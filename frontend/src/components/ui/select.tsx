@@ -56,9 +56,9 @@ SelectContent.displayName = "SelectContent"
 
 const SelectLabel = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof BaseSelect.GroupLabel>
+  React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <BaseSelect.GroupLabel
+  <div
     ref={ref}
     className={cn("py-1.5 pl-8 pr-2 text-xs font-semibold text-muted-foreground", className)}
     {...props}

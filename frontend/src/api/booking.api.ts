@@ -78,11 +78,11 @@ export const bookingApi = {
     }
   },
 
-  completeBooking: async (bookingId: string, priestId: string) => {
+  completeBooking: async (bookingId: string, priestId: string, completionCode?: string) => {
     try {
-      return await mockApi.mockCompleteBooking(bookingId, priestId);
+      return await mockApi.mockCompleteBooking(bookingId, priestId, completionCode);
     } catch (error) {
-      logAppError('bookingApi.completeBooking', error, { bookingId, priestId });
+      logAppError('bookingApi.completeBooking', error, { bookingId, priestId, completionCode });
       return {
         success: false,
         message: getUserFriendlyErrorMessage(error, 'Failed to mark ceremony as completed.'),

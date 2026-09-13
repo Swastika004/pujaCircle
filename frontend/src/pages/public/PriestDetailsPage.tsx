@@ -72,7 +72,11 @@ export const PriestDetailsPage: React.FC = () => {
         if (user) {
           const addrs = await addressApi.getAddresses(user.id);
           setUserAddresses(addrs);
-          const defaultAddr = addrs.find((a) => a.isDefault) || addrs[0];
+          const priestCity = priestData?.city?.trim().toLowerCase();
+          const matchingAddrs = priestCity
+            ? addrs.filter((a) => a.city?.trim().toLowerCase() === priestCity)
+            : addrs;
+          const defaultAddr = matchingAddrs.find((a) => a.isDefault) || matchingAddrs[0];
           if (defaultAddr) setSelectedAddressId(defaultAddr.id);
         }
       } catch {
@@ -115,6 +119,12 @@ export const PriestDetailsPage: React.FC = () => {
   const handleSubmitBooking = async () => {
     if (!user || !priest || !selectedSlot || !selectedAddressId || !selectedService) {
       toast.error('Please select a service, address, and available time slot.');
+      return;
+    }
+
+    const selectedAddress = userAddresses.find((a) => a.id === selectedAddressId);
+    if (priest.city && selectedAddress && selectedAddress.city.trim().toLowerCase() !== priest.city.trim().toLowerCase()) {
+      toast.error(`This priest only conducts ceremonies in ${priest.city}. Please choose an address in ${priest.city}.`);
       return;
     }
 
@@ -475,27 +485,60 @@ export const PriestDetailsPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {userAddresses.map((addr) => (
-                    <div
-                      key={addr.id}
-                      onClick={() => setSelectedAddressId(addr.id)}
-                      className={`p-2.5 rounded-md border-2 cursor-pointer flex items-center justify-between bg-white transition-all ${
-                        selectedAddressId === addr.id
-                          ? 'border-red-700 ring-2 ring-red-700/20 shadow-2xs'
-                          : 'border-amber-200 hover:border-amber-300'
-                      }`}
-                    >
-                      <div>
-                        <p className="font-bold text-stone-900 text-xs font-serif">
-                          {addr.houseNo || addr.houseBuilding}, {addr.villageTown || addr.locality}
-                        </p>
-                        <p className="text-[11px] text-stone-600">
-                          {addr.city}, {addr.state} - <strong className="font-mono text-stone-900">{addr.pincode}</strong>
-                        </p>
+                  {userAddresses.map((addr) => {
+                    const isServiceable = !priest?.city || addr.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase();
+                    const isSelected = selectedAddressId === addr.id;
+
+                    return (
+                      <div
+                        key={addr.id}
+                        onClick={() => {
+                          if (isServiceable) setSelectedAddressId(addr.id);
+                        }}
+                        className={`p-2.5 rounded-md border-2 flex items-center justify-between transition-all ${
+                          !isServiceable
+                            ? 'opacity-60 bg-stone-50 border-stone-200 cursor-not-allowed'
+                            : isSelected
+                            ? 'border-red-700 ring-2 ring-red-700/20 shadow-2xs bg-white cursor-pointer'
+                            : 'border-amber-200 hover:border-amber-300 bg-white cursor-pointer'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold text-stone-900 text-xs font-serif">
+                              {addr.houseNo || addr.houseBuilding}, {addr.villageTown || addr.locality}
+                            </p>
+                            {!isServiceable && (
+                              <span className="text-[10px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-xs">
+                                Outside {priest?.city}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-stone-600">
+                            {addr.city}, {addr.state} - <strong className="font-mono text-stone-900">{addr.pincode}</strong>
+                          </p>
+                        </div>
+                        {isSelected && isServiceable && <Check className="h-4 w-4 text-red-700 shrink-0" />}
                       </div>
-                      {selectedAddressId === addr.id && <Check className="h-4 w-4 text-red-700 shrink-0" />}
+                    );
+                  })}
+
+                  {userAddresses.length > 0 && !userAddresses.some((a) => !priest?.city || a.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase()) && (
+                    <div className="p-3 rounded-md border border-amber-300 bg-amber-50 text-amber-950 text-xs space-y-1.5">
+                      <p className="font-semibold flex items-center gap-1.5 text-amber-900">
+                        <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                        No addresses in {priest?.city}
+                      </p>
+                      <p className="text-stone-700 text-[11px]">
+                        This priest only conducts ceremonies in <strong>{priest?.city}</strong>. Please add or select an address located in {priest?.city}.
+                      </p>
+                      <Link to="/user/addresses" className="inline-block mt-1">
+                        <Button size="sm" variant="outline" className="text-xs h-7 border-amber-300 hover:bg-amber-100/50">
+                          <Plus className="h-3 w-3 mr-1" /> Add Address in {priest?.city}
+                        </Button>
+                      </Link>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -534,7 +577,15 @@ export const PriestDetailsPage: React.FC = () => {
             </Button>
             <Button
               size="sm"
-              disabled={isSubmitting || !selectedSlot || !selectedAddressId || !selectedService}
+              disabled={
+                isSubmitting ||
+                !selectedSlot ||
+                !selectedAddressId ||
+                !selectedService ||
+                !userAddresses.find(
+                  (a) => a.id === selectedAddressId && (!priest?.city || a.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase())
+                )
+              }
               onClick={handleSubmitBooking}
               className="text-xs font-bold bg-red-700 hover:bg-red-800 text-white h-9 px-4 rounded-md shadow-md cursor-pointer"
             >

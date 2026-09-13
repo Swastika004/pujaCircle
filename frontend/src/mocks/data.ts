@@ -870,6 +870,7 @@ export const SEED_BOOKINGS: Booking[] = [
     specialInstructions: 'Please bring Ganga jal and pure cow ghee. We will arrange fresh flowers, fruits, and panchamrit.',
     userNotes: 'Auspicious ceremony for our new home inauguration and family blessing.',
     responseDeadline: getPendingDeadline(),
+    completionCode: '5821',
     createdAt: '2026-08-26T09:00:00.000Z',
   },
   {
@@ -894,6 +895,7 @@ export const SEED_BOOKINGS: Booking[] = [
     specialInstructions: 'Strict Vedic chanting requested for morning muhurat. Bel leaves and raw milk ready.',
     userNotes: 'Ceremony for family health and peace. 4th floor apartment.',
     responseDeadline: getPendingDeadline(),
+    completionCode: '7294',
     createdAt: '2026-08-26T08:30:00.000Z',
   },
   {
@@ -918,6 +920,7 @@ export const SEED_BOOKINGS: Booking[] = [
     specialInstructions: 'Havan kund setup required. Please bring yagya samagri checklist.',
     userNotes: '15 family members will be present at the ceremony.',
     responseDeadline: getPendingDeadline(),
+    completionCode: '3109',
     createdAt: '2026-08-26T07:45:00.000Z',
   },
   {
@@ -939,6 +942,7 @@ export const SEED_BOOKINGS: Booking[] = [
     status: 'CONFIRMED',
     paymentMethod: 'OFFLINE_CASH',
     paymentStatus: 'PENDING',
+    completionCode: '4829',
     specialInstructions: 'Please arrive 15 minutes early for altar setup.',
     userNotes: 'Please bring samagri list checklist.',
     createdAt: '2026-08-20T10:00:00.000Z',

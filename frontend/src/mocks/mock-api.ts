@@ -1177,6 +1177,16 @@ export async function mockCreateBooking(
     return { success: false, message: 'Please select a valid saved address.' };
   }
 
+  // 3b. Verify geographic serviceability (city check)
+  const priestCity = priest.city.toLowerCase().trim();
+  const devoteeCity = address.city.toLowerCase().trim();
+  if (priestCity !== devoteeCity) {
+    return {
+      success: false,
+      message: `Selected priest only provides in-person services in ${priest.city}. Please select an address located in ${priest.city}.`,
+    };
+  }
+
   // 4. Retrieve authoritative price from PriestService snapshot or Catalog
   let serviceName = 'Vedic Ceremony';
   let authoritativePrice = 2100;
@@ -1277,6 +1287,7 @@ export async function mockCreateBooking(
     specialInstructions: validated.specialInstructions || validated.userNotes || '',
     userNotes: validated.userNotes || validated.specialInstructions || '',
     responseDeadline: deadline,
+    completionCode: String(Math.floor(1000 + Math.random() * 9000)),
     createdAt: now.toISOString(),
   };
 
@@ -1388,7 +1399,8 @@ export async function mockCancelBooking(
 
 export async function mockCompleteBooking(
   bookingId: string,
-  priestId: string
+  priestId: string,
+  completionCode?: string
 ): Promise<{ success: boolean; data?: Booking; message: string }> {
   await delay(300);
 
@@ -1398,6 +1410,16 @@ export async function mockCompleteBooking(
 
   if (booking.status !== 'CONFIRMED') {
     return { success: false, message: 'Only confirmed bookings can be marked as completed.' };
+  }
+
+  // If completionCode is provided, verify match against devotee's booking code
+  if (completionCode !== undefined && booking.completionCode) {
+    if (completionCode.trim() !== booking.completionCode.trim()) {
+      return {
+        success: false,
+        message: 'Invalid completion verification code. Please confirm the 4-digit code with the devotee.',
+      };
+    }
   }
 
   booking.status = 'COMPLETED';

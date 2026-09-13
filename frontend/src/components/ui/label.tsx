@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Field } from "@base-ui/react/field"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -10,10 +9,10 @@ const labelVariants = cva(
 
 const Label = React.forwardRef<
   HTMLLabelElement,
-  React.ComponentPropsWithoutRef<typeof Field.Label> &
+  React.LabelHTMLAttributes<HTMLLabelElement> &
     VariantProps<typeof labelVariants>
 >(({ className, ...props }, ref) => (
-  <Field.Label
+  <label
     ref={ref}
     className={cn(labelVariants(), className)}
     {...props}

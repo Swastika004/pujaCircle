@@ -10,6 +10,7 @@ import {
 import { Booking } from "@/types/booking.types";
 import { PriestBookingRow } from "@/components/priest/PriestBookingRow";
 import { PriestBookingDetailsDialog } from "@/components/priest/PriestBookingDetailsDialog";
+import { CompleteBookingModal } from "@/components/priest/CompleteBookingModal";
 import { CancelBookingDialog } from "@/components/booking/CancelBookingDialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,6 +40,8 @@ export const PriestBookingsPage: React.FC = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [rejectBookingTarget, setRejectBookingTarget] =
+    useState<Booking | null>(null);
+  const [completeBookingTarget, setCompleteBookingTarget] =
     useState<Booking | null>(null);
 
   const fetchBookings = async () => {
@@ -87,12 +90,18 @@ export const PriestBookingsPage: React.FC = () => {
     }
   };
 
-  const handleComplete = async (bookingId: string) => {
+  const handleCompleteConfirm = async (completionCode: string) => {
+    if (!completeBookingTarget) return;
     setIsProcessing(true);
     try {
-      const res = await mockCompleteBooking(bookingId, priestId);
+      const res = await mockCompleteBooking(
+        completeBookingTarget.id,
+        priestId,
+        completionCode
+      );
       if (res.success) {
-        toast.success("Puja marked as COMPLETED! Cash payment recorded.");
+        toast.success("Puja marked as COMPLETED! Cash Dakshina verified.");
+        setCompleteBookingTarget(null);
         fetchBookings();
       } else {
         toast.error(res.message || "Failed to mark completion.");
@@ -148,7 +157,8 @@ export const PriestBookingsPage: React.FC = () => {
               Ceremony Appointments
             </h1>
             <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
-              Manage incoming requests, confirmed Shubh Muhurat schedules, and log ritual completions.
+              Manage incoming requests, confirmed Shubh Muhurat schedules, and
+              log ritual completions.
             </p>
           </div>
         </div>
@@ -248,7 +258,7 @@ export const PriestBookingsPage: React.FC = () => {
             placeholder="Search by puja name, devotee name, or reference ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
@@ -266,7 +276,7 @@ export const PriestBookingsPage: React.FC = () => {
               }}
               onAccept={handleAccept}
               onOpenReject={(booking) => setRejectBookingTarget(booking)}
-              onComplete={handleComplete}
+              onComplete={(booking) => setCompleteBookingTarget(booking)}
               isProcessing={isProcessing}
             />
           ))}
@@ -274,7 +284,9 @@ export const PriestBookingsPage: React.FC = () => {
       ) : (
         <div className="p-12 text-center rounded-xl border-2 border-amber-300 bg-white space-y-3">
           <Calendar className="h-12 w-12 mx-auto text-amber-500/50" />
-          <h3 className="text-base font-bold font-serif text-stone-900">No Appointments Found</h3>
+          <h3 className="text-base font-bold font-serif text-stone-900">
+            No Appointments Found
+          </h3>
           <p className="text-xs text-stone-600">
             {searchQuery
               ? "No appointments match your search criteria."
@@ -298,6 +310,14 @@ export const PriestBookingsPage: React.FC = () => {
           rejectBookingTarget?.bookingReference || rejectBookingTarget?.id
         }
         isPriest={true}
+      />
+
+      <CompleteBookingModal
+        isOpen={!!completeBookingTarget}
+        onClose={() => setCompleteBookingTarget(null)}
+        onConfirm={handleCompleteConfirm}
+        booking={completeBookingTarget}
+        isProcessing={isProcessing}
       />
     </div>
   );

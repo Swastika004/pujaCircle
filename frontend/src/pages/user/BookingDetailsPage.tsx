@@ -22,7 +22,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   Copy,
+  KeyRound,
 } from 'lucide-react';
+import { CountdownTimer } from '@/components/common/CountdownTimer';
 import { toast } from 'sonner';
 
 /**
@@ -204,6 +206,49 @@ export const BookingDetailsPage: React.FC = () => {
             {/* Progress Stepper (Flexbox Only, Pure White) */}
             <BookingTimelineCard status={booking.status} />
 
+            {/* Live 5-Hour SLA Countdown for Pending Requests */}
+            {booking.status === 'PENDING' && booking.responseDeadline && (
+              <CountdownTimer
+                targetDate={booking.responseDeadline}
+                label="Purohit Acceptance Window"
+              />
+            )}
+
+            {/* Cash Dakshina Handshake & Ceremony Completion Verification Code */}
+            {booking.status === 'CONFIRMED' && (
+              <div className="p-4 sm:p-5 rounded-lg border-2 border-emerald-300 bg-emerald-50/60 space-y-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <KeyRound className="w-4 h-4 text-emerald-700 shrink-0" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+                        Ceremony Completion Verification Code
+                      </h3>
+                    </div>
+                    <p className="text-xs text-emerald-800 leading-relaxed">
+                      Share this 4-digit code with Pandit Ji <strong>only after</strong> the puja ceremony is completed and Dakshina is handed over.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-md border-2 border-emerald-400 shadow-2xs shrink-0 self-start sm:self-center">
+                    <span className="font-mono text-2xl font-black tracking-widest text-emerald-900 select-all">
+                      {booking.completionCode || '4829'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(booking.completionCode || '4829');
+                        toast.success('Completion code copied!');
+                      }}
+                      className="text-emerald-700 hover:text-emerald-900 p-1 cursor-pointer transition-colors"
+                      title="Copy Code"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Details Deck: 100% Flexbox, Zero CSS Grids */}
             <div className="flex flex-col md:flex-row items-stretch gap-6 pt-2 w-full">
               {/* Schedule & Venue Card */}
@@ -334,7 +379,7 @@ export const BookingDetailsPage: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap gap-2 pt-1">
-                {defaultSamagriItems.map((item, idx) => (
+                {((booking.samagriList && booking.samagriList.length > 0) ? booking.samagriList : defaultSamagriItems).map((item, idx) => (
                   <div
                     key={idx}
                     className="w-full sm:w-[calc(50%-4px)] flex items-start gap-2 p-2.5 rounded-md border border-stone-200 bg-white text-xs text-stone-800 font-medium"

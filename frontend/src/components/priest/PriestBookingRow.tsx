@@ -3,6 +3,7 @@ import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookingStatusBadge } from '@/components/booking/BookingStatusBadge';
+import { CountdownTimer } from '@/components/common/CountdownTimer';
 import { formatINR, formatDate } from '@/lib/utils';
 import { Calendar, Clock, MapPin, Check, Ban, Eye, CheckCircle2, Phone } from 'lucide-react';
 
@@ -11,7 +12,7 @@ interface PriestBookingRowProps {
   onViewDetails: (booking: Booking) => void;
   onAccept: (bookingId: string) => void;
   onOpenReject: (booking: Booking) => void;
-  onComplete: (bookingId: string) => void;
+  onComplete: (booking: Booking) => void;
   isProcessing?: boolean;
 }
 
@@ -40,6 +41,9 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
           <Badge variant="outline" className="font-mono text-xs font-bold border-amber-300 bg-white text-stone-800">
             {booking.bookingReference || booking.id.slice(0, 8)}
           </Badge>
+          {booking.status === 'PENDING' && booking.responseDeadline && (
+            <CountdownTimer targetDate={booking.responseDeadline} compact />
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-stone-700">
@@ -119,7 +123,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
         {booking.status === 'CONFIRMED' && (
           <Button
             size="sm"
-            onClick={() => onComplete(booking.id)}
+            onClick={() => onComplete(booking)}
             disabled={isProcessing}
             className="gap-1.5 text-xs bg-[#780016] hover:bg-red-800 text-white border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-md font-bold shadow-xs cursor-pointer puja-btn-tap"
           >

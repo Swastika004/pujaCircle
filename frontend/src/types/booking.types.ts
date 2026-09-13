@@ -43,6 +43,7 @@ export interface Booking {
   cancelledAt?: string;
   completedAt?: string;
   ratingSubmitted?: boolean;
+  completionCode?: string; // 4-digit verification code provided to devotee upon confirmation
   createdAt: string;
   updatedAt?: string;
 

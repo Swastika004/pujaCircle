@@ -11,6 +11,7 @@ import {
 import { PublicRouteGuard } from '@/components/common/PublicRouteGuard';
 import { GuestOnlyRoute } from '@/components/common/GuestOnlyRoute';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { RouteErrorElement } from '@/components/common/RouteErrorElement';
 
 const LazyPage = (Component: React.ComponentType) => (
   <Suspense
@@ -92,6 +93,7 @@ export const appRouter = createBrowserRouter([
         <PublicLayout />
       </PublicRouteGuard>
     ),
+    errorElement: <RouteErrorElement />,
     children: [
       // Public Marketing
       { index: true, element: <GuestOnlyRoute>{LazyPage(HomePage)}</GuestOnlyRoute> },
@@ -149,6 +151,7 @@ export const appRouter = createBrowserRouter([
         <PriestLayout />
       </PriestRouteGuard>
     ),
+    errorElement: <RouteErrorElement />,
     children: [
       { index: true, element: <Navigate to="/priest/dashboard" replace /> },
       { path: 'dashboard', element: LazyPage(PriestDashboardPage) },
@@ -171,6 +174,7 @@ export const appRouter = createBrowserRouter([
         <AdminLayout />
       </AdminRouteGuard>
     ),
+    errorElement: <RouteErrorElement />,
     children: [
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: 'dashboard', element: LazyPage(AdminDashboardPage) },
