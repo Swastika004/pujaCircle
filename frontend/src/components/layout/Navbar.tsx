@@ -80,9 +80,7 @@ export const Navbar: React.FC = () => {
             <span className="font-serif text-stone-950 font-extrabold text-lg sm:text-xl">
               Puja<span className="text-[#991B1B] font-sans font-bold">Circle</span>
             </span>
-            <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest text-[#780016] bg-amber-100/90 border border-amber-300 px-2 py-0.5 rounded-full">
-              Vedic Sanctum
-            </span>
+           
           </div>
         </Link>
 

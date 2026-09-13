@@ -7,7 +7,7 @@ import {
   mockUpdateUserProfile,
   mockResetPassword,
 } from '@/mocks/mock-api';
-import { mockDb } from '@/mocks/db';
+import { mockDb } from '@/mocks/data';
 import { updateUserProfileSchema, changePasswordSchema } from '@/schemas/user.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

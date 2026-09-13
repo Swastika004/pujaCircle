@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { SacredBackground } from '@/components/common/SacredBackground';
-import { Toaster } from '@/components/ui/sonner';
 
 /**
  * PublicLayout
@@ -20,7 +19,6 @@ export const PublicLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
-      <Toaster position="top-right" />
     </div>
   );
 };

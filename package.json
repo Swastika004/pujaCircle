@@ -11,6 +11,8 @@
     "build": "npm run build --prefix frontend",
     "typecheck": "npm run typecheck --prefix frontend",
     "test:mock": "tsx --tsconfig frontend/tsconfig.json frontend/src/mocks/test-mock-api.ts",
+    "test:advisor": "tsx --tsconfig frontend/tsconfig.json frontend/src/mocks/test-advisor-matching.ts",
+    "test": "npm run test:mock && npm run test:advisor",
     "lint:frontend": "npm run lint --prefix frontend"
   },
   "devDependencies": {

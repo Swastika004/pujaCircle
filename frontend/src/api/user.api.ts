@@ -1,5 +1,5 @@
 import { UserProfile, UpdateUserProfileRequest } from '@/types/user.types';
-import { mockDb } from '@/mocks/db';
+import { mockDb } from '@/mocks/data';
 import { mockUpdateUserProfile } from '@/mocks/mock-api';
 import { delay } from '@/mocks/delay';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';

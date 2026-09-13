@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Toaster } from '@/components/ui/sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, LogOut, User } from 'lucide-react';
@@ -235,8 +234,6 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
           {children}
         </main>
       </div>
-
-      <Toaster />
     </div>
   );
 };
