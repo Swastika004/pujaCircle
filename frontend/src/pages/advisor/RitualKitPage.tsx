@@ -80,15 +80,15 @@ export const RitualKitPage: React.FC = () => {
           <span>Back</span>
         </button>
 
-        <span className="rounded-full bg-[hsl(var(--advisor-accent-soft))] px-3 py-1 text-xs font-semibold text-[hsl(var(--advisor-accent))] border border-[hsl(var(--advisor-accent))]/20">
+        <span className="rounded-sm bg-[hsl(var(--advisor-accent-soft))] px-2.5 py-1 text-xs font-semibold text-[hsl(var(--advisor-accent))] border border-[hsl(var(--advisor-accent))]/20">
           Vedic Ritual Kit & Vidhi
         </span>
       </div>
 
       
-      <div className="bg-[hsl(var(--surface))] rounded-2xl border border-[hsl(var(--border))] p-6 sm:p-8 shadow-xs space-y-4">
+      <div className="bg-[hsl(var(--surface))] rounded-xl border border-[hsl(var(--border))] p-6 sm:p-8 shadow-xs space-y-4">
         <div className="space-y-2">
-          <div className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground-muted))] capitalize">
+          <div className="inline-block px-2 py-0.5 rounded-sm text-xs font-medium bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground-muted))] capitalize">
             {entry.category.replace('-', ' ')}
           </div>
           <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[hsl(var(--foreground))] tracking-tight">
@@ -107,7 +107,7 @@ export const RitualKitPage: React.FC = () => {
           <button
             type="button"
             onClick={handleDownloadPdf}
-            className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--brand-primary))] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-[hsl(var(--brand-primary-hover))] transition-colors"
+            className="inline-flex items-center gap-2 rounded-md bg-[hsl(var(--brand-primary))] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-[hsl(var(--brand-primary-hover))] transition-colors"
           >
             {downloadSuccess ? (
               <>
@@ -125,7 +125,7 @@ export const RitualKitPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('/priests')}
-            className="inline-flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] px-4 py-2.5 text-xs sm:text-sm font-semibold text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
+            className="inline-flex items-center gap-2 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] px-4 py-2.5 text-xs sm:text-sm font-semibold text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
           >
             <span>Find a Verified Purohit</span>
             <ArrowRight className="w-4 h-4" />
@@ -134,7 +134,7 @@ export const RitualKitPage: React.FC = () => {
       </div>
 
       
-      <div className="rounded-2xl border border-[hsl(var(--brand-accent))]/40 bg-[hsl(var(--brand-accent-soft))]/30 p-6 space-y-4">
+      <div className="rounded-lg border border-[hsl(var(--brand-accent))]/40 bg-[hsl(var(--brand-accent-soft))]/30 p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold text-[hsl(var(--brand-secondary))] uppercase tracking-wider">
             <User className="w-4 h-4 text-[hsl(var(--brand-primary))]" />
@@ -160,13 +160,13 @@ export const RitualKitPage: React.FC = () => {
                 value={tempProfile.fullName}
                 onChange={(e) => setTempProfile({ ...tempProfile, fullName: e.target.value })}
                 placeholder="e.g. Debabrata Banerjee"
-                className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
               />
             </div>
             <button
               type="button"
               onClick={handleSaveProfile}
-              className="rounded-lg bg-[hsl(var(--brand-primary))] px-4 py-2 text-xs font-medium text-white shadow-xs hover:bg-[hsl(var(--brand-primary-hover))] h-8 shrink-0"
+              className="rounded-md bg-[hsl(var(--brand-primary))] px-4 py-2 text-xs font-medium text-white shadow-xs hover:bg-[hsl(var(--brand-primary-hover))] h-8 shrink-0"
             >
               Save Name
             </button>
@@ -179,7 +179,7 @@ export const RitualKitPage: React.FC = () => {
         )}
 
         
-        <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-4">
+        <div className="rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-4">
           <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-[hsl(var(--brand-secondary))]">
             <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--brand-primary))]" />
             <span>Personalized Sankalp Text (Resolve)</span>
@@ -193,7 +193,7 @@ export const RitualKitPage: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 space-y-4 shadow-xs">
+        <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 space-y-4 shadow-xs">
           <div className="flex items-center justify-between border-b border-[hsl(var(--border))] pb-3">
             <h2 className="font-serif text-lg font-bold text-[hsl(var(--foreground))]">
               Sacred Samagri Checklist
@@ -215,7 +215,7 @@ export const RitualKitPage: React.FC = () => {
                   key={item}
                   type="button"
                   onClick={() => toggleSamagri(index)}
-                  className={`w-full flex items-start gap-3 p-3 rounded-xl border text-left transition-all text-xs ${
+                  className={`w-full flex items-start gap-3 p-3 rounded-md border text-left transition-all text-xs ${
                     isChecked
                       ? 'border-emerald-200 bg-emerald-50/50 text-emerald-900'
                       : 'border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground))] hover:border-[hsl(var(--brand-primary))]/40'
@@ -238,7 +238,7 @@ export const RitualKitPage: React.FC = () => {
         </div>
 
         
-        <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 space-y-4 shadow-xs">
+        <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 space-y-4 shadow-xs">
           <div className="border-b border-[hsl(var(--border))] pb-3">
             <h2 className="font-serif text-lg font-bold text-[hsl(var(--foreground))]">
               Step-by-Step Vidhi Order
@@ -262,7 +262,7 @@ export const RitualKitPage: React.FC = () => {
           </div>
 
           
-          <div className="mt-6 rounded-xl border border-[hsl(var(--advisor-accent))]/30 bg-[hsl(var(--advisor-accent-soft))]/40 p-4 space-y-1.5">
+          <div className="mt-6 rounded-md border border-[hsl(var(--advisor-accent))]/30 bg-[hsl(var(--advisor-accent-soft))]/40 p-4 space-y-1.5">
             <div className="flex items-center gap-2 text-xs font-bold text-[hsl(var(--advisor-accent))]">
               <Calendar className="w-4 h-4" />
               <span>Auspicious Timing & Tradition Note</span>

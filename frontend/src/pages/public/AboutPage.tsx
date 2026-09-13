@@ -18,7 +18,7 @@ export const AboutPage: React.FC = () => {
       
       <section className="w-full pt-8 sm:pt-14 pb-10 sm:pb-12 px-4 border-b border-stone-200">
         <div className="container max-w-4xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#780016] text-white text-xs font-bold tracking-wide uppercase shadow-sm border border-amber-400">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm bg-[#780016] text-white text-xs font-bold tracking-wide uppercase shadow-sm border border-amber-400">
             <span className="text-amber-300 font-serif font-black text-sm">ॐ</span>
             <span>Preserving Sanatana Dharma</span>
           </div>
@@ -36,8 +36,8 @@ export const AboutPage: React.FC = () => {
       
       <section className="w-full py-8 px-4 bg-amber-50/50 border-b border-amber-200">
         <div className="container max-w-4xl mx-auto">
-          <div className="p-5 sm:p-6 rounded-2xl border border-[#C59A3F]/50 bg-white shadow-xs flex items-start gap-4">
-            <div className="h-10 w-10 rounded-xl bg-amber-100 text-[#780016] flex items-center justify-center shrink-0 border border-amber-300 mt-0.5">
+          <div className="p-5 sm:p-6 rounded-lg border border-[#C59A3F]/50 bg-white shadow-xs flex items-start gap-4">
+            <div className="h-10 w-10 rounded-md bg-amber-100 text-[#780016] flex items-center justify-center shrink-0 border border-amber-300 mt-0.5">
               <Info className="h-5 w-5" />
             </div>
             <div className="space-y-1.5 text-xs sm:text-sm text-stone-700 leading-relaxed">
@@ -59,7 +59,7 @@ export const AboutPage: React.FC = () => {
       <section className="w-full py-12 sm:py-16 px-4">
         <div className="container max-w-4xl mx-auto space-y-8">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
               <BookOpen className="h-3.5 w-3.5 text-amber-700" />
               <span>Our Sacred Heritage</span>
             </div>
@@ -80,7 +80,7 @@ export const AboutPage: React.FC = () => {
               PujaCircle was founded to restore sanctity, trust, and predictability to every home ritual through verified priest credentials and comprehensive ritual kit vidhi checklists.
             </p>
 
-            <div className="p-5 rounded-2xl border-2 border-amber-300 border-l-4 border-l-red-700 bg-amber-50/60 space-y-1.5 shadow-xs">
+            <div className="p-5 rounded-lg border-2 border-amber-300 border-l-4 border-l-red-700 bg-amber-50/60 space-y-1.5 shadow-xs">
               <div className="text-sm font-serif font-extrabold text-red-900 italic">
                 “यज्ञो वै श्रेष्ठतमं कर्म”
               </div>
@@ -103,13 +103,13 @@ export const AboutPage: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <Link to="/advisor">
-                <Button size="sm" className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold gap-1.5 rounded-xl">
+                <Button size="sm" className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold gap-1.5 rounded-md">
                   <Compass className="w-3.5 h-3.5" />
                   <span>Ask the Advisor</span>
                 </Button>
               </Link>
               <Link to="/priests">
-                <Button size="sm" variant="outline" className="border-stone-300 font-bold rounded-xl">
+                <Button size="sm" variant="outline" className="border-stone-300 font-bold rounded-md">
                   <span>Browse Priests</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>

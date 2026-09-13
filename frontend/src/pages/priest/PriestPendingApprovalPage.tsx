@@ -28,10 +28,10 @@ export const PriestPendingApprovalPage: React.FC = () => {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center container max-w-xl px-4 py-10 sm:py-16 text-stone-900">
-      <div className="w-full rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden">
+      <div className="w-full rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden">
         {/* Header Banner (Solid Vermilion #780016 with Gold Border) */}
         <div className="bg-[#780016] p-7 text-center text-white border-b-2 border-amber-400 space-y-3">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400 text-stone-950 shadow-md font-serif font-black text-2xl select-none">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-amber-400 text-stone-950 shadow-md font-serif font-black text-2xl select-none">
             ॐ
           </div>
           <div className="space-y-1">
@@ -46,7 +46,7 @@ export const PriestPendingApprovalPage: React.FC = () => {
 
         <div className="p-6 sm:p-8 space-y-6 bg-white">
           {/* Registered Scholar Credentials Pill */}
-          <div className="p-4 rounded-2xl bg-amber-50/70 border-2 border-amber-300 space-y-2.5 text-xs">
+          <div className="p-4 rounded-lg bg-amber-50/70 border-2 border-amber-300 space-y-2.5 text-xs">
             <div className="flex items-center justify-between">
               <span className="text-stone-600 font-medium">Registered Scholar:</span>
               <strong className="text-stone-950 text-sm font-serif">{user?.name || 'Acharya Pt. Ramesh Sharma'}</strong>
@@ -74,7 +74,7 @@ export const PriestPendingApprovalPage: React.FC = () => {
               {verificationSteps.map((step, idx) => (
                 <div
                   key={idx}
-                  className={`p-3 rounded-xl border-2 flex items-start gap-3 transition-all ${
+                  className={`p-3 rounded-md border-2 flex items-start gap-3 transition-all ${
                     step.status === 'COMPLETED'
                       ? 'border-emerald-300 bg-emerald-50/50'
                       : step.status === 'IN_PROGRESS'
@@ -101,7 +101,7 @@ export const PriestPendingApprovalPage: React.FC = () => {
           </div>
 
           {/* Assurance info */}
-          <div className="p-4 rounded-2xl bg-white border border-stone-200 text-xs text-stone-600 space-y-2">
+          <div className="p-4 rounded-lg bg-white border border-stone-200 text-xs text-stone-600 space-y-2">
             <div className="flex items-center gap-2 text-stone-900 font-bold">
               <Phone className="w-4 h-4 text-red-700" />
               Need to expedite your verification?
@@ -115,7 +115,7 @@ export const PriestPendingApprovalPage: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={handleLogout}
-            className="w-full gap-2 text-xs h-11 rounded-xl border-stone-300 hover:border-red-300 hover:text-red-700 font-bold cursor-pointer"
+            className="w-full gap-2 text-xs h-11 rounded-md border-stone-300 hover:border-red-300 hover:text-red-700 font-bold cursor-pointer"
           >
             <LogOut className="h-4 w-4" /> Sign Out & Return Later
           </Button>

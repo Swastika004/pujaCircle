@@ -112,9 +112,9 @@ export const AdminUsersPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 w-full max-w-7xl text-stone-900">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
             ॐ
           </div>
           <div>
@@ -131,7 +131,7 @@ export const AdminUsersPage: React.FC = () => {
           variant="outline"
           size="sm"
           onClick={fetchUsers}
-          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-xl border-stone-300 hover:border-amber-400"
+          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-md border-stone-300 hover:border-amber-400"
         >
           <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
           Refresh
@@ -140,12 +140,12 @@ export const AdminUsersPage: React.FC = () => {
 
       {/* Metrics Row (100% Flexbox, Zero CSS Grids) */}
       <div className="flex flex-wrap gap-4 w-full">
-        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs rounded-lg flex flex-col justify-between">
           <div className="flex flex-row items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Total Devotees
             </span>
-            <div className="h-8 w-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
+            <div className="h-8 w-8 rounded-md bg-red-100 text-red-700 flex items-center justify-center font-bold">
               <Users className="w-4 h-4" />
             </div>
           </div>
@@ -154,12 +154,12 @@ export const AdminUsersPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs rounded-lg flex flex-col justify-between">
           <div className="flex flex-row items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Active Profiles
             </span>
-            <div className="h-8 w-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <div className="h-8 w-8 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
               <UserCheck className="w-4 h-4" />
             </div>
           </div>
@@ -168,12 +168,12 @@ export const AdminUsersPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-stone-700 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-stone-700 bg-white shadow-xs rounded-lg flex flex-col justify-between">
           <div className="flex flex-row items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Suspended
             </span>
-            <div className="h-8 w-8 rounded-xl bg-stone-200 text-stone-700 flex items-center justify-center font-bold">
+            <div className="h-8 w-8 rounded-md bg-stone-200 text-stone-700 flex items-center justify-center font-bold">
               <UserX className="w-4 h-4" />
             </div>
           </div>
@@ -189,14 +189,14 @@ export const AdminUsersPage: React.FC = () => {
           value={activeTab}
           onValueChange={(val) => setActiveTab(val as DevoteeFilter)}
         >
-          <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
-            <TabsTrigger value="ALL" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
+          <TabsList className="inline-flex h-11 items-center justify-start rounded-md bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
+            <TabsTrigger value="ALL" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
               All ({users.length})
             </TabsTrigger>
-            <TabsTrigger value="ACTIVE" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-emerald-700 transition-all">
+            <TabsTrigger value="ACTIVE" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
               Active ({activeCount})
             </TabsTrigger>
-            <TabsTrigger value="SUSPENDED" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-red-700 transition-all">
+            <TabsTrigger value="SUSPENDED" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
               Suspended ({suspendedCount})
             </TabsTrigger>
           </TabsList>
@@ -208,14 +208,14 @@ export const AdminUsersPage: React.FC = () => {
             placeholder="Search by devotee name, email, or mobile..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-xs h-11 rounded-2xl border-2 border-stone-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
+            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
 
       {/* Table Container */}
       {filteredUsers.length > 0 ? (
-        <div className="rounded-3xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
           <UserManagementTable
             users={filteredUsers}
             onOpenSuspend={(u) => setSuspendTarget(u)}

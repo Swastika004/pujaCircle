@@ -50,7 +50,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
   const priestDetailUrl = `/user/priests/${priest.id}`;
 
   return (
-    <div className="w-full bg-white border-2 border-amber-200 hover:border-amber-400 rounded-3xl shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl overflow-hidden flex flex-col md:flex-row items-stretch justify-between p-5 sm:p-6 gap-5 group">
+    <div className="w-full bg-white border-2 border-amber-200 hover:border-amber-400 rounded-xl shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl overflow-hidden flex flex-col md:flex-row items-stretch justify-between p-5 sm:p-6 gap-5 group">
       {/* 1. Left Section: Priest Photo & Trust Badges */}
       <div className="flex flex-row md:flex-col items-center md:items-center gap-4 md:gap-3 shrink-0">
         <div className="relative shrink-0">
@@ -60,7 +60,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
               '/images/verified_purohit_portrait.jpg'
             }
             alt={displayName}
-            className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl object-cover ring-2 ring-amber-400 bg-amber-50 shadow-xs"
+            className="h-20 w-20 sm:h-24 sm:w-24 rounded-md object-cover ring-2 ring-amber-400 bg-amber-50 shadow-xs"
             loading="lazy"
           />
           <div
@@ -73,7 +73,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
 
         {/* Rating & Review Counter Pill */}
         <div className="flex flex-col md:items-center gap-1">
-          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-stone-950 border border-amber-300 text-xs font-bold shadow-2xs">
+          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-sm bg-amber-100 text-stone-950 border border-amber-300 text-xs font-bold shadow-2xs">
             <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
             <span>{ratingValue}</span>
             <span className="text-stone-600 text-[11px]">({reviewTotal})</span>
@@ -95,19 +95,19 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
               </Link>
 
               {/* Vedic Verified Pill */}
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-700 text-white text-[11px] font-semibold shadow-2xs">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-red-700 text-white text-[11px] font-semibold shadow-2xs">
                 <ShieldCheck className="h-3 w-3" />
                 <span>Vedic Verified</span>
               </span>
 
               {/* Years of Experience Pill */}
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-400 text-stone-950 text-[11px] font-bold shadow-2xs">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-amber-400 text-stone-950 text-[11px] font-bold shadow-2xs">
                 <Clock className="h-3 w-3 text-stone-950" />
                 <span>{priest.experienceYears}+ Yrs Exp</span>
               </span>
 
               {/* Pooja Count Pill */}
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-950 text-white text-[11px] font-semibold">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-red-950 text-white text-[11px] font-semibold">
                 <Flame className="h-3 w-3 text-amber-400" />
                 <span>{poojaCount}+ Pujas</span>
               </span>
@@ -134,7 +134,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
             {topSpecializations.map((spec) => (
               <span
                 key={spec}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 text-red-950 border border-amber-300 text-[11px] font-semibold"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-amber-50 text-red-950 border border-amber-300 text-[11px] font-semibold"
               >
                 <Sparkles className="h-3 w-3 text-amber-600" />
                 <span>{spec}</span>
@@ -168,7 +168,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
               {formatINR(minPrice)}
             </span>
           </div>
-          <div className="inline-flex items-center gap-1 text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+          <div className="inline-flex items-center gap-1 text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-sm border border-emerald-200">
             <CheckCircle2 className="h-2.5 w-2.5 text-emerald-700" />
             <span>Cash after puja</span>
           </div>
@@ -176,7 +176,7 @@ export const PriestCard: React.FC<PriestCardProps> = ({ priest }) => {
 
         <Button
           asChild
-          className="bg-red-700 hover:bg-red-800 text-white font-bold px-6 h-11 rounded-xl shadow-md active:scale-[0.98] transition-transform duration-150 cursor-pointer w-full sm:w-auto"
+          className="bg-red-700 hover:bg-red-800 text-white font-bold px-6 h-11 rounded-md shadow-md active:scale-[0.98] transition-transform duration-150 cursor-pointer w-full sm:w-auto"
         >
           <Link to={priestDetailUrl} className="flex items-center justify-center gap-2 text-xs font-bold">
             <span>Book Purohit</span>

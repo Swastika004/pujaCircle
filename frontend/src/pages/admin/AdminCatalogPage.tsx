@@ -1,59 +1,58 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Plus,
-  Search,
-  Edit2,
-  Trash2,
-  Filter,
-  X,
-  Layers,
-} from 'lucide-react';
-import { PujaCatalogEntry } from '@/types/advisor';
-import { mockDb } from '@/mocks/data';
-import { modalTransition, buttonPress } from '@/motion/variants';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus, Search, Edit2, Trash2, Filter, X, Layers } from "lucide-react";
+import { PujaCatalogEntry } from "@/types/advisor";
+import { mockDb } from "@/mocks/data";
+import { modalTransition, buttonPress } from "@/motion/variants";
 
 export const AdminCatalogPage: React.FC = () => {
-  const [catalog, setCatalog] = useState<PujaCatalogEntry[]>([...mockDb.pujaCatalog]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [catalog, setCatalog] = useState<PujaCatalogEntry[]>([
+    ...mockDb.pujaCatalog,
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
   // Modal states for Create / Edit
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<PujaCatalogEntry | null>(null);
+  const [editingEntry, setEditingEntry] = useState<PujaCatalogEntry | null>(
+    null,
+  );
 
   // Form states
-  const [name, setName] = useState('');
-  const [deity, setDeity] = useState('');
-  const [category, setCategory] = useState<PujaCatalogEntry['category']>('life-event');
-  const [description, setDescription] = useState('');
-  const [intentTagsText, setIntentTagsText] = useState('');
-  const [samagriText, setSamagriText] = useState('');
-  const [stepsText, setStepsText] = useState('');
-  const [timingNote, setTimingNote] = useState('');
+  const [name, setName] = useState("");
+  const [deity, setDeity] = useState("");
+  const [category, setCategory] =
+    useState<PujaCatalogEntry["category"]>("life-event");
+  const [description, setDescription] = useState("");
+  const [intentTagsText, setIntentTagsText] = useState("");
+  const [samagriText, setSamagriText] = useState("");
+  const [stepsText, setStepsText] = useState("");
+  const [timingNote, setTimingNote] = useState("");
 
   const filteredCatalog = catalog.filter((entry) => {
     const matchesSearch =
       entry.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entry.deity.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      entry.intentTags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      entry.intentTags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
 
     const matchesCategory =
-      selectedCategory === 'ALL' || entry.category === selectedCategory;
+      selectedCategory === "ALL" || entry.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
 
   const handleOpenAddModal = () => {
     setEditingEntry(null);
-    setName('');
-    setDeity('');
-    setCategory('life-event');
-    setDescription('');
-    setIntentTagsText('');
-    setSamagriText('');
-    setStepsText('');
-    setTimingNote('');
+    setName("");
+    setDeity("");
+    setCategory("life-event");
+    setDescription("");
+    setIntentTagsText("");
+    setSamagriText("");
+    setStepsText("");
+    setTimingNote("");
     setIsModalOpen(true);
   };
 
@@ -63,9 +62,9 @@ export const AdminCatalogPage: React.FC = () => {
     setDeity(entry.deity);
     setCategory(entry.category);
     setDescription(entry.description);
-    setIntentTagsText(entry.intentTags.join(', '));
-    setSamagriText(entry.samagriList.join('\n'));
-    setStepsText(entry.steps.join('\n'));
+    setIntentTagsText(entry.intentTags.join(", "));
+    setSamagriText(entry.samagriList.join("\n"));
+    setStepsText(entry.steps.join("\n"));
     setTimingNote(entry.timingNote);
     setIsModalOpen(true);
   };
@@ -74,23 +73,25 @@ export const AdminCatalogPage: React.FC = () => {
     e.preventDefault();
 
     const tags = intentTagsText
-      .split(',')
+      .split(",")
       .map((t) => t.trim().toLowerCase())
       .filter(Boolean);
 
     const samagri = samagriText
-      .split('\n')
+      .split("\n")
       .map((s) => s.trim())
       .filter(Boolean);
 
     const steps = stepsText
-      .split('\n')
+      .split("\n")
       .map((s) => s.trim())
       .filter(Boolean);
 
     if (editingEntry) {
       // Edit existing entry per FR-18 & FR-21
-      const updatedIndex = mockDb.pujaCatalog.findIndex((e) => e.id === editingEntry.id);
+      const updatedIndex = mockDb.pujaCatalog.findIndex(
+        (e) => e.id === editingEntry.id,
+      );
       if (updatedIndex !== -1) {
         mockDb.pujaCatalog[updatedIndex] = {
           ...editingEntry,
@@ -115,7 +116,7 @@ export const AdminCatalogPage: React.FC = () => {
         intentTags: tags,
         samagriList: samagri,
         steps,
-        timingNote: timingNote || 'Auspicious timing determined by tradition.',
+        timingNote: timingNote || "Auspicious timing determined by tradition.",
       };
       mockDb.pujaCatalog.unshift(newEntry);
     }
@@ -125,7 +126,9 @@ export const AdminCatalogPage: React.FC = () => {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this puja catalog entry?')) {
+    if (
+      window.confirm("Are you sure you want to delete this puja catalog entry?")
+    ) {
       // Delete entry from session mockDb per FR-18
       const index = mockDb.pujaCatalog.findIndex((e) => e.id === id);
       if (index !== -1) {
@@ -137,7 +140,6 @@ export const AdminCatalogPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl space-y-8">
-      
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[hsl(var(--border))] pb-5">
         <div>
           <div className="flex items-center gap-2">
@@ -147,7 +149,8 @@ export const AdminCatalogPage: React.FC = () => {
             </h1>
           </div>
           <p className="text-xs text-[hsl(var(--foreground-muted))] mt-1">
-            Curate and moderate rituals, deities, and intent-tag mappings powering the Sankalp Advisor (SRS FR-18)
+            Curate and moderate rituals, deities, and intent-tag mappings
+            powering the Sankalp Advisor (SRS FR-18)
           </p>
         </div>
 
@@ -162,7 +165,6 @@ export const AdminCatalogPage: React.FC = () => {
         </motion.button>
       </div>
 
-      
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-[hsl(var(--surface-alt))] p-3 rounded-lg border border-[hsl(var(--border))]">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-2.5 text-[hsl(var(--foreground-muted))]" />
@@ -171,30 +173,36 @@ export const AdminCatalogPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by puja name, deity, or tag..."
-            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] pl-9 pr-3 py-1.5 text-xs text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--foreground-muted))] focus:outline-none focus:border-[hsl(var(--brand-primary))]"
+            className="w-full rounded-md border bg-[hsl(var(--surface))] pl-9 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-[hsl(var(--brand-primary))]"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto text-xs">
           <Filter className="w-3.5 h-3.5 text-[hsl(var(--foreground-muted))]" />
-          {['ALL', 'life-event', 'dosha-nivaran', 'festival', 'business', 'ancestral'].map((cat) => (
+          {[
+            "ALL",
+            "life-event",
+            "dosha-nivaran",
+            "festival",
+            "business",
+            "ancestral",
+          ].map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded-sm text-[11px] font-medium transition-colors ${
                 selectedCategory === cat
-                  ? 'bg-[hsl(var(--brand-secondary))] text-white'
-                  : 'bg-[hsl(var(--surface))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface-alt))] border border-[hsl(var(--border))]'
+                  ? "bg-[hsl(var(--brand-secondary))] text-white"
+                  : "bg-[hsl(var(--surface))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface-alt))] border border-[hsl(var(--border))]"
               }`}
             >
-              {cat.replace('-', ' ')}
+              {cat.replace("-", " ")}
             </button>
           ))}
         </div>
       </div>
 
-      
       <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-[hsl(var(--foreground))] divide-y divide-[hsl(var(--border))]">
@@ -209,15 +217,20 @@ export const AdminCatalogPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-[hsl(var(--border))]">
               {filteredCatalog.map((entry) => (
-                <tr key={entry.id} className="hover:bg-[hsl(var(--surface-alt))]/50 transition-colors">
+                <tr
+                  key={entry.id}
+                  className="hover:bg-[hsl(var(--surface-alt))]/50 transition-colors"
+                >
                   <td className="py-3 px-4">
-                    <div className="font-semibold text-[hsl(var(--foreground))]">{entry.name}</div>
+                    <div className="font-semibold text-[hsl(var(--foreground))]">
+                      {entry.name}
+                    </div>
                     <div className="text-[11px] text-[hsl(var(--brand-primary))]">
                       Deity: {entry.deity}
                     </div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="rounded-full bg-[hsl(var(--surface-alt))] px-2 py-0.5 text-[10px] font-medium border border-[hsl(var(--border))]">
+                    <span className="rounded-sm bg-[hsl(var(--surface-alt))] px-2 py-0.5 text-[10px] font-medium border border-[hsl(var(--border))]">
                       {entry.category}
                     </span>
                   </td>
@@ -269,12 +282,13 @@ export const AdminCatalogPage: React.FC = () => {
         </div>
 
         <div className="p-3 bg-[hsl(var(--surface-alt))] border-t border-[hsl(var(--border))] text-[11px] text-[hsl(var(--foreground-muted))] flex justify-between items-center">
-          <span>Showing {filteredCatalog.length} of {catalog.length} catalog entries</span>
+          <span>
+            Showing {filteredCatalog.length} of {catalog.length} catalog entries
+          </span>
           <span>Session In-Memory Persistence Active (FR-21)</span>
         </div>
       </div>
 
-      
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
@@ -287,7 +301,9 @@ export const AdminCatalogPage: React.FC = () => {
             >
               <div className="flex items-center justify-between border-b border-[hsl(var(--border))] pb-3">
                 <h3 className="font-serif text-lg font-bold text-[hsl(var(--brand-secondary))]">
-                  {editingEntry ? 'Edit Catalog Entry' : 'Create New Puja Catalog Entry'}
+                  {editingEntry
+                    ? "Edit Catalog Entry"
+                    : "Create New Puja Catalog Entry"}
                 </h3>
                 <button
                   type="button"
@@ -335,11 +351,17 @@ export const AdminCatalogPage: React.FC = () => {
                   </label>
                   <select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value as PujaCatalogEntry['category'])}
+                    onChange={(e) =>
+                      setCategory(
+                        e.target.value as PujaCatalogEntry["category"],
+                      )
+                    }
                     className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
                   >
                     <option value="life-event">Life Event (Samskara)</option>
-                    <option value="dosha-nivaran">Dosha Nivaran (Remedial)</option>
+                    <option value="dosha-nivaran">
+                      Dosha Nivaran (Remedial)
+                    </option>
                     <option value="festival">Festival / Seasonal Vrat</option>
                     <option value="business">Business / Commercial</option>
                     <option value="ancestral">Ancestral / Shraddha</option>
@@ -425,7 +447,7 @@ export const AdminCatalogPage: React.FC = () => {
                     type="submit"
                     className="rounded-md bg-[hsl(var(--brand-primary))] px-4 py-1.5 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))]"
                   >
-                    {editingEntry ? 'Update Entry' : 'Create Entry'}
+                    {editingEntry ? "Update Entry" : "Create Entry"}
                   </button>
                 </div>
               </form>

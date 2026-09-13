@@ -48,11 +48,11 @@ export const AdvisorPreviewPanel: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-[hsl(var(--surface-alt))] p-1 rounded-lg border border-[hsl(var(--border))] text-xs">
+        <div className="flex items-center gap-2 bg-[hsl(var(--surface-alt))] p-1 rounded-md border border-[hsl(var(--border))] text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('tester')}
-            className={`px-3 py-1 rounded-md font-medium transition-colors ${
+            className={`px-3 py-1 rounded-sm font-medium transition-colors ${
               activeTab === 'tester'
                 ? 'bg-[hsl(var(--surface))] text-[hsl(var(--advisor-accent))] shadow-xs'
                 : 'text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--foreground))]'
@@ -63,7 +63,7 @@ export const AdvisorPreviewPanel: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('logs')}
-            className={`px-3 py-1 rounded-md font-medium transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1 rounded-sm font-medium transition-colors flex items-center gap-1.5 ${
               activeTab === 'logs'
                 ? 'bg-[hsl(var(--surface))] text-[hsl(var(--advisor-accent))] shadow-xs'
                 : 'text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--foreground))]'
@@ -122,7 +122,7 @@ export const AdvisorPreviewPanel: React.FC = () => {
                           {match.entry.name}
                         </span>
                       </div>
-                      <span className="rounded-full bg-[hsl(var(--advisor-accent))] px-2 py-0.5 font-bold text-white text-[10px]">
+                      <span className="rounded-sm bg-[hsl(var(--advisor-accent))] px-2 py-0.5 font-bold text-white text-[10px]">
                         Score: {match.score} ({Math.round(match.score * 100)}%)
                       </span>
                     </div>
@@ -166,7 +166,7 @@ export const AdvisorPreviewPanel: React.FC = () => {
               No devotee recommendation queries recorded yet in this session.
             </p>
           ) : (
-            <div className="divide-y divide-[hsl(var(--border))] rounded-lg border border-[hsl(var(--border))] overflow-hidden">
+            <div className="divide-y divide-[hsl(var(--border))] rounded-lg border overflow-hidden">
               {loggedQueries.map((log) => (
                 <div key={log.id} className="p-3 bg-[hsl(var(--surface))] text-xs space-y-1">
                   <div className="flex items-center justify-between">

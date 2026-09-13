@@ -220,7 +220,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               <button
                 type="button"
                 onClick={() => applyPreset('08:00', '11:00')}
-                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
+                className="flex-1 p-3 text-center text-[12px] rounded-md border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Morning</div>
                 <div className="text-muted-foreground font-mono text-[12px]">08:00 - 11:00</div>
@@ -228,7 +228,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               <button
                 type="button"
                 onClick={() => applyPreset('11:30', '14:30')}
-                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
+                className="flex-1 p-3 text-center text-[12px] rounded-md border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Midday</div>
                 <div className="text-muted-foreground font-mono text-[12px]">11:30 - 14:30</div>
@@ -236,7 +236,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               <button
                 type="button"
                 onClick={() => applyPreset('16:00', '19:00')}
-                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
+                className="flex-1 p-3 text-center text-[12px] rounded-md border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Evening</div>
                 <div className="text-muted-foreground font-mono text-[12px]">16:00 - 19:00</div>

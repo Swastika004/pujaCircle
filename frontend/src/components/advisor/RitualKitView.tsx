@@ -82,36 +82,35 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
           initial="initial"
           animate="animate"
           exit="exit"
-          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-xl space-y-6"
+          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-xl space-y-6"
         >
           <div className="flex items-start justify-between border-b border-[hsl(var(--border))] pb-4">
-            <div>
+            <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="rounded-full bg-[hsl(var(--advisor-accent-soft))] px-2.5 py-0.5 text-xs font-semibold text-[hsl(var(--advisor-accent))]">
-                  Ritual Kit & Vidhi
+                <span className="rounded-sm bg-[hsl(var(--advisor-accent-soft))] px-2.5 py-0.5 text-xs font-semibold text-[hsl(var(--advisor-accent))]">
+                  Personalized Ritual Kit
                 </span>
                 <span className="text-xs text-[hsl(var(--foreground-muted))]">
-                  {entry.category.replace('-', ' ')}
+                  • {entry.name}
                 </span>
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[hsl(var(--foreground))] mt-1">
-                {entry.name}
+              <h2 className="font-serif text-2xl font-semibold text-[hsl(var(--foreground))]">
+                Samagri & Preparations
               </h2>
-              <p className="text-xs text-[hsl(var(--brand-primary))] font-medium">
-                Presiding Deity: {entry.deity}
+              <p className="text-xs text-[hsl(var(--foreground-muted))]">
+                Vedic ritual requirements, deity offerings, and auspicious guidance.
               </p>
             </div>
-
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg p-2 text-[hsl(var(--foreground-muted))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
+              className="rounded-md p-2 text-[hsl(var(--foreground-muted))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="rounded-xl border border-[hsl(var(--brand-accent))]/30 bg-[hsl(var(--brand-accent-soft))]/40 p-4 space-y-3">
+          <div className="rounded-md border border-[hsl(var(--brand-accent))]/30 bg-[hsl(var(--brand-accent-soft))]/40 p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-bold text-[hsl(var(--brand-secondary))] uppercase tracking-wider">
                 <User className="w-4 h-4 text-[hsl(var(--brand-primary))]" />
@@ -168,7 +167,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
                 Personalized Devotee Sankalp (संकल्प)
               </h3>
             </div>
-            <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-4 text-xs italic leading-relaxed text-[hsl(var(--foreground))] border-l-4 border-l-[hsl(var(--brand-primary))]">
+            <div className="rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-4 text-xs italic leading-relaxed text-[hsl(var(--foreground))] border-l-4 border-l-[hsl(var(--brand-primary))]">
               {sankalpParagraph}
             </div>
           </div>
@@ -192,7 +191,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
                     key={item}
                     type="button"
                     onClick={() => toggleSamagri(index)}
-                    className="flex items-center gap-2 text-left rounded-lg p-2 border border-[hsl(var(--border))] bg-[hsl(var(--surface))] hover:bg-[hsl(var(--surface-alt))] transition-colors text-xs"
+                    className="flex items-center gap-2 text-left rounded-md p-2 border border-[hsl(var(--border))] bg-[hsl(var(--surface))] hover:bg-[hsl(var(--surface-alt))] transition-colors text-xs"
                   >
                     {isChecked ? (
                       <CheckSquare className="w-4 h-4 text-[hsl(var(--success))] shrink-0" />
@@ -216,7 +215,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
               {entry.steps.map((step, index) => (
                 <div
                   key={step}
-                  className="flex items-start gap-3 rounded-lg border border-[hsl(var(--border))] p-3 text-xs"
+                  className="flex items-start gap-3 rounded-md border border-[hsl(var(--border))] p-3 text-xs"
                 >
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--advisor-accent-soft))] text-[hsl(var(--advisor-accent))] font-bold text-[10px]">
                     {index + 1}
@@ -227,7 +226,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-lg bg-[hsl(var(--surface-alt))] p-3 text-xs text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]">
+          <div className="flex items-center gap-2 rounded-md bg-[hsl(var(--surface-alt))] p-3 text-xs text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]">
             <Calendar className="w-4 h-4 text-[hsl(var(--brand-accent))] shrink-0" />
             <span>
               <strong>Auspicious Timing & Tradition Note:</strong> {entry.timingNote}

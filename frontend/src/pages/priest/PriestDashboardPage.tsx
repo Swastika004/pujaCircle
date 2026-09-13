@@ -74,7 +74,7 @@ export const PriestDashboardPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <Link
             to="/priest/bookings"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#991B1B] text-white text-xs font-bold hover:bg-[#780016] transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#991B1B] text-white text-xs font-bold hover:bg-[#780016] transition-colors shadow-xs"
           >
             <span>Manage All Bookings</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -134,14 +134,14 @@ export const PriestDashboardPage: React.FC = () => {
       </div>
 
       
-      <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-6 space-y-4">
+      <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-6 space-y-4">
         <h2 className="font-serif text-base font-bold text-stone-900">
           Quick Priest Management Shortcuts
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           <Link
             to="/priest/bookings"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Appointments & Bookings</p>
@@ -152,7 +152,7 @@ export const PriestDashboardPage: React.FC = () => {
 
           <Link
             to="/priest/services"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Services & Dakshina</p>
@@ -163,7 +163,7 @@ export const PriestDashboardPage: React.FC = () => {
 
           <Link
             to="/priest/availability"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Availability & Slots</p>

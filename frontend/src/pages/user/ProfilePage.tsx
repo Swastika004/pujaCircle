@@ -235,7 +235,7 @@ export const ProfilePage: React.FC = () => {
 
         {/* Avatar Management Modal */}
         <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-          <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
+          <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
             <DialogHeader>
               <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
                 <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
@@ -266,7 +266,7 @@ export const ProfilePage: React.FC = () => {
                   type="button"
                   variant="destructive"
                   onClick={handleRemoveAvatar}
-                  className="w-full sm:w-auto text-xs rounded-xl"
+                  className="w-full sm:w-auto text-xs rounded-md"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Remove Photo
@@ -278,14 +278,14 @@ export const ProfilePage: React.FC = () => {
                   type="button"
                   variant="outline"
                   onClick={() => setIsAvatarModalOpen(false)}
-                  className="flex-1 sm:flex-none text-xs rounded-xl"
+                  className="flex-1 sm:flex-none text-xs rounded-md"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-[#780016] hover:bg-red-800 text-white border border-amber-400 font-bold flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
+                  className="bg-[#780016] hover:bg-red-800 text-white border border-amber-400 font-bold flex-1 sm:flex-none text-xs gap-1.5 rounded-md cursor-pointer"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Upload New Photo
@@ -296,9 +296,9 @@ export const ProfilePage: React.FC = () => {
         </Dialog>
 
         {/* Top Header & Quick Links (100% Flexbox Responsive) */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-5 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-5 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
           <div className="space-y-1.5 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
               <span className="text-sm font-serif font-black leading-none">ॐ</span>
               <span>Devotee Sanctuary Profile</span>
             </div>
@@ -315,7 +315,7 @@ export const ProfilePage: React.FC = () => {
             <Link to="/user/addresses" className="w-full sm:w-auto">
               <Button
                 variant="outline"
-                className="w-full sm:w-auto border-stone-300 hover:border-amber-400 hover:bg-amber-50 h-11 px-4 text-xs font-bold rounded-xl shadow-2xs transition-all flex items-center justify-center cursor-pointer"
+                className="w-full sm:w-auto border-stone-300 hover:border-amber-400 hover:bg-amber-50 h-11 px-4 text-xs font-bold rounded-md shadow-2xs transition-all flex items-center justify-center cursor-pointer"
               >
                 <MapPin className="w-4 h-4 mr-1.5 text-amber-600" />
                 <span>Manage Addresses</span>
@@ -323,7 +323,7 @@ export const ProfilePage: React.FC = () => {
             </Link>
             <Link to="/user/bookings" className="w-full sm:w-auto">
               <Button
-                className="w-full sm:w-auto bg-[#780016] hover:bg-red-800 text-white border border-amber-400 h-11 px-4 text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center cursor-pointer"
+                className="w-full sm:w-auto bg-[#780016] hover:bg-red-800 text-white border border-amber-400 h-11 px-4 text-xs font-bold rounded-md shadow-xs transition-all flex items-center justify-center cursor-pointer"
               >
                 <BookOpen className="w-4 h-4 mr-1.5 text-amber-300" />
                 <span>Puja Bookings</span>
@@ -333,7 +333,7 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* Hero User Profile Card (Pure White, Zero Gradients, Zero Blurs) */}
-        <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm">
+        <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto text-center sm:text-left">
               {/* Clickable Avatar to Change Photo */}
@@ -341,7 +341,7 @@ export const ProfilePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAvatarModalOpen(true)}
-                  className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
+                  className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-offset-2 focus:ring-offset-white transition-transform hover:scale-105 cursor-pointer"
                   title="Click to change profile picture"
                 >
                   <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-white">
@@ -379,13 +379,13 @@ export const ProfilePage: React.FC = () => {
 
                 {/* Verified Contact Badges */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs text-stone-600 pt-1">
-                  <div className="flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-xl border border-stone-200" title="Verified Mobile">
+                  <div className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200" title="Verified Mobile">
                     <Phone className="w-3.5 h-3.5 text-amber-600" />
                     <span className="font-mono font-bold text-stone-900">{phoneNumber}</span>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
                   </div>
 
-                  <div className="flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-xl border border-stone-200" title="Verified Email">
+                  <div className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200" title="Verified Email">
                     <Mail className="w-3.5 h-3.5 text-amber-600" />
                     <span className="font-medium text-stone-900">{email}</span>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
@@ -407,7 +407,7 @@ export const ProfilePage: React.FC = () => {
                 <Button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 shadow-xs w-full sm:w-auto text-xs h-11 px-6 rounded-xl cursor-pointer transition-all hover:shadow-md"
+                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 shadow-xs w-full sm:w-auto text-xs h-11 px-6 rounded-md cursor-pointer transition-all hover:shadow-md"
                 >
                   <Edit3 className="w-4 h-4 mr-2" />
                   <span>Edit Profile</span>
@@ -417,7 +417,7 @@ export const ProfilePage: React.FC = () => {
                   type="button"
                   variant="outline"
                   onClick={handleCancelEdit}
-                  className="w-full sm:w-auto text-xs h-11 px-6 rounded-xl border-stone-300"
+                  className="w-full sm:w-auto text-xs h-11 px-6 rounded-md border-stone-300"
                 >
                   <X className="w-4 h-4 mr-2" />
                   <span>Cancel Editing</span>
@@ -428,7 +428,7 @@ export const ProfilePage: React.FC = () => {
 
           {/* Devotee Quick Stats Row (100% Flexbox, Zero CSS Grids) */}
           <div className="flex flex-col sm:flex-row items-stretch justify-between gap-3 pt-6 mt-6 border-t border-amber-200">
-            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+            <div className="flex-1 p-4 rounded-lg bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
               <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
                 <Calendar className="w-3.5 h-3.5 text-red-700" />
                 Ceremonies Booked
@@ -438,7 +438,7 @@ export const ProfilePage: React.FC = () => {
               </span>
             </div>
 
-            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+            <div className="flex-1 p-4 rounded-lg bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
               <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
                 <MapPin className="w-3.5 h-3.5 text-amber-600" />
                 Saved Addresses
@@ -448,7 +448,7 @@ export const ProfilePage: React.FC = () => {
               </span>
             </div>
 
-            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+            <div className="flex-1 p-4 rounded-lg bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
               <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 Devotee Trust Status
@@ -462,17 +462,17 @@ export const ProfilePage: React.FC = () => {
 
         {/* Main Tabs Section */}
         <Tabs defaultValue="personal" className="w-full space-y-6">
-          <TabsList className="flex items-center gap-2 w-full sm:max-w-sm bg-white p-1.5 border-2 border-amber-300 rounded-2xl shadow-xs">
+          <TabsList className="flex items-center gap-2 w-full sm:max-w-sm bg-white p-1.5 border-2 border-amber-300 rounded-md shadow-xs">
             <TabsTrigger
               value="personal"
-              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-xl data-[state=active]:shadow-sm transition-all"
+              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-sm data-[state=active]:shadow-sm transition-all"
             >
               <User className="w-4 h-4 mr-1.5 hidden sm:inline-block" />
               Personal Details
             </TabsTrigger>
             <TabsTrigger
               value="security"
-              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-xl data-[state=active]:shadow-sm transition-all"
+              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-sm data-[state=active]:shadow-sm transition-all"
             >
               <KeyRound className="w-4 h-4 mr-1.5 hidden sm:inline-block" />
               Security & Credentials
@@ -481,7 +481,7 @@ export const ProfilePage: React.FC = () => {
 
           {/* TAB 1: Personal Details */}
           <TabsContent value="personal" className="space-y-6 focus-visible:outline-none">
-            <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
               <div className="space-y-1">
                 <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Personal Information</h3>
                 <p className="text-xs text-stone-600">
@@ -502,11 +502,11 @@ export const ProfilePage: React.FC = () => {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Aditi Sharma"
-                        className="h-11 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs font-medium"
+                        className="h-11 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs font-medium"
                         required
                       />
                     ) : (
-                      <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200 text-sm font-bold text-stone-900 flex items-center justify-between">
+                      <div className="p-3.5 bg-stone-50 rounded-md border border-stone-200 text-sm font-bold text-stone-900 flex items-center justify-between">
                         <span>{fullName}</span>
                         <User className="w-4 h-4 text-stone-400" />
                       </div>
@@ -523,7 +523,7 @@ export const ProfilePage: React.FC = () => {
                         <ShieldCheck className="w-3 h-3 text-emerald-600" /> Verified
                       </span>
                     </div>
-                    <div className="p-3.5 bg-stone-100 rounded-xl border border-stone-200 text-sm text-stone-700 font-medium flex items-center justify-between cursor-not-allowed">
+                    <div className="p-3.5 bg-stone-100 rounded-md border border-stone-200 text-sm text-stone-700 font-medium flex items-center justify-between cursor-not-allowed">
                       <span>{email}</span>
                       <Lock className="w-4 h-4 text-stone-400" />
                     </div>
@@ -540,7 +540,7 @@ export const ProfilePage: React.FC = () => {
                       <ShieldCheck className="w-3 h-3 text-emerald-600" /> OTP Verified
                     </span>
                   </div>
-                  <div className="p-3.5 bg-stone-100 rounded-xl border border-stone-200 text-sm font-mono font-bold text-stone-900 flex items-center justify-between cursor-not-allowed">
+                  <div className="p-3.5 bg-stone-100 rounded-md border border-stone-200 text-sm font-mono font-bold text-stone-900 flex items-center justify-between cursor-not-allowed">
                     <span>{phoneNumber}</span>
                     <Lock className="w-4 h-4 text-stone-400" />
                   </div>
@@ -548,13 +548,13 @@ export const ProfilePage: React.FC = () => {
 
                 {isEditing && (
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t border-stone-200">
-                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto h-10 px-5 text-xs rounded-xl">
+                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto h-10 px-5 text-xs rounded-md">
                       Cancel
                     </Button>
                     <Button
                       type="submit"
                       disabled={isSavingProfile}
-                      className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-6 text-xs rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+                      className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-6 text-xs rounded-md shadow-xs cursor-pointer puja-btn-tap"
                     >
                       <Save className="w-4 h-4 mr-2" />
                       {isSavingProfile ? 'Saving Changes...' : 'Save Profile Changes'}
@@ -567,7 +567,7 @@ export const ProfilePage: React.FC = () => {
 
           {/* TAB 2: Security & Passwords */}
           <TabsContent value="security" className="space-y-6 focus-visible:outline-none">
-            <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
               <div className="space-y-1">
                 <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Security & Credentials</h3>
                 <p className="text-xs text-stone-600">
@@ -586,7 +586,7 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
@@ -602,7 +602,7 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <KeyRound className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
@@ -621,7 +621,7 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
@@ -629,7 +629,7 @@ export const ProfilePage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-300 space-y-1.5 text-xs text-stone-700">
+                <div className="p-4 bg-amber-50/70 rounded-md border border-amber-300 space-y-1.5 text-xs text-stone-700">
                   <div className="flex items-center gap-2 font-bold text-stone-900">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     Account Credential Protection
@@ -642,7 +642,7 @@ export const ProfilePage: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isUpdatingPassword}
-                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-11 px-6 text-xs rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-11 px-6 text-xs rounded-md shadow-xs cursor-pointer puja-btn-tap"
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   {isUpdatingPassword ? 'Updating Password...' : 'Update Password'}
@@ -655,9 +655,9 @@ export const ProfilePage: React.FC = () => {
         {/* Quick Navigation Cards (100% Flexbox) */}
         <div className="flex flex-col sm:flex-row items-stretch gap-4 pt-2 w-full">
           <Link to="/user/addresses" className="flex-1 group">
-            <div className="p-6 rounded-3xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
+            <div className="p-6 rounded-xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-amber-100 text-amber-800 border border-amber-300 group-hover:scale-105 transition-transform">
+                <div className="p-3 rounded-md bg-amber-100 text-amber-800 border border-amber-300 group-hover:scale-105 transition-transform">
                   <MapPin className="w-6 h-6 text-amber-700" />
                 </div>
                 <div>
@@ -674,9 +674,9 @@ export const ProfilePage: React.FC = () => {
           </Link>
 
           <Link to="/user/bookings" className="flex-1 group">
-            <div className="p-6 rounded-3xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
+            <div className="p-6 rounded-xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-red-100 text-red-800 border border-red-200 group-hover:scale-105 transition-transform">
+                <div className="p-3 rounded-md bg-red-100 text-red-800 border border-red-200 group-hover:scale-105 transition-transform">
                   <BookOpen className="w-6 h-6 text-red-700" />
                 </div>
                 <div>

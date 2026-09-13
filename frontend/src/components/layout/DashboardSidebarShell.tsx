@@ -63,7 +63,7 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
               key={item.path}
               to={item.path}
               onClick={onItemClick}
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition-all ${
                 isActive
                   ? 'bg-amber-100/80 text-[#991B1B] font-bold shadow-2xs border-l-3 border-[#991B1B]'
                   : 'text-stone-700 hover:text-stone-950 hover:bg-stone-100/60'
@@ -89,7 +89,7 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
         <Link
           to={profilePath}
           onClick={onItemClick}
-          className={`flex items-center gap-3 p-2 rounded-xl transition-colors ${
+          className={`flex items-center gap-3 p-2 rounded-md transition-colors ${
             isProfileActive
               ? 'bg-amber-100 text-[#991B1B]'
               : 'hover:bg-stone-100/70 text-stone-800'
@@ -117,7 +117,7 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
           variant="outline"
           size="sm"
           onClick={handleLogout}
-          className="w-full justify-center gap-2 text-xs font-bold text-red-700 hover:text-red-800 hover:bg-red-50 border-red-200 h-9 rounded-xl cursor-pointer"
+          className="w-full justify-center gap-2 text-xs font-bold text-red-700 hover:text-red-800 hover:bg-red-50 border-red-200 h-9 rounded-md cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Sign Out</span>
@@ -169,7 +169,7 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
               <SheetTrigger asChild>
                 <button
                   type="button"
-                  className="md:hidden p-2 rounded-lg border border-[hsl(var(--border))] text-stone-700 hover:bg-stone-100"
+                  className="md:hidden p-2 rounded-md border border-[hsl(var(--border))] text-stone-700 hover:bg-stone-100"
                   aria-label="Open mobile menu"
                 >
                   <Menu className="w-5 h-5" />
@@ -221,7 +221,7 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
             <button
               type="button"
               onClick={handleLogout}
-              className="p-2 rounded-lg text-stone-500 hover:text-red-700 hover:bg-red-50 transition-colors"
+              className="p-2 rounded-md text-stone-500 hover:text-red-700 hover:bg-red-50 transition-colors"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />

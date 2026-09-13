@@ -104,12 +104,12 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel */}
         <div className={`hidden lg:flex flex-col justify-between w-5/12 ${roleConfig.panelBg} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
                 ॐ
               </div>
               <div>
@@ -123,7 +123,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>{roleConfig.badge}</span>
               </div>
@@ -192,7 +192,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
             </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -207,7 +207,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                     type="email"
                     placeholder={roleConfig.demoEmail}
                     {...register('email')}
-                    className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                 </div>
                 {errors.email && (
@@ -231,7 +231,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-xl shadow-md cursor-pointer gap-2`}
+                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-md shadow-md cursor-pointer gap-2`}
                 >
                   {isLoading ? 'Sending Reset Code...' : 'Send Recovery Code'}
                   <ArrowRight className="h-4 w-4" />

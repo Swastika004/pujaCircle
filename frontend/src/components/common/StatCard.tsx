@@ -51,12 +51,12 @@ export const StatCard: React.FC<StatCardProps> = ({
   }[accentColor];
 
   return (
-    <div className="rounded-2xl border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+    <div className="rounded-lg border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
           {label}
         </span>
-        <div className={`h-9 w-9 rounded-xl ${colorStyles.bg} border ${colorStyles.border} flex items-center justify-center shrink-0`}>
+        <div className={`h-9 w-9 rounded-md ${colorStyles.bg} border ${colorStyles.border} flex items-center justify-center shrink-0`}>
           <Icon className={`h-4.5 w-4.5 ${colorStyles.text}`} />
         </div>
       </div>

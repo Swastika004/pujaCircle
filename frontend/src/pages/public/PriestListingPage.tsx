@@ -108,7 +108,7 @@ export const PriestListingPage: React.FC = () => {
     <div className="container py-6 sm:py-8 space-y-6 max-w-5xl">
       {/* Header Banner */}
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold">
           <Sparkles className="h-3.5 w-3.5 text-amber-700" />
           <span>Vedic Purohit Directory • Gurukul Acharyas</span>
         </div>
@@ -120,20 +120,20 @@ export const PriestListingPage: React.FC = () => {
         </p>
 
         <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-red-100 text-red-900 font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-red-100 text-red-900 font-semibold">
             <ShieldCheck className="h-3.5 w-3.5 text-red-700" /> 100% Lineage Verified
           </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-900 font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-amber-100 text-amber-900 font-semibold">
             <Flame className="h-3.5 w-3.5 text-amber-700" /> Complete Vidhi & Samagri List
           </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-emerald-100 text-emerald-900 font-semibold">
             ✓ Zero Online Advance
           </span>
         </div>
       </div>
 
       {/* Search & Filter Control Hub */}
-      <div className="bg-white border-2 border-amber-300 rounded-2xl shadow-xs overflow-hidden p-4 sm:p-5 space-y-4">
+      <div className="bg-white border-2 border-amber-300 rounded-lg shadow-xs overflow-hidden p-4 sm:p-5 space-y-4">
         {/* 1. Live Search Bar & Filters Toggle */}
         <div className="flex items-center gap-2.5">
           <div className="relative flex-1 w-full">
@@ -142,7 +142,7 @@ export const PriestListingPage: React.FC = () => {
               placeholder="Type ceremony name or priest (e.g. Griha Pravesh, Satyanarayan, Rudrabhishek)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-9 text-xs sm:text-sm h-10 rounded-xl border-amber-300 focus-visible:ring-red-700 focus-visible:border-red-700"
+              className="pl-9 pr-9 text-xs sm:text-sm h-10 rounded-md border-amber-300 focus-visible:ring-2 focus-visible:ring-red-700"
             />
             {searchQuery && (
               <button
@@ -162,7 +162,7 @@ export const PriestListingPage: React.FC = () => {
             variant={isFiltersOpen || appliedFiltersCount > 0 ? 'default' : 'outline'}
             size="sm"
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-            className={`h-10 text-xs gap-1.5 px-3.5 sm:px-4 font-bold shrink-0 cursor-pointer rounded-xl ${
+            className={`h-10 text-xs gap-1.5 px-3.5 sm:px-4 font-bold shrink-0 cursor-pointer rounded-md ${
               isFiltersOpen || appliedFiltersCount > 0
                 ? 'bg-red-700 hover:bg-red-800 text-white'
                 : 'border-2 border-amber-300 text-stone-800 hover:bg-amber-50'
@@ -171,7 +171,7 @@ export const PriestListingPage: React.FC = () => {
             <SlidersHorizontal className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Filters</span>
             {appliedFiltersCount > 0 && (
-              <span className="h-4 min-w-4 px-1 rounded-full bg-white text-red-700 text-[10px] font-bold flex items-center justify-center">
+              <span className="h-4 min-w-4 px-1 rounded-sm bg-white text-red-700 text-[10px] font-bold flex items-center justify-center">
                 {appliedFiltersCount}
               </span>
             )}
@@ -194,7 +194,7 @@ export const PriestListingPage: React.FC = () => {
               type="button"
               onClick={() => setSearchQuery(tag)}
               className={cn(
-                'px-2.5 py-1 rounded-lg text-xs transition-colors cursor-pointer',
+                'px-2.5 py-1 rounded-sm text-xs transition-colors cursor-pointer',
                 searchQuery.toLowerCase().includes(tag.toLowerCase())
                   ? 'bg-red-700 text-white font-bold'
                   : 'bg-stone-100 hover:bg-amber-100 text-stone-700 border border-stone-200'
@@ -223,7 +223,7 @@ export const PriestListingPage: React.FC = () => {
                       type="button"
                       onClick={() => setActiveLanguage(lang)}
                       className={cn(
-                        'px-3 py-1 rounded-xl text-xs transition-all cursor-pointer select-none font-semibold',
+                        'px-3 py-1 rounded-sm text-xs transition-all cursor-pointer select-none font-semibold',
                         isSelected
                           ? 'bg-red-700 text-white shadow-xs'
                           : 'bg-stone-100 text-stone-700 hover:bg-amber-100 border border-stone-200'
@@ -251,7 +251,7 @@ export const PriestListingPage: React.FC = () => {
                       type="button"
                       onClick={() => setActiveMinExp(tier.value)}
                       className={cn(
-                        'px-3 py-1 rounded-xl text-xs transition-all cursor-pointer select-none font-semibold',
+                        'px-3 py-1 rounded-sm text-xs transition-all cursor-pointer select-none font-semibold',
                         isSelected
                           ? 'bg-amber-500 text-stone-950 shadow-xs'
                           : 'bg-stone-100 text-stone-700 hover:bg-amber-100 border border-stone-200'
@@ -305,9 +305,9 @@ export const PriestListingPage: React.FC = () => {
           Connecting to Vedic scholar directory...
         </div>
       ) : priests.length === 0 ? (
-        <div className="border-2 border-amber-300 bg-white text-center py-14 px-4 shadow-xs rounded-3xl">
+        <div className="border-2 border-amber-300 bg-white text-center py-14 px-4 shadow-xs rounded-xl">
           <div className="max-w-md mx-auto space-y-3">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-red-700 border-2 border-amber-300">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-amber-100 text-red-700 border-2 border-amber-300">
               <Search className="h-6 w-6" />
             </div>
             <h2 className="text-base font-bold font-serif text-stone-900">No Priests Found</h2>
@@ -318,7 +318,7 @@ export const PriestListingPage: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={handleResetFilters}
-              className="text-xs gap-1.5 border-2 border-amber-300 rounded-xl cursor-pointer"
+              className="text-xs gap-1.5 border-2 border-amber-300 rounded-md cursor-pointer"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>Clear All Filters</span>

@@ -42,7 +42,7 @@ export const PujaCircleLogo: React.FC<PujaCircleLogoProps> = ({
         <rect
           width="32"
           height="32"
-          rx="7"
+          rx="5"
           fill="#B91C1C"
           className="transition-all duration-300 ease-out origin-center group-hover:scale-95 shadow-sm"
         />

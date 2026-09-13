@@ -46,7 +46,7 @@ export const ContactPage: React.FC = () => {
       
       <section className="w-full pt-8 sm:pt-14 pb-10 sm:pb-12 px-4 border-b border-stone-200">
         <div className="container max-w-4xl mx-auto text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-700 text-white text-xs font-semibold tracking-wide uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm bg-red-700 text-white text-xs font-semibold tracking-wide uppercase shadow-sm">
             <Flame className="h-3.5 w-3.5 text-amber-300 fill-amber-300 animate-pulse" />
             <span>Devotee Support & Inquiries</span>
           </div>
@@ -64,9 +64,9 @@ export const ContactPage: React.FC = () => {
       
       <section className="w-full px-4 pt-6">
         <div className="container max-w-5xl mx-auto">
-          <div className="rounded-2xl border-2 border-amber-400 bg-[#780016] text-white p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+          <div className="rounded-lg border-2 border-amber-400 bg-[#780016] text-white p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
             <div className="flex items-center gap-3 text-center sm:text-left">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-bold shrink-0">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-bold shrink-0">
                 <Flame className="h-5 w-5 fill-stone-950" />
               </div>
               <div>
@@ -81,7 +81,7 @@ export const ContactPage: React.FC = () => {
 
             <a
               href="tel:+919876543210"
-              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold text-xs shrink-0 flex items-center gap-2 shadow-sm puja-btn-tap"
+              className="px-5 py-2.5 rounded-md bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold text-xs shrink-0 flex items-center gap-2 shadow-sm puja-btn-tap"
             >
               <Phone className="h-3.5 w-3.5" />
               <span>+91 98765 43210 (24/7)</span>
@@ -94,7 +94,7 @@ export const ContactPage: React.FC = () => {
       <section className="w-full py-10 sm:py-14 px-4 border-b border-stone-200">
         <div className="container max-w-5xl mx-auto flex flex-col lg:flex-row items-start gap-8">
           
-          <div className="w-full lg:w-7/12 rounded-2xl border-2 border-stone-200 bg-white p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="w-full lg:w-7/12 rounded-lg border-2 border-stone-200 bg-white p-6 sm:p-8 shadow-xs space-y-5">
             <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
                 Send a Ritual Inquiry
@@ -113,7 +113,7 @@ export const ContactPage: React.FC = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Ramesh Chandra Sharma"
-                    className="text-xs h-10 border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                    className="text-xs h-10 border-stone-300 focus:ring-amber-500 focus:ring-amber-500"
                   />
                 </div>
 
@@ -125,7 +125,7 @@ export const ContactPage: React.FC = () => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="e.g. +91 98765 43210"
-                    className="text-xs h-10 border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                    className="text-xs h-10 border-stone-300 focus:ring-amber-500 focus:ring-amber-500"
                   />
                 </div>
               </div>
@@ -137,7 +137,7 @@ export const ContactPage: React.FC = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="e.g. Varanasi, Kolkata, Bengaluru"
-                    className="text-xs h-10 border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                    className="text-xs h-10 border-stone-300 focus:ring-amber-500 focus:ring-amber-500"
                   />
                 </div>
 
@@ -146,7 +146,7 @@ export const ContactPage: React.FC = () => {
                   <select
                     value={ritualType}
                     onChange={(e) => setRitualType(e.target.value)}
-                    className="w-full h-10 rounded-md border border-stone-300 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full h-10 rounded-md border border-stone-300 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-amber-500"
                   >
                     <option value="Griha Pravesh">Griha Pravesh (House Warming)</option>
                     <option value="Satyanarayan Katha">Satyanarayan Vrat Katha</option>
@@ -167,7 +167,7 @@ export const ContactPage: React.FC = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Mention preferred ceremony dates, language preference, or any specific samagri requirements..."
-                  className="text-xs border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                  className="text-xs border-stone-300 focus:ring-amber-500 focus:ring-amber-500"
                 />
               </div>
 
@@ -189,9 +189,9 @@ export const ContactPage: React.FC = () => {
             </h3>
 
             
-            <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
+            <Card className="border-2 border-stone-200 bg-white rounded-lg shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
-                <div className="h-10 w-10 rounded-xl bg-red-700 text-white flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-red-700 text-white flex items-center justify-center shrink-0">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
@@ -203,9 +203,9 @@ export const ContactPage: React.FC = () => {
             </Card>
 
             
-            <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
+            <Card className="border-2 border-stone-200 bg-white rounded-lg shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
-                <div className="h-10 w-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-emerald-700 text-white flex items-center justify-center shrink-0">
                   <MessageSquare className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
@@ -217,9 +217,9 @@ export const ContactPage: React.FC = () => {
             </Card>
 
             
-            <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
+            <Card className="border-2 border-stone-200 bg-white rounded-lg shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
-                <div className="h-10 w-10 rounded-xl bg-amber-500 text-stone-900 flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-amber-500 text-stone-900 flex items-center justify-center shrink-0">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
@@ -231,9 +231,9 @@ export const ContactPage: React.FC = () => {
             </Card>
 
             
-            <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs">
+            <Card className="border-2 border-stone-200 bg-white rounded-lg shadow-xs">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
-                <div className="h-10 w-10 rounded-xl bg-stone-900 text-white flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-stone-900 text-white flex items-center justify-center shrink-0">
                   <Clock className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">

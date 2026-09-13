@@ -18,9 +18,9 @@ export interface CookiesModalProps {
 export const CookiesModal: React.FC<CookiesModalProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto p-6 bg-white text-stone-900 border-2 border-amber-300 shadow-2xl sm:rounded-2xl space-y-4">
+      <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto p-6 bg-white text-stone-900 border-2 border-amber-300 shadow-2xl sm:rounded-lg space-y-4">
         <DialogHeader className="space-y-1 text-left pb-2 border-b border-stone-200">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-[#780016] text-[11px] font-bold w-fit">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-sm bg-amber-100 text-[#780016] text-[11px] font-bold w-fit">
             <Cookie className="w-3.5 h-3.5" />
             <span>Browser Preferences</span>
           </div>
@@ -76,7 +76,7 @@ export const CookiesModal: React.FC<CookiesModalProps> = ({ isOpen, onClose }) =
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-bold text-white bg-[#991B1B] hover:bg-[#780016] rounded-xl transition-colors cursor-pointer"
+            className="px-4 py-2 text-xs font-bold text-white bg-[#991B1B] hover:bg-[#780016] rounded-md transition-colors cursor-pointer"
           >
             Acknowledge
           </button>

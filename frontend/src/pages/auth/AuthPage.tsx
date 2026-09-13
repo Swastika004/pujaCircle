@@ -220,12 +220,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel (Solid Sacred Vermilion `#780016`) */}
         <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
                 ॐ
               </div>
               <div>
@@ -239,7 +239,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>
                   {showStaff ? 'Platform Governance' : activeTab === 'priest' ? 'Vedic Purohit Service' : 'Sacred Home Rituals'}
@@ -316,12 +316,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               </div>
             ) : (
               <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="inline-flex p-1 rounded-xl bg-amber-100/70 border border-amber-300 w-full sm:w-auto">
+                <div className="inline-flex p-1 rounded-md bg-amber-100/70 border border-amber-300 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={() => handleTabSwitch('devotee')}
                     className={cn(
-                      'flex-1 sm:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer',
+                      'flex-1 sm:flex-initial px-5 py-2 rounded-sm text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer',
                       activeTab === 'devotee'
                         ? 'bg-white text-[#780016] shadow-xs'
                         : 'text-stone-700 hover:text-stone-950'
@@ -335,7 +335,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     type="button"
                     onClick={() => handleTabSwitch('priest')}
                     className={cn(
-                      'flex-1 sm:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer',
+                      'flex-1 sm:flex-initial px-5 py-2 rounded-sm text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer',
                       activeTab === 'priest'
                         ? 'bg-white text-[#780016] shadow-xs'
                         : 'text-stone-700 hover:text-stone-950'
@@ -374,7 +374,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
 
             {/* Error Alert */}
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -391,7 +391,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type="email"
                       placeholder="admin@pujacircle.demo"
                       {...registerAdmin('email')}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
                   {adminErrors.email && (
@@ -407,7 +407,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
                       {...registerAdmin('password')}
-                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                     <button
                       type="button"
@@ -454,7 +454,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       placeholder={activeTab === 'priest' ? 'Pandit Debabrata Acharya' : 'Aditi Sharma'}
                       value={regFullName}
                       onChange={(e) => setRegFullName(e.target.value)}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
                 </div>
@@ -468,7 +468,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       placeholder="+919876543210"
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
                 </div>
@@ -482,7 +482,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       placeholder="devotee@example.com"
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
                 </div>
@@ -497,7 +497,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                         placeholder="Rigveda / Shukla Yajurveda"
                         value={regSamhita}
                         onChange={(e) => setRegSamhita(e.target.value)}
-                        className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                        className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                       />
                     </div>
                   </div>
@@ -512,7 +512,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       placeholder="••••••••"
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
-                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                     <button
                       type="button"
@@ -561,7 +561,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type="tel"
                       placeholder={activeTab === 'priest' ? '+919876543211' : '+919876543210'}
                       {...registerLogin('phoneNumber')}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
                   {loginErrors.phoneNumber && (
@@ -589,7 +589,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
                       {...registerLogin('password')}
-                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:border-amber-500"
+                      className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                     <button
                       type="button"

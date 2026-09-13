@@ -114,7 +114,7 @@ export const BookingsPage: React.FC = () => {
       {/* 1. Page Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold">
             <Sparkles className="h-3.5 w-3.5 text-amber-700" />
             <span>Devotee Appointments • Shubh Muhurats</span>
           </div>
@@ -127,7 +127,7 @@ export const BookingsPage: React.FC = () => {
         </div>
 
         <Link to="/user/priests" className="shrink-0 w-full sm:w-auto">
-          <Button className="w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-md h-11 px-5 active:scale-[0.98] transition-transform cursor-pointer">
+          <Button className="w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold bg-red-700 hover:bg-red-800 text-white rounded-md shadow-md h-11 px-5 active:scale-[0.98] transition-transform cursor-pointer">
             <span>Schedule New Puja</span>
             <ArrowRight className="h-4 w-4" />
           </Button>
@@ -136,7 +136,7 @@ export const BookingsPage: React.FC = () => {
 
       {/* 2. Stat Counters Strip (Flexbox Only) */}
       <div className="flex flex-wrap gap-3 w-full">
-        <div className="flex-1 min-w-36 bg-white border-2 border-amber-200 rounded-2xl p-4 shadow-2xs">
+        <div className="flex-1 min-w-36 bg-white border-2 border-amber-200 rounded-lg p-4 shadow-2xs">
           <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">
             Total Ceremonies
           </span>
@@ -145,7 +145,7 @@ export const BookingsPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex-1 min-w-36 bg-white border-2 border-emerald-200 rounded-2xl p-4 shadow-2xs">
+        <div className="flex-1 min-w-36 bg-white border-2 border-emerald-200 rounded-lg p-4 shadow-2xs">
           <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
             Confirmed & Scheduled
           </span>
@@ -154,7 +154,7 @@ export const BookingsPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex-1 min-w-36 bg-white border-2 border-amber-300 rounded-2xl p-4 shadow-2xs">
+        <div className="flex-1 min-w-36 bg-white border-2 border-amber-300 rounded-lg p-4 shadow-2xs">
           <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">
             Awaiting Purohit
           </span>
@@ -163,7 +163,7 @@ export const BookingsPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex-1 min-w-36 bg-white border-2 border-stone-200 rounded-2xl p-4 shadow-2xs">
+        <div className="flex-1 min-w-36 bg-white border-2 border-stone-200 rounded-lg p-4 shadow-2xs">
           <span className="text-[11px] font-bold text-stone-600 uppercase tracking-wider block">
             Completed Blessings
           </span>
@@ -174,27 +174,27 @@ export const BookingsPage: React.FC = () => {
       </div>
 
       {/* 3. Tabs & Live Search Filter Hub */}
-      <div className="bg-white border-2 border-amber-300 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+      <div className="bg-white border-2 border-amber-300 rounded-lg p-4 sm:p-5 shadow-xs space-y-4">
         <div className="overflow-x-auto pb-1 -mx-2 px-2 sm:mx-0 sm:px-0">
           <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as FilterTab)}>
-            <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-stone-100 p-1 text-stone-600 border border-stone-200 min-w-max gap-1">
+            <TabsList className="inline-flex h-11 items-center justify-start rounded-md bg-stone-100 p-1 text-stone-600 border border-stone-200 min-w-max gap-1">
               <TabsTrigger
                 value="ALL"
-                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-xl data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
+                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-sm data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>All</span>
-                <span className="px-1.5 py-0.5 rounded-full bg-stone-200 text-[10px] font-bold text-stone-900">
+                <span className="px-1.5 py-0.5 rounded-sm bg-stone-200 text-[10px] font-bold text-stone-900">
                   {counts.all}
                 </span>
               </TabsTrigger>
 
               <TabsTrigger
                 value="PENDING"
-                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-xl data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
+                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-sm data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Pending Acceptance</span>
                 {counts.pending > 0 && (
-                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400 text-stone-950">
+                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-amber-400 text-stone-950">
                     {counts.pending}
                   </span>
                 )}
@@ -202,11 +202,11 @@ export const BookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="CONFIRMED"
-                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-xl data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
+                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-sm data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Confirmed</span>
                 {counts.confirmed > 0 && (
-                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white">
+                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-600 text-white">
                     {counts.confirmed}
                   </span>
                 )}
@@ -214,11 +214,11 @@ export const BookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="COMPLETED"
-                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-xl data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
+                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-sm data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Completed</span>
                 {counts.completed > 0 && (
-                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-stone-700 text-white">
+                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-stone-700 text-white">
                     {counts.completed}
                   </span>
                 )}
@@ -226,11 +226,11 @@ export const BookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="CANCELLED"
-                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-xl data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
+                className="text-xs px-3.5 py-1.5 h-9 gap-1.5 rounded-sm data-[state=active]:bg-red-700 data-[state=active]:text-white data-[state=active]:shadow-sm font-bold active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Cancelled</span>
                 {counts.cancelled > 0 && (
-                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-600 text-white">
+                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-red-600 text-white">
                     {counts.cancelled}
                   </span>
                 )}
@@ -245,7 +245,7 @@ export const BookingsPage: React.FC = () => {
             placeholder="Search bookings by ceremony, purohit name, or reference ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-9 text-xs sm:text-sm h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+            className="pl-9 pr-9 text-xs sm:text-sm h-10 rounded-md border-amber-300 focus-visible:ring-red-700"
           />
           {searchQuery && (
             <button
@@ -273,7 +273,7 @@ export const BookingsPage: React.FC = () => {
             return (
               <div
                 key={b.id}
-                className="w-full bg-white border-2 border-amber-200 hover:border-amber-400 rounded-3xl p-5 sm:p-6 shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5 group"
+                className="w-full bg-white border-2 border-amber-200 hover:border-amber-400 rounded-xl p-5 sm:p-6 shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5 group"
               >
                 <div className="space-y-3 flex-1 min-w-0">
                   {/* Title & Status Bar */}
@@ -282,7 +282,7 @@ export const BookingsPage: React.FC = () => {
                       {b.serviceName || 'Vedic Ceremony'}
                     </span>
                     <BookingStatusBadge status={b.status} />
-                    <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-lg bg-amber-100 border border-amber-300 text-stone-900">
+                    <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-sm bg-amber-100 border border-amber-300 text-stone-900">
                       {b.bookingReference || b.id.slice(0, 8)}
                     </span>
                   </div>
@@ -337,7 +337,7 @@ export const BookingsPage: React.FC = () => {
                 {/* Actions Block */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 w-full md:w-auto">
                   <Link to={`/user/bookings/${b.id}`} className="w-full sm:w-auto">
-                    <Button className="gap-1.5 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-xs w-full sm:w-auto h-10 px-5 cursor-pointer">
+                    <Button className="gap-1.5 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-md shadow-xs w-full sm:w-auto h-10 px-5 cursor-pointer">
                       <span>View Details & Samagri</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
@@ -350,7 +350,7 @@ export const BookingsPage: React.FC = () => {
                         setBookingToRate(b);
                         setRatingModalOpen(true);
                       }}
-                      className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold w-full sm:w-auto h-10 px-4 rounded-xl cursor-pointer shadow-xs"
+                      className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold w-full sm:w-auto h-10 px-4 rounded-md cursor-pointer shadow-xs"
                     >
                       <Star className="w-3.5 h-3.5 fill-stone-950" />
                       <span>Rate Purohit</span>
@@ -365,7 +365,7 @@ export const BookingsPage: React.FC = () => {
                         setBookingToCancel(b);
                         setCancelModalOpen(true);
                       }}
-                      className="gap-1 text-xs text-red-700 hover:text-red-800 hover:bg-red-50 border-2 border-red-200 w-full sm:w-auto h-10 px-4 rounded-xl cursor-pointer"
+                      className="gap-1 text-xs text-red-700 hover:text-red-800 hover:bg-red-50 border-2 border-red-200 w-full sm:w-auto h-10 px-4 rounded-md cursor-pointer"
                     >
                       <Ban className="w-3.5 h-3.5" />
                       <span>Cancel</span>
@@ -377,9 +377,9 @@ export const BookingsPage: React.FC = () => {
           })}
         </div>
       ) : (
-        <div className="bg-white border-2 border-amber-300 rounded-3xl p-12 text-center shadow-xs">
+        <div className="bg-white border-2 border-amber-300 rounded-xl p-12 text-center shadow-xs">
           <div className="max-w-md mx-auto space-y-4">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-red-700 border-2 border-amber-300">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-amber-100 text-red-700 border-2 border-amber-300">
               <Calendar className="h-7 w-7" />
             </div>
             <div className="space-y-1">
@@ -393,7 +393,7 @@ export const BookingsPage: React.FC = () => {
               </p>
             </div>
             <Link to="/user/priests">
-              <Button className="gap-2 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-md h-10 px-5 cursor-pointer">
+              <Button className="gap-2 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-md shadow-md h-10 px-5 cursor-pointer">
                 <Search className="h-3.5 w-3.5" /> Discover Purohits
               </Button>
             </Link>

@@ -27,7 +27,7 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({
       animate="animate"
       exit="exit"
       whileHover="hover"
-      className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
+      className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
     >
       <motion.div variants={cardHover} className="space-y-4">
         <div className="flex items-start justify-between gap-4">
@@ -49,7 +49,7 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({
           </div>
 
           <div className="flex flex-col items-end">
-            <div className="inline-flex items-center gap-1 rounded-full bg-[hsl(var(--advisor-accent-soft))] px-3 py-1 text-xs font-semibold text-[hsl(var(--advisor-accent))]">
+            <div className="inline-flex items-center gap-1 rounded-sm bg-[hsl(var(--advisor-accent-soft))] px-2.5 py-1 text-xs font-semibold text-[hsl(var(--advisor-accent))]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>{matchPercentage}% Match</span>
             </div>
@@ -60,7 +60,7 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({
           {entry.description}
         </p>
 
-        <div className="rounded-lg bg-[hsl(var(--surface-alt))] p-3 text-xs text-[hsl(var(--foreground))] space-y-1 border border-[hsl(var(--border))]">
+        <div className="rounded-md bg-[hsl(var(--surface-alt))] p-3 text-xs text-[hsl(var(--foreground))] space-y-1 border border-[hsl(var(--border))]">
           <div className="flex items-center gap-1 font-semibold text-[hsl(var(--advisor-accent))]">
             <CheckCircle className="w-3.5 h-3.5" />
             <span>Why this is recommended:</span>

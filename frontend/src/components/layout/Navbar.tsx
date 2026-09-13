@@ -53,7 +53,7 @@ export const Navbar: React.FC = () => {
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
-      'relative transition-all font-semibold text-xs sm:text-sm flex items-center gap-1.5 py-1.5 px-3.5 rounded-xl cursor-pointer select-none',
+      'relative transition-all font-semibold text-xs sm:text-sm flex items-center gap-1.5 py-1.5 px-3.5 rounded-md cursor-pointer select-none',
       isActive
         ? 'text-[#780016] font-bold bg-amber-100/90 border border-amber-300 shadow-xs'
         : 'text-stone-700 hover:text-[#780016] hover:bg-amber-50/70 border border-transparent'
@@ -61,7 +61,7 @@ export const Navbar: React.FC = () => {
 
   const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
-      'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors border-l-2',
+      'flex items-center gap-3 px-3.5 py-2.5 rounded-md text-sm font-semibold transition-colors border-l-2',
       isActive
         ? 'bg-amber-100 text-[#780016] font-bold border-amber-500'
         : 'text-stone-700 hover:bg-amber-50/60 hover:text-stone-950 border-transparent'
@@ -135,7 +135,7 @@ export const Navbar: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1.5 sm:gap-2 pl-1.5 pr-2.5 sm:pr-3 py-1.5 h-9 rounded-xl border border-amber-300 bg-white text-stone-900 shadow-xs hover:border-amber-400 hover:bg-amber-50/50 transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 sm:gap-2 pl-1.5 pr-2.5 sm:pr-3 py-1.5 h-9 rounded-md border border-amber-300 bg-white text-stone-900 shadow-xs hover:border-amber-400 hover:bg-amber-50/50 transition-all cursor-pointer"
                 >
                   <Avatar className="h-6 w-6 ring-1 ring-amber-400 bg-amber-50 shrink-0">
                     <AvatarImage src={user.avatarUrl} alt={user.name} />
@@ -150,7 +150,7 @@ export const Navbar: React.FC = () => {
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-56 p-1.5 bg-white border-2 border-amber-300 shadow-xl rounded-xl">
+              <DropdownMenuContent align="end" className="w-56 p-1.5 bg-white border-2 border-amber-300 shadow-xl rounded-lg">
                 <DropdownMenuLabel className="font-normal px-2 py-1.5">
                   <div className="flex flex-col space-y-0.5">
                     <p className="text-xs font-bold font-serif text-stone-900 truncate">{user.name}</p>
@@ -162,7 +162,7 @@ export const Navbar: React.FC = () => {
                 <DropdownMenuGroup>
                   <DropdownMenuItem
                     onClick={() => navigate('/user/profile')}
-                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-lg hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
+                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-sm hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
                   >
                     <User className="h-3.5 w-3.5 text-stone-700" />
                     <span>Profile</span>
@@ -170,7 +170,7 @@ export const Navbar: React.FC = () => {
 
                   <DropdownMenuItem
                     onClick={() => navigate('/user/addresses')}
-                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-lg hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
+                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-sm hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
                   >
                     <MapPin className="h-3.5 w-3.5 text-amber-600" />
                     <span>My Addresses</span>
@@ -178,7 +178,7 @@ export const Navbar: React.FC = () => {
 
                   <DropdownMenuItem
                     onClick={() => navigate('/user/bookings')}
-                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-lg hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
+                    className="flex items-center gap-2.5 text-xs py-2 px-2 cursor-pointer rounded-sm hover:bg-amber-50 focus:bg-amber-50 text-stone-800"
                   >
                     <Calendar className="h-3.5 w-3.5 text-amber-700" />
                     <span>My Bookings</span>
@@ -189,7 +189,7 @@ export const Navbar: React.FC = () => {
 
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="flex items-center gap-2.5 text-xs py-2 px-2 text-red-700 focus:bg-red-50 cursor-pointer rounded-lg font-semibold"
+                  className="flex items-center gap-2.5 text-xs py-2 px-2 text-red-700 focus:bg-red-50 cursor-pointer rounded-sm font-semibold"
                 >
                   <LogOut className="h-3.5 w-3.5" />
                   <span>Sign Out</span>
@@ -201,7 +201,7 @@ export const Navbar: React.FC = () => {
               <Link to="/login">
                 <Button
                   size="sm"
-                  className="text-xs font-bold bg-[#991B1B] hover:bg-[#780016] text-white shadow-xs active:scale-[0.98] transition-all rounded-xl px-5 h-9 border border-amber-400/60 cursor-pointer"
+                  className="text-xs font-bold bg-[#991B1B] hover:bg-[#780016] text-white shadow-xs active:scale-[0.98] transition-all rounded-md px-5 h-9 border border-amber-400/60 cursor-pointer"
                 >
                   Login
                 </Button>
@@ -215,7 +215,7 @@ export const Navbar: React.FC = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden text-stone-800 hover:text-stone-950 hover:bg-amber-50 rounded-xl"
+                className="md:hidden text-stone-800 hover:text-stone-950 hover:bg-amber-50 rounded-md"
                 aria-label="Toggle navigation menu"
               >
                 <Menu className="h-5 w-5" />
@@ -346,7 +346,7 @@ export const Navbar: React.FC = () => {
                     <Button
                       variant="outline"
                       onClick={handleLogout}
-                      className="w-full text-xs font-bold text-red-700 border-red-200 hover:bg-red-50 gap-2 h-9 rounded-xl"
+                      className="w-full text-xs font-bold text-red-700 border-red-200 hover:bg-red-50 gap-2 h-9 rounded-md"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Sign Out</span>
@@ -354,7 +354,7 @@ export const Navbar: React.FC = () => {
                   </div>
                 ) : (
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full">
-                    <Button className="w-full bg-[#991B1B] hover:bg-[#780016] text-white font-bold text-xs h-10 rounded-xl shadow-sm">
+                    <Button className="w-full bg-[#991B1B] hover:bg-[#780016] text-white font-bold text-xs h-10 rounded-md shadow-sm">
                       Login
                     </Button>
                   </Link>

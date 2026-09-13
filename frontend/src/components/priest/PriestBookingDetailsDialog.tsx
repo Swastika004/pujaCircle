@@ -44,7 +44,7 @@ export const PriestBookingDetailsDialog: React.FC<PriestBookingDetailsDialogProp
 
         <div className="space-y-4 py-2 text-xs">
           {/* Puja & Price Banner */}
-          <div className="p-3.5 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+          <div className="p-3.5 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-between">
             <div>
               <p className="font-bold text-sm text-foreground">{booking.serviceName || 'Puja Ceremony'}</p>
               <p className="text-muted-foreground text-[11px]">Cash on completion</p>
@@ -55,7 +55,7 @@ export const PriestBookingDetailsDialog: React.FC<PriestBookingDetailsDialogProp
           </div>
 
           {/* Schedule Flex Row */}
-          <div className="flex items-center justify-between gap-4 p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
+          <div className="flex items-center justify-between gap-4 p-3.5 rounded-md bg-amber-50/60 border border-amber-200">
             <div className="flex-1 space-y-1">
               <span className="text-muted-foreground text-[11px] flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-primary" />

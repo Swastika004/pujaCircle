@@ -40,7 +40,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
   isProcessing = false,
 }) => {
   return (
-    <div className="rounded-2xl border border-amber-300/80 bg-white overflow-hidden shadow-xs">
+    <div className="rounded-lg border border-amber-300/80 bg-white overflow-hidden shadow-xs">
       <Table>
         <TableHeader>
           <TableRow className="bg-amber-50/70 border-b border-amber-200/80 hover:bg-amber-50/70">
@@ -119,7 +119,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                             size="sm"
                             onClick={() => onApprove(p.id)}
                             disabled={isProcessing}
-                            className="h-8 text-xs px-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-1 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+                            className="h-8 text-xs px-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-1 rounded-md shadow-xs cursor-pointer puja-btn-tap"
                           >
                             <Check className="w-3.5 h-3.5" />
                             Approve
@@ -129,7 +129,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                             size="sm"
                             onClick={() => onOpenReject(p)}
                             disabled={isProcessing}
-                            className="h-8 text-xs px-2.5 text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300 font-bold gap-1 rounded-xl cursor-pointer puja-btn-tap"
+                            className="h-8 text-xs px-2.5 text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300 font-bold gap-1 rounded-md cursor-pointer puja-btn-tap"
                           >
                             <XCircle className="w-3.5 h-3.5" />
                             Reject
@@ -143,7 +143,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 rounded-lg hover:bg-amber-100/70 hover:text-stone-900 cursor-pointer"
+                        className="h-8 w-8 p-0 rounded-md hover:bg-amber-100/70 hover:text-stone-900 cursor-pointer"
                         title="View Dossier"
                       >
                         <Eye className="w-4 h-4 text-stone-500 hover:text-stone-800" />
@@ -156,12 +156,12 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 w-8 p-0 rounded-lg hover:bg-amber-100/70 text-stone-500 hover:text-stone-800 cursor-pointer shrink-0"
+                          className="h-8 w-8 p-0 rounded-md hover:bg-amber-100/70 text-stone-500 hover:text-stone-800 cursor-pointer shrink-0"
                         >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44 text-xs rounded-xl border-amber-200 shadow-md">
+                      <DropdownMenuContent align="end" className="w-44 text-xs rounded-lg border-amber-200 shadow-md">
                         {isBanned ? (
                           <DropdownMenuItem onClick={() => onUnban(p.id)} className="gap-2 text-emerald-700 font-medium cursor-pointer">
                             <ShieldCheck className="w-3.5 h-3.5" />

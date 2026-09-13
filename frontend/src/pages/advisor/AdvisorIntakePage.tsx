@@ -50,7 +50,7 @@ export const AdvisorIntakePage: React.FC = () => {
       className="container mx-auto px-4 py-8 max-w-4xl space-y-8"
     >
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--advisor-accent-soft))] px-4 py-1.5 text-xs font-semibold text-[hsl(var(--advisor-accent))] border border-[hsl(var(--advisor-accent))]/20">
+        <div className="inline-flex items-center gap-2 rounded-sm bg-[hsl(var(--advisor-accent-soft))] px-3.5 py-1.5 text-xs font-semibold text-[hsl(var(--advisor-accent))] border border-[hsl(var(--advisor-accent))]/20">
           <Compass className="w-4 h-4" />
           <span>Sankalp Advisor • Guided Ritual Intelligence</span>
         </div>
@@ -62,7 +62,7 @@ export const AdvisorIntakePage: React.FC = () => {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 sm:p-8 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-[hsl(var(--border))] pb-4">
           <div className="flex items-center gap-2">
             <Wand2 className="w-5 h-5 text-[hsl(var(--advisor-accent))]" />
@@ -83,7 +83,7 @@ export const AdvisorIntakePage: React.FC = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs"
           >
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-8 text-center max-w-sm mx-4 space-y-4 shadow-2xl">
+            <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-8 text-center max-w-sm mx-4 space-y-4 shadow-2xl">
               <div className="mx-auto w-14 h-14 rounded-full bg-[hsl(var(--advisor-accent-soft))] flex items-center justify-center text-[hsl(var(--advisor-accent))] animate-spin">
                 <Compass className="w-8 h-8" />
               </div>

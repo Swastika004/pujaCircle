@@ -1,10 +1,13 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'framer-motion';
-import { Sparkles, HelpCircle, ArrowRight } from 'lucide-react';
-import { advisorIntakeSchema, AdvisorIntakeFormData } from '@/schemas/advisor.schema';
-import { buttonPress } from '@/motion/variants';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { Sparkles, HelpCircle, ArrowRight } from "lucide-react";
+import {
+  advisorIntakeSchema,
+  AdvisorIntakeFormData,
+} from "@/schemas/advisor.schema";
+import { buttonPress } from "@/motion/variants";
 
 export interface IntakeFormProps {
   onSubmit: (data: AdvisorIntakeFormData) => void;
@@ -14,10 +17,10 @@ export interface IntakeFormProps {
 }
 
 const QUICK_PROMPTS = [
-  'I just bought a new flat and want positive energy before moving in.',
+  "I just bought a new flat and want positive energy before moving in.",
   "My exams are coming up and I'm anxious about focus and recall.",
-  'Recurring bad luck, nothing is working out lately despite efforts.',
-  'Starting a new business and retail shop next month.',
+  "Recurring bad luck, nothing is working out lately despite efforts.",
+  "Starting a new business and retail shop next month.",
   "It's my father's death anniversary and we wish to perform rites.",
   "Planning my daughter's wedding and need divine blessings for harmony.",
 ];
@@ -26,7 +29,7 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
   onSubmit,
   isLoading = false,
   initialValues,
-  submitButtonText = 'Discover Recommended Pujas',
+  submitButtonText = "Discover Recommended Pujas",
 }) => {
   const {
     register,
@@ -37,17 +40,17 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
   } = useForm<AdvisorIntakeFormData>({
     resolver: zodResolver(advisorIntakeSchema),
     defaultValues: {
-      rawInput: initialValues?.rawInput || '',
-      occasion: initialValues?.occasion || '',
-      concern: initialValues?.concern || '',
-      urgency: initialValues?.urgency || 'medium',
+      rawInput: initialValues?.rawInput || "",
+      occasion: initialValues?.occasion || "",
+      concern: initialValues?.concern || "",
+      urgency: initialValues?.urgency || "medium",
     },
   });
 
-  const rawInputValue = watch('rawInput');
+  const rawInputValue = watch("rawInput");
 
   const handleQuickPromptClick = (prompt: string) => {
-    setValue('rawInput', prompt, { shouldValidate: true });
+    setValue("rawInput", prompt, { shouldValidate: true });
   };
 
   return (
@@ -58,18 +61,22 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
           className="block text-sm font-medium text-[hsl(var(--foreground))] items-center justify-between"
         >
           <span>Describe your situation or spiritual intent</span>
-          <span className="text-xs text-[hsl(var(--foreground-muted))]">Plain language</span>
+          <span className="text-xs text-[hsl(var(--foreground-muted))]">
+            Plain language
+          </span>
         </label>
         <textarea
           id="rawInput"
           rows={4}
-          {...register('rawInput')}
+          {...register("rawInput")}
           disabled={isLoading}
           placeholder="e.g. We recently bought our first home and want to conduct a housewarming before Navratri, or I am experiencing persistent career obstacles..."
-          className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-3 text-sm text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--foreground-muted))] focus:border-[hsl(var(--advisor-accent))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--advisor-accent))]/20 transition-colors"
+          className="w-full rounded-md border bg-[hsl(var(--surface))] p-3 text-sm text-foreground focus:border-[hsl(var(--advisor-accent))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--advisor-accent))]/20 transition-colors"
         />
         {errors.rawInput && (
-          <p className="text-xs text-[hsl(var(--danger))] mt-1">{errors.rawInput.message}</p>
+          <p className="text-xs text-[hsl(var(--danger))] mt-1">
+            {errors.rawInput.message}
+          </p>
         )}
       </div>
 
@@ -84,7 +91,7 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
               key={prompt}
               type="button"
               onClick={() => handleQuickPromptClick(prompt)}
-              className="text-xs rounded-full px-3 py-1 bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--advisor-accent-soft))] hover:text-[hsl(var(--advisor-accent))] border border-transparent hover:border-[hsl(var(--advisor-accent))]/30 transition-all text-left"
+              className="text-xs rounded-sm px-2.5 py-1 bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--advisor-accent-soft))] hover:text-[hsl(var(--advisor-accent))] border border-transparent hover:border-[hsl(var(--advisor-accent))]/30 transition-all text-left"
             >
               {prompt}
             </button>
@@ -102,14 +109,17 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="occasion" className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1">
+            <label
+              htmlFor="occasion"
+              className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1"
+            >
               Occasion
             </label>
             <select
               id="occasion"
-              {...register('occasion')}
+              {...register("occasion")}
               disabled={isLoading}
-              className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))] focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
+              className="w-full rounded-md border bg-[hsl(var(--surface))] p-2 text-xs text-foreground focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
             >
               <option value="">Any Occasion</option>
               <option value="new-home">New Home / Griha Pravesh</option>
@@ -122,17 +132,22 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
           </div>
 
           <div>
-            <label htmlFor="concern" className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1">
+            <label
+              htmlFor="concern"
+              className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1"
+            >
               Primary Concern
             </label>
             <select
               id="concern"
-              {...register('concern')}
+              {...register("concern")}
               disabled={isLoading}
-              className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))] focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
+              className="w-full rounded-md border bg-[hsl(var(--surface))] p-2 text-xs text-foreground focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
             >
               <option value="">General Well-being</option>
-              <option value="dosha-nivaran">Planetary Dosha / Astrological</option>
+              <option value="dosha-nivaran">
+                Planetary Dosha / Astrological
+              </option>
               <option value="health">Health & Longevity (Ayushya)</option>
               <option value="debt">Debt Clearance / Financial Relief</option>
               <option value="peace">Domestic Peace & Harmony</option>
@@ -140,14 +155,17 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
           </div>
 
           <div>
-            <label htmlFor="urgency" className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1">
+            <label
+              htmlFor="urgency"
+              className="block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1"
+            >
               Timeframe
             </label>
             <select
               id="urgency"
-              {...register('urgency')}
+              {...register("urgency")}
               disabled={isLoading}
-              className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))] focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
+              className="w-full rounded-md border bg-[hsl(var(--surface))] p-2 text-xs text-foreground focus:border-[hsl(var(--advisor-accent))] focus:outline-none"
             >
               <option value="low">Flexible / Future planning</option>
               <option value="medium">This Month</option>
@@ -163,7 +181,9 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
         whileTap={buttonPress}
         className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[hsl(var(--advisor-accent))] px-5 py-3 text-sm font-medium text-white shadow-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
       >
-        <span>{isLoading ? 'Reasoning and matching rituals...' : submitButtonText}</span>
+        <span>
+          {isLoading ? "Reasoning and matching rituals..." : submitButtonText}
+        </span>
         {!isLoading && <ArrowRight className="w-4 h-4" />}
       </motion.button>
     </form>

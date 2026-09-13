@@ -108,14 +108,18 @@ export const AdminPriestsPage: React.FC = () => {
   };
 
   // Status counts
-  const pendingCount = priests.filter((p) => p.approvalStatus === "PENDING").length;
+  const pendingCount = priests.filter(
+    (p) => p.approvalStatus === "PENDING",
+  ).length;
   const approvedCount = priests.filter(
     (p) => p.approvalStatus === "APPROVED" && p.accountStatus !== "BANNED",
   ).length;
   const rejectedCount = priests.filter(
     (p) => p.approvalStatus === "REJECTED",
   ).length;
-  const bannedCount = priests.filter((p) => p.accountStatus === "BANNED").length;
+  const bannedCount = priests.filter(
+    (p) => p.accountStatus === "BANNED",
+  ).length;
 
   // Filter priests
   const filteredPriests = priests.filter((p) => {
@@ -125,7 +129,8 @@ export const AdminPriestsPage: React.FC = () => {
       (p.approvalStatus !== "APPROVED" || p.accountStatus === "BANNED")
     )
       return false;
-    if (activeTab === "REJECTED" && p.approvalStatus !== "REJECTED") return false;
+    if (activeTab === "REJECTED" && p.approvalStatus !== "REJECTED")
+      return false;
     if (activeTab === "BANNED" && p.accountStatus !== "BANNED") return false;
 
     if (searchQuery.trim()) {
@@ -142,9 +147,9 @@ export const AdminPriestsPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 w-full max-w-7xl text-stone-900">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
             ॐ
           </div>
           <div>
@@ -152,7 +157,8 @@ export const AdminPriestsPage: React.FC = () => {
               Priest Applications & Directory
             </h1>
             <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-              Review onboarding requests, verify Gurukul credentials, and moderate Vedic scholar profiles.
+              Review onboarding requests, verify Gurukul credentials, and
+              moderate Vedic scholar profiles.
             </p>
           </div>
         </div>
@@ -160,7 +166,7 @@ export const AdminPriestsPage: React.FC = () => {
           variant="outline"
           size="sm"
           onClick={fetchPriests}
-          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-xl border-stone-300 hover:border-amber-400"
+          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-md border-stone-300 hover:border-amber-400"
         >
           <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
           Refresh List
@@ -175,34 +181,34 @@ export const AdminPriestsPage: React.FC = () => {
             onValueChange={(val) => setActiveTab(val as StatusFilter)}
             className="w-full sm:w-auto min-w-max"
           >
-            <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
+            <TabsList className="inline-flex h-11 items-center justify-start rounded-md bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
               <TabsTrigger
                 value="ALL"
-                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
               >
                 All ({priests.length})
               </TabsTrigger>
               <TabsTrigger
                 value="PENDING"
-                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-amber-700 transition-all"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
               >
                 Pending ({pendingCount})
               </TabsTrigger>
               <TabsTrigger
                 value="APPROVED"
-                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-emerald-700 transition-all"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
               >
                 Approved ({approvedCount})
               </TabsTrigger>
               <TabsTrigger
                 value="REJECTED"
-                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-red-700 transition-all"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
               >
                 Rejected ({rejectedCount})
               </TabsTrigger>
               <TabsTrigger
                 value="BANNED"
-                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-stone-600 transition-all"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
               >
                 Banned ({bannedCount})
               </TabsTrigger>
@@ -216,7 +222,7 @@ export const AdminPriestsPage: React.FC = () => {
             placeholder="Search by name, city, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-xs h-11 rounded-2xl border-2 border-stone-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
+            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
@@ -233,7 +239,7 @@ export const AdminPriestsPage: React.FC = () => {
           description="Try adjusting your search criteria or switching status tabs."
         />
       ) : (
-        <div className="rounded-3xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
           <PriestApprovalTable
             priests={filteredPriests}
             onApprove={handleApprove}

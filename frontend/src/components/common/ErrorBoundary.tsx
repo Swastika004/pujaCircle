@@ -66,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Brand Logo & Error Status Header */}
             <div className="flex flex-col items-center gap-3">
               <PujaCircleLogo size={48} className="shadow-xs" />
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-destructive/10 text-destructive text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-destructive/10 text-destructive text-xs font-semibold">
                 <AlertTriangle className="h-3.5 w-3.5" /> Application Notice
               </div>
             </div>

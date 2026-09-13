@@ -48,9 +48,9 @@ export const UserHomePage: React.FC = () => {
   return (
     <div className="container py-8 space-y-8 max-w-4xl mx-auto px-4">
       
-      <div className="rounded-3xl bg-white p-6 sm:p-8 border border-[hsl(var(--border))] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="rounded-xl bg-white p-6 sm:p-8 border border-[hsl(var(--border))] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-stone-900 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-amber-50 border border-amber-300 text-stone-900 text-xs font-semibold">
             <Sparkles className="h-3.5 w-3.5 text-amber-700" />
             <span>Devotee Sanctuary • Vedic Portal</span>
           </div>
@@ -64,7 +64,7 @@ export const UserHomePage: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
           <Link to="/priests" className="w-full sm:w-auto">
-            <Button className="w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold bg-[#991B1B] hover:bg-[#780016] text-white rounded-xl shadow-xs h-10 px-5">
+            <Button className="w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold bg-[#991B1B] hover:bg-[#780016] text-white rounded-md shadow-xs h-10 px-5">
               <Users className="h-4 w-4" />
               <span>Browse Priests</span>
             </Button>
@@ -73,9 +73,9 @@ export const UserHomePage: React.FC = () => {
       </div>
 
       
-      <div className="rounded-3xl bg-[#780016] text-white p-6 sm:p-8 border border-[#C59A3F]/60 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+      <div className="rounded-xl bg-[#780016] text-white p-6 sm:p-8 border border-[#C59A3F]/60 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="space-y-2 max-w-xl z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-red-950 text-xs font-extrabold shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400 text-red-950 text-xs font-extrabold shadow-xs">
             <Compass className="h-3.5 w-3.5 text-red-950" />
             <span>Sankalp Vedic Advisor</span>
           </div>
@@ -91,7 +91,7 @@ export const UserHomePage: React.FC = () => {
           <Link to="/advisor" className="w-full sm:w-auto inline-block">
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm h-11 px-6 rounded-xl shadow-sm gap-2"
+              className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm h-11 px-6 rounded-md shadow-sm gap-2"
             >
               <span>Ask the Advisor</span>
               <ArrowRight className="h-4 w-4" />
@@ -119,7 +119,7 @@ export const UserHomePage: React.FC = () => {
         </div>
 
         {upcomingBooking ? (
-          <div className="w-full bg-white border border-[hsl(var(--border))] rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="w-full bg-white border border-[hsl(var(--border))] rounded-lg p-6 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-stone-100 pb-3">
               <div>
                 <span className="text-[11px] font-mono text-stone-500 block">
@@ -161,7 +161,7 @@ export const UserHomePage: React.FC = () => {
 
             <div className="pt-2 flex justify-end">
               <Link to={`/user/bookings/${upcomingBooking.id}`}>
-                <Button size="sm" className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold text-xs gap-1.5 rounded-xl">
+                <Button size="sm" className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold text-xs gap-1.5 rounded-md">
                   <span>View Details & Samagri</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Button>
@@ -169,12 +169,12 @@ export const UserHomePage: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full bg-white border border-[hsl(var(--border))] rounded-2xl p-8 text-center space-y-3 shadow-xs">
+          <div className="w-full bg-white border border-[hsl(var(--border))] rounded-lg p-8 text-center space-y-3 shadow-xs">
             <p className="text-xs sm:text-sm text-stone-600">
               You do not have any active appointments scheduled at this moment.
             </p>
             <Link to="/priests" className="inline-block">
-              <Button size="sm" variant="outline" className="text-xs font-bold border-stone-300 rounded-xl gap-1.5">
+              <Button size="sm" variant="outline" className="text-xs font-bold border-stone-300 rounded-md gap-1.5">
                 <span>Explore Verified Priests</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Button>

@@ -38,13 +38,13 @@ export const AdminDashboardPage: React.FC = () => {
   return (
     <div className="space-y-8 pb-12 w-full max-w-7xl text-stone-900">
       
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border border-[hsl(var(--border))] bg-white shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border border-[hsl(var(--border))] bg-white shadow-xs">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-xs shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-xs shrink-0 select-none">
             ॐ
           </div>
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
               <span>Platform Operations Console</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900">
@@ -58,7 +58,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <Link
           to="/admin/priests"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#991B1B] hover:bg-[#780016] text-white text-xs font-bold px-5 h-11 transition-colors shadow-xs shrink-0"
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-[#991B1B] hover:bg-[#780016] text-white text-xs font-bold px-5 h-11 transition-colors shadow-xs shrink-0"
         >
           <Clock className="w-4 h-4" />
           <span>Review Onboarding ({stats?.pendingPriests ?? 0} Pending)</span>
@@ -109,14 +109,14 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
 
       
-      <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-6 space-y-4">
+      <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))] p-6 space-y-4">
         <h2 className="font-serif text-base font-bold text-stone-900">
           Platform Governance Modules
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
           <Link
             to="/admin/priests"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Priest Governance</p>
@@ -127,7 +127,7 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/users"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">User Moderation</p>
@@ -138,7 +138,7 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/catalog"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Puja Catalog CRUD</p>
@@ -149,7 +149,7 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/advisor-preview"
-            className="p-4 rounded-xl bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
+            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
           >
             <div>
               <p className="font-bold text-stone-900">Advisor QA Preview</p>

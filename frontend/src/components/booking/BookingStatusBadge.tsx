@@ -21,7 +21,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         <Badge
           variant="outline"
           className={cn(
-            'gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-bold shadow-2xs',
+            'gap-1.5 px-2.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-bold shadow-2xs',
             className
           )}
         >
@@ -41,7 +41,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         <Badge
           variant="outline"
           className={cn(
-            'gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-400 text-xs font-bold shadow-2xs',
+            'gap-1.5 px-2.5 py-0.5 rounded-sm bg-amber-50 text-amber-900 border border-amber-400 text-xs font-bold shadow-2xs',
             className
           )}
         >
@@ -61,7 +61,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         <Badge
           variant="outline"
           className={cn(
-            'gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-900 border border-stone-300 text-xs font-bold shadow-2xs',
+            'gap-1.5 px-2.5 py-0.5 rounded-sm bg-stone-100 text-stone-900 border border-stone-300 text-xs font-bold shadow-2xs',
             className
           )}
         >
@@ -75,7 +75,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         <Badge
           variant="outline"
           className={cn(
-            'gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
+            'gap-1 px-2.5 py-0.5 rounded-sm bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
             className
           )}
         >
@@ -89,7 +89,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         <Badge
           variant="outline"
           className={cn(
-            'gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
+            'gap-1 px-2.5 py-0.5 rounded-sm bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
             className
           )}
         >

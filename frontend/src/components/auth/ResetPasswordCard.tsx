@@ -67,12 +67,12 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel */}
         <div className={`hidden lg:flex flex-col justify-between w-5/12 ${isPriest ? 'bg-[#450A0A]' : 'bg-[#780016]'} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
                 ॐ
               </div>
               <div>
@@ -86,7 +86,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>{isPriest ? 'Purohit Sanctum' : 'Devotee Sanctum'}</span>
               </div>
@@ -137,13 +137,13 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
             </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
+            <div className="mb-4 p-3 rounded-md bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
               <span className="font-bold text-stone-900">Mock Recovery OTP:</span>
               <span className="font-mono font-bold text-red-800 text-sm">123456</span>
             </div>
@@ -155,7 +155,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                   maxLength={6}
                   placeholder="123456"
                   {...register('otp')}
-                  className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                 />
                 {errors.otp && (
                   <p className="text-[11px] text-red-700 font-semibold">{errors.otp.message}</p>
@@ -170,7 +170,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter new password"
                     {...register('newPassword')}
-                    className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                   <button
                     type="button"
@@ -194,7 +194,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                     type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="Re-enter new password"
                     {...register('confirmPassword')}
-                    className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                   <button
                     type="button"
@@ -224,7 +224,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
               <div className="space-y-3 pt-2">
                 <Button
                   type="submit"
-                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-xl shadow-md cursor-pointer gap-2`}
+                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-md shadow-md cursor-pointer gap-2`}
                 >
                   <span>Update Password & Sign In</span>
                   <ArrowRight className="h-4 w-4" />

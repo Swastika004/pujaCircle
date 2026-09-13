@@ -164,9 +164,9 @@ export const PriestAvailabilityPage: React.FC = () => {
   return (
     <div className="space-y-8 w-full max-w-7xl text-stone-900 pb-12">
       {/* Page Header (100% Flexbox) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
             ॐ
           </div>
           <div>
@@ -184,7 +184,7 @@ export const PriestAvailabilityPage: React.FC = () => {
             setEditingSlot(null);
             setIsAddModalOpen(true);
           }}
-          className="gap-2 text-xs sm:text-sm h-11 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl shadow-xs cursor-pointer shrink-0 puja-btn-tap"
+          className="gap-2 text-xs sm:text-sm h-11 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-md shadow-xs cursor-pointer shrink-0 puja-btn-tap"
         >
           <Plus className="h-4 w-4" />
           <span>Add Availability Slot</span>
@@ -193,7 +193,7 @@ export const PriestAvailabilityPage: React.FC = () => {
 
       {/* Metrics Summary Deck (100% Flexbox, Zero CSS Grids) */}
       <div className="flex flex-wrap gap-4 w-full">
-        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 bg-white shadow-xs">
+        <div className="flex-1 min-w-55 p-5 rounded-lg border-2 border-amber-300 bg-white shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">
               Total Upcoming Slots
@@ -205,7 +205,7 @@ export const PriestAvailabilityPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs">
+        <div className="flex-1 min-w-55 p-5 rounded-lg border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
               Open For Booking
@@ -217,7 +217,7 @@ export const PriestAvailabilityPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs">
+        <div className="flex-1 min-w-55 p-5 rounded-lg border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">
               Confirmed Booked
@@ -249,9 +249,9 @@ export const PriestAvailabilityPage: React.FC = () => {
             Loading your availability calendar...
           </div>
         ) : upcomingDates.length === 0 ? (
-          <div className="border-2 border-dashed border-amber-300 rounded-3xl p-10 text-center bg-white">
+          <div className="border-2 border-dashed border-amber-300 rounded-xl p-10 text-center bg-white">
             <div className="max-w-md mx-auto space-y-3">
-              <div className="h-12 w-12 rounded-2xl bg-amber-100 text-amber-800 border border-amber-300 mx-auto flex items-center justify-center">
+              <div className="h-12 w-12 rounded-md bg-amber-100 text-amber-800 border border-amber-300 mx-auto flex items-center justify-center">
                 <CalendarIcon className="h-6 w-6 text-amber-700" />
               </div>
               <h3 className="font-serif font-bold text-base text-stone-900">No Upcoming Availability Set</h3>
@@ -263,7 +263,7 @@ export const PriestAvailabilityPage: React.FC = () => {
                   setEditingSlot(null);
                   setIsAddModalOpen(true);
                 }}
-                className="gap-2 text-xs h-10 px-5 mt-2 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl cursor-pointer puja-btn-tap"
+                className="gap-2 text-xs h-10 px-5 mt-2 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-md cursor-pointer puja-btn-tap"
               >
                 <Plus className="h-4 w-4" /> Add Your First Slot
               </Button>
@@ -301,7 +301,7 @@ export const PriestAvailabilityPage: React.FC = () => {
                       return (
                         <div
                           key={slot.id}
-                          className={`w-full sm:w-[calc(50%-7px)] lg:w-[calc(33.333%-10px)] p-4 rounded-2xl border-2 transition-all shadow-xs bg-white space-y-3 ${
+                          className={`w-full sm:w-[calc(50%-7px)] lg:w-[calc(33.333%-10px)] p-4 rounded-lg border-2 transition-all shadow-xs bg-white space-y-3 ${
                             isAvailable
                               ? 'border-amber-200 hover:border-emerald-500/60'
                               : 'border-amber-300 bg-amber-50/20'
@@ -320,7 +320,7 @@ export const PriestAvailabilityPage: React.FC = () => {
 
                             <Badge
                               variant="outline"
-                              className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                              className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm ${
                                 isAvailable
                                   ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                                   : 'bg-red-50 text-red-700 border-red-300'
@@ -341,7 +341,7 @@ export const PriestAvailabilityPage: React.FC = () => {
                                     setEditingSlot(slot);
                                     setIsAddModalOpen(true);
                                   }}
-                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-stone-900 gap-1 rounded-lg"
+                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-stone-900 gap-1 rounded-md"
                                 >
                                   <Edit2 className="h-3 w-3" /> Edit
                                 </Button>
@@ -349,7 +349,7 @@ export const PriestAvailabilityPage: React.FC = () => {
                                   size="sm"
                                   variant="ghost"
                                   onClick={() => handleDeleteSlot(slot)}
-                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-red-700 gap-1 rounded-lg"
+                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-red-700 gap-1 rounded-md"
                                 >
                                   <Trash2 className="h-3 w-3" /> Delete
                                 </Button>
@@ -359,7 +359,7 @@ export const PriestAvailabilityPage: React.FC = () => {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => handleViewBooking(slot)}
-                                className="h-8 px-3 text-xs gap-1.5 border-amber-300 text-stone-900 hover:bg-amber-50 font-bold rounded-xl"
+                                className="h-8 px-3 text-xs gap-1.5 border-amber-300 text-stone-900 hover:bg-amber-50 font-bold rounded-md"
                               >
                                 <ExternalLink className="h-3 w-3 text-amber-700" /> View Booking
                               </Button>

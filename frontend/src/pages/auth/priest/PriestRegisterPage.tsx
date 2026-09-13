@@ -166,13 +166,13 @@ export const PriestRegisterPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Sanctum Maroon `#450A0A`) */}
         <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#450A0A] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
           <div className="space-y-6">
             {/* Top Brand Logo */}
             <div className="flex items-center gap-2.5">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
                 ॐ
               </div>
               <div>
@@ -187,7 +187,7 @@ export const PriestRegisterPage: React.FC = () => {
 
             {/* Headline & Value Propositions */}
             <div className="space-y-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Purohit Application</span>
               </div>
@@ -216,7 +216,7 @@ export const PriestRegisterPage: React.FC = () => {
             </div>
 
             {/* Stepper Progress Indicator on Left Panel */}
-            <div className="p-3.5 rounded-2xl bg-black/25 border border-amber-400/30 space-y-2 pt-3">
+            <div className="p-3.5 rounded-md bg-black/25 border border-amber-400/30 space-y-2 pt-3">
               <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
                 Application Progress
               </div>
@@ -340,7 +340,7 @@ export const PriestRegisterPage: React.FC = () => {
 
             {/* Error Notification */}
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{errorMessage}</span>
               </div>
@@ -357,7 +357,7 @@ export const PriestRegisterPage: React.FC = () => {
                       <Input
                         placeholder="e.g. Pandit Radhe Shyam Shastri"
                         {...register("fullName")}
-                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                        className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.fullName && (
@@ -373,7 +373,7 @@ export const PriestRegisterPage: React.FC = () => {
                         type="tel"
                         placeholder="+91 98765 43211"
                         {...register("phoneNumber")}
-                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                        className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.phoneNumber && (
@@ -389,7 +389,7 @@ export const PriestRegisterPage: React.FC = () => {
                         type="email"
                         placeholder="purohit@example.demo"
                         {...register("email")}
-                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                        className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.email && (
@@ -405,7 +405,7 @@ export const PriestRegisterPage: React.FC = () => {
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a secure password"
                         {...register("password")}
-                        className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                        className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                       <button
                         type="button"
@@ -434,7 +434,7 @@ export const PriestRegisterPage: React.FC = () => {
                 <div className="space-y-3 pt-2">
                   <Button
                     type="submit"
-                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-xl shadow-md cursor-pointer gap-2"
+                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
                   >
                     <span>Continue to Verification</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -446,7 +446,7 @@ export const PriestRegisterPage: React.FC = () => {
             {/* ================= STEP 2: Phone & Email OTP ================= */}
             {step === 2 && (
               <form onSubmit={handleVerifyOtp} className="space-y-4">
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 text-xs text-stone-700 space-y-1">
+                <div className="p-3 bg-amber-50 rounded-md border border-amber-300 text-xs text-stone-700 space-y-1">
                   <p className="font-bold text-stone-900">Development Testing OTP:</p>
                   <p>Enter mock verification code: <strong className="text-red-800 font-mono text-sm">123456</strong></p>
                 </div>
@@ -462,7 +462,7 @@ export const PriestRegisterPage: React.FC = () => {
                       placeholder="123456"
                       value={phoneOtp}
                       onChange={(e) => setPhoneOtp(e.target.value)}
-                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       required
                     />
                   </div>
@@ -477,7 +477,7 @@ export const PriestRegisterPage: React.FC = () => {
                       placeholder="123456"
                       value={emailOtp}
                       onChange={(e) => setEmailOtp(e.target.value)}
-                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       required
                     />
                   </div>
@@ -500,7 +500,7 @@ export const PriestRegisterPage: React.FC = () => {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    className="text-xs gap-1 h-10 px-4 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
                     onClick={() => setStep(1)}
                   >
                     <ArrowLeft className="h-3.5 w-3.5" /> Back
@@ -508,7 +508,7 @@ export const PriestRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
                   >
                     <span>Verify & Continue</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -526,7 +526,7 @@ export const PriestRegisterPage: React.FC = () => {
                     type="number"
                     value={experienceYears}
                     onChange={(e) => setExperienceYears(e.target.value)}
-                    className="text-xs h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    className="text-xs h-10 rounded-md border-amber-300 focus-visible:ring-red-700"
                     required
                   />
                 </div>
@@ -553,14 +553,14 @@ export const PriestRegisterPage: React.FC = () => {
                         }
                       }}
                       placeholder="e.g. 700019, 560038, 400050"
-                      className="text-xs font-mono h-10 rounded-xl border-amber-300 focus-visible:ring-red-700 flex-1"
+                      className="text-xs font-mono h-10 rounded-md border-amber-300 focus-visible:ring-red-700 flex-1"
                       required
                     />
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="text-xs shrink-0 h-10 px-3.5 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer font-bold"
+                      className="text-xs shrink-0 h-10 px-3.5 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer font-bold"
                       onClick={() => handleLookupPin(pincode)}
                       disabled={isSearchingPin || pincode.length < 6}
                     >
@@ -571,12 +571,12 @@ export const PriestRegisterPage: React.FC = () => {
 
                 {/* Localities Dropdown */}
                 {locations.length > 0 && (
-                  <div className="space-y-1.5 p-2.5 rounded-xl bg-amber-50 border border-amber-300">
+                  <div className="space-y-1.5 p-2.5 rounded-md bg-amber-50 border border-amber-300">
                     <Label className="text-xs font-bold text-stone-900">
                       Primary Service Locality ({locations.length} areas found)
                     </Label>
                     <select
-                      className="w-full text-xs p-2 rounded-xl border border-amber-300 bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-700 font-medium"
+                      className="w-full text-xs p-2 rounded-md border border-amber-300 bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-700 font-medium"
                       value={selectedLocation?.postOffice}
                       onChange={(e) => {
                         const match = locations.find(
@@ -633,7 +633,7 @@ export const PriestRegisterPage: React.FC = () => {
                                 : [...languages, lang],
                             );
                           }}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                          className={`px-2.5 py-1 rounded-sm text-xs font-medium cursor-pointer transition-colors ${
                             checked
                               ? "bg-[#780016] text-white border border-amber-400"
                               : "bg-white text-stone-700 border border-stone-300 hover:border-amber-400"
@@ -670,7 +670,7 @@ export const PriestRegisterPage: React.FC = () => {
                                 : [...specializations, spec],
                             );
                           }}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                          className={`px-2.5 py-1 rounded-sm text-xs font-medium cursor-pointer transition-colors ${
                             checked
                               ? "bg-[#780016] text-white border border-amber-400"
                               : "bg-white text-stone-700 border border-stone-300 hover:border-amber-400"
@@ -690,7 +690,7 @@ export const PriestRegisterPage: React.FC = () => {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={2}
-                    className="text-xs rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    className="text-xs rounded-md border-amber-300 focus-visible:ring-red-700"
                     placeholder="Describe your Vedic study and samhita lineage..."
                     required
                   />
@@ -701,7 +701,7 @@ export const PriestRegisterPage: React.FC = () => {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    className="text-xs gap-1 h-10 px-4 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
                     onClick={() => setStep(2)}
                   >
                     <ArrowLeft className="h-3.5 w-3.5" /> Back
@@ -709,7 +709,7 @@ export const PriestRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
                   >
                     <Award className="h-3.5 w-3.5" /> Submit Application
                   </Button>
@@ -720,11 +720,11 @@ export const PriestRegisterPage: React.FC = () => {
             {/* ================= STEP 4: PENDING APPROVAL CONFIRMATION ================= */}
             {step === 4 && (
               <div className="py-4 space-y-6 text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 border-2 border-amber-300 shadow-md">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-amber-100 text-amber-700 border-2 border-amber-300 shadow-md">
                   <Clock className="h-8 w-8 animate-pulse" />
                 </div>
                 <div className="space-y-2">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold">
                     <span>Status: PENDING ADMIN APPROVAL</span>
                   </div>
                   <h3 className="text-xl font-bold font-serif text-stone-900">
@@ -741,12 +741,12 @@ export const PriestRegisterPage: React.FC = () => {
 
                 <div className="space-y-2.5 pt-2 max-w-xs mx-auto">
                   <Link to="/priest/login" className="block w-full">
-                    <Button className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 rounded-xl shadow-md cursor-pointer">
+                    <Button className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 rounded-md shadow-md cursor-pointer">
                       Return to Priest Sign In
                     </Button>
                   </Link>
                   <Link to="/" className="block w-full">
-                    <Button variant="outline" className="w-full text-xs h-10 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer">
+                    <Button variant="outline" className="w-full text-xs h-10 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer">
                       Go to PujaCircle Home
                     </Button>
                   </Link>

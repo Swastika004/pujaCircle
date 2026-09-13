@@ -29,7 +29,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
   isProcessing = false,
 }) => {
   return (
-    <div className="p-5 sm:p-6 rounded-2xl border-2 border-amber-200 hover:border-amber-400 bg-white shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 puja-card-lift">
+    <div className="p-5 sm:p-6 rounded-lg border-2 border-amber-200 hover:border-amber-400 bg-white shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 puja-card-lift">
       {/* Left Details */}
       <div className="space-y-2 flex-1">
         <div className="flex flex-wrap items-center gap-2.5">
@@ -86,7 +86,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
           variant="outline"
           size="sm"
           onClick={() => onViewDetails(booking)}
-          className="gap-1.5 text-xs w-full sm:w-auto h-10 px-4 rounded-xl border-stone-300 hover:border-amber-400 font-bold cursor-pointer"
+          className="gap-1.5 text-xs w-full sm:w-auto h-10 px-4 rounded-md border-stone-300 hover:border-amber-400 font-bold cursor-pointer"
         >
           <Eye className="w-3.5 h-3.5" />
           Details
@@ -98,7 +98,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
               size="sm"
               onClick={() => onAccept(booking.id)}
               disabled={isProcessing}
-              className="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto h-10 px-5 rounded-xl font-bold shadow-xs cursor-pointer puja-btn-tap"
+              className="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto h-10 px-5 rounded-md font-bold shadow-xs cursor-pointer puja-btn-tap"
             >
               <Check className="w-3.5 h-3.5" />
               Accept
@@ -108,7 +108,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
               size="sm"
               onClick={() => onOpenReject(booking)}
               disabled={isProcessing}
-              className="gap-1.5 text-xs text-red-700 hover:bg-red-50 border-red-200 w-full sm:w-auto h-10 px-4 rounded-xl font-bold cursor-pointer"
+              className="gap-1.5 text-xs text-red-700 hover:bg-red-50 border-red-200 w-full sm:w-auto h-10 px-4 rounded-md font-bold cursor-pointer"
             >
               <Ban className="w-3.5 h-3.5" />
               Decline
@@ -121,7 +121,7 @@ export const PriestBookingRow: React.FC<PriestBookingRowProps> = ({
             size="sm"
             onClick={() => onComplete(booking.id)}
             disabled={isProcessing}
-            className="gap-1.5 text-xs bg-[#780016] hover:bg-red-800 text-white border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-xl font-bold shadow-xs cursor-pointer puja-btn-tap"
+            className="gap-1.5 text-xs bg-[#780016] hover:bg-red-800 text-white border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-md font-bold shadow-xs cursor-pointer puja-btn-tap"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             Mark Completed

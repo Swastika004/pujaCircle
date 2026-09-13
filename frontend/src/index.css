@@ -54,9 +54,14 @@
   --color-brand-ivory: hsl(var(--brand-ivory));
   --color-brand-charcoal: hsl(var(--brand-charcoal));
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 8px;
+  --radius: 6px;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -67,13 +72,13 @@
     }
 
     to {
-      height: var(--radix-accordion-content-height);
+      height: var(--base-ui-accordion-content-height, var(--radix-accordion-content-height, var(--accordion-content-height, auto)));
     }
   }
 
   @keyframes accordion-up {
     from {
-      height: var(--radix-accordion-content-height);
+      height: var(--base-ui-accordion-content-height, var(--radix-accordion-content-height, var(--accordion-content-height, auto)));
     }
 
     to {
@@ -179,10 +184,15 @@
   --input: 40 15% 85%;
   --ring: 20 68% 48%;
 
-  --radius: 0.75rem;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  /* Subtle, Restrained Corner Radius Hierarchy */
+  --radius: 6px;
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 8px;
 
   /* Shadows per DESIGN §4 */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
@@ -480,7 +490,7 @@ body,
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(217, 119, 6, 0.4);
-  border-radius: 9999px;
+  border-radius: 3px;
   transition: background-color 0.2s ease;
 }
 

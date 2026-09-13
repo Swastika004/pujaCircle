@@ -85,9 +85,9 @@ export const PriestServicesPage: React.FC = () => {
   return (
     <div className="space-y-6 w-full max-w-7xl text-stone-900 pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
             ॐ
           </div>
           <div>
@@ -102,14 +102,14 @@ export const PriestServicesPage: React.FC = () => {
 
         <Button
           onClick={handleOpenCreate}
-          className="gap-2 text-xs h-11 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl shadow-xs cursor-pointer shrink-0 puja-btn-tap"
+          className="gap-2 text-xs h-11 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-md shadow-xs cursor-pointer shrink-0 puja-btn-tap"
         >
           <Plus className="h-4 w-4" /> Add Custom Ritual Offering
         </Button>
       </div>
 
       {/* Services List Card */}
-      <div className="rounded-3xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
         <div className="p-5 sm:p-6 border-b-2 border-amber-300 bg-white">
           <h2 className="text-lg font-serif font-bold text-stone-950">Offered Ceremonies ({services.length})</h2>
           <p className="text-xs text-stone-600 mt-0.5">
@@ -124,7 +124,7 @@ export const PriestServicesPage: React.FC = () => {
               <Button
                 onClick={handleOpenCreate}
                 size="sm"
-                className="text-xs gap-1.5 h-10 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold rounded-xl border border-amber-400 shadow-xs cursor-pointer puja-btn-tap"
+                className="text-xs gap-1.5 h-10 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold rounded-md border border-amber-400 shadow-xs cursor-pointer puja-btn-tap"
               >
                 <Plus className="h-4 w-4" /> Add Your First Offering
               </Button>
@@ -162,7 +162,7 @@ export const PriestServicesPage: React.FC = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleOpenEdit(service)}
-                      className="h-10 px-4 text-xs gap-1.5 w-full sm:w-auto rounded-xl border-stone-300 hover:border-amber-400 font-bold"
+                      className="h-10 px-4 text-xs gap-1.5 w-full sm:w-auto rounded-md border-stone-300 hover:border-amber-400 font-bold"
                     >
                       <Edit2 className="h-3.5 w-3.5 text-stone-600" /> Edit Rate
                     </Button>
@@ -170,7 +170,7 @@ export const PriestServicesPage: React.FC = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleToggleActive(service)}
-                      className={`h-10 px-4 text-xs gap-1.5 w-full sm:w-auto rounded-xl font-bold cursor-pointer ${
+                      className={`h-10 px-4 text-xs gap-1.5 w-full sm:w-auto rounded-md font-bold cursor-pointer ${
                         service.isActive ? 'text-stone-500 hover:text-red-700 hover:bg-red-50' : 'text-emerald-700 hover:bg-emerald-50'
                       }`}
                     >

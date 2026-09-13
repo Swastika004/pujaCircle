@@ -277,7 +277,7 @@ export const PriestProfilePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center bg-white space-y-3">
-        <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-sm animate-pulse">
+        <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-sm animate-pulse">
           ॐ
         </div>
         <p className="text-xs text-stone-600 font-medium">Loading your Vedic credentials...</p>
@@ -297,7 +297,7 @@ export const PriestProfilePage: React.FC = () => {
 
       {/* Avatar Modal */}
       <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-        <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
+        <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
               <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
@@ -334,7 +334,7 @@ export const PriestProfilePage: React.FC = () => {
                 type="button"
                 variant="destructive"
                 onClick={handleRemoveAvatar}
-                className="w-full sm:w-auto text-xs rounded-xl"
+                className="w-full sm:w-auto text-xs rounded-md"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Remove Photo
@@ -348,14 +348,14 @@ export const PriestProfilePage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={() => setIsAvatarModalOpen(false)}
-                className="flex-1 sm:flex-none text-xs rounded-xl"
+                className="flex-1 sm:flex-none text-xs rounded-md"
               >
                 Cancel
               </Button>
               <Button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
+                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-md cursor-pointer"
               >
                 <Upload className="w-4 h-4" />
                 Upload New Photo
@@ -366,7 +366,7 @@ export const PriestProfilePage: React.FC = () => {
       </Dialog>
 
       {/* 1. Header & Primary Action (100% Flexbox) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div>
           <div className="flex items-center gap-2">
             <Badge
@@ -397,7 +397,7 @@ export const PriestProfilePage: React.FC = () => {
           size="sm"
           onClick={handleSave}
           disabled={isSaving}
-          className="gap-2 text-xs font-bold px-6 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-xl shadow-xs shrink-0 cursor-pointer puja-btn-tap"
+          className="gap-2 text-xs font-bold px-6 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-md shadow-xs shrink-0 cursor-pointer puja-btn-tap"
         >
           {isSaving ? (
             <>
@@ -414,13 +414,13 @@ export const PriestProfilePage: React.FC = () => {
       </div>
 
       {/* 2. Top Summary Card with Interactive Avatar Trigger (Pure White, Haldi Gold Border) */}
-      <div className="p-6 sm:p-8 rounded-3xl border-2 border-amber-300 bg-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+      <div className="p-6 sm:p-8 rounded-xl border-2 border-amber-300 bg-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto text-center sm:text-left">
           <div className="relative group shrink-0">
             <button
               type="button"
               onClick={() => setIsAvatarModalOpen(true)}
-              className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
+              className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-offset-2 focus:ring-offset-white transition-transform hover:scale-105 cursor-pointer"
               title="Click to change profile picture"
             >
               <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-white">
@@ -467,7 +467,7 @@ export const PriestProfilePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-50/70 border border-amber-300 text-xs text-stone-800 font-bold shrink-0">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-amber-50/70 border border-amber-300 text-xs text-stone-800 font-bold shrink-0">
           <MapPin className="w-4 h-4 text-red-700" />
           <span>{serviceAreas.length} Active Localities</span>
         </div>
@@ -476,7 +476,7 @@ export const PriestProfilePage: React.FC = () => {
       {/* 3 & 4. Details Deck (100% Flexbox, Zero CSS Grids) */}
       <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
         {/* Basic Details & Experience */}
-        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+        <div className="flex-1 rounded-xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
             <User className="w-4 h-4 text-red-700" />
             <h3 className="text-base font-serif font-bold text-stone-950">
@@ -493,7 +493,7 @@ export const PriestProfilePage: React.FC = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="e.g. Pandit Ramesh Shastri"
-                className="h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
+                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
@@ -509,7 +509,7 @@ export const PriestProfilePage: React.FC = () => {
                 value={experienceYears}
                 onChange={(e) => setExperienceYears(Number(e.target.value))}
                 placeholder="18"
-                className="h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
+                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
@@ -531,7 +531,7 @@ export const PriestProfilePage: React.FC = () => {
                   maxLength={6}
                   onChange={(e) => handlePincodeLookup(e.target.value)}
                   placeholder="e.g. 400050"
-                  className="h-10 text-xs font-mono tracking-wider rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="h-10 text-xs font-mono tracking-wider rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                 />
                 <Button
                   type="button"
@@ -539,7 +539,7 @@ export const PriestProfilePage: React.FC = () => {
                   size="sm"
                   onClick={() => handlePincodeLookup(pincode)}
                   disabled={isSearchingPin || pincode.length !== 6}
-                  className="h-10 text-xs gap-1 shrink-0 rounded-xl border-amber-300 font-bold"
+                  className="h-10 text-xs gap-1 shrink-0 rounded-md border-amber-300 font-bold"
                 >
                   <Search className="w-3.5 h-3.5 text-amber-600" /> Lookup
                 </Button>
@@ -552,7 +552,7 @@ export const PriestProfilePage: React.FC = () => {
                 <span className="font-bold text-stone-500 text-[10px] uppercase">
                   Detected City
                 </span>
-                <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
+                <div className="p-3 rounded-md bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
                   {city || "Enter PIN Code"}
                 </div>
               </div>
@@ -560,7 +560,7 @@ export const PriestProfilePage: React.FC = () => {
                 <span className="font-bold text-stone-500 text-[10px] uppercase">
                   Detected State
                 </span>
-                <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
+                <div className="p-3 rounded-md bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
                   {state || "Enter PIN Code"}
                 </div>
               </div>
@@ -569,7 +569,7 @@ export const PriestProfilePage: React.FC = () => {
         </div>
 
         {/* Verified Contact Information */}
-        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+        <div className="flex-1 rounded-xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
             <h3 className="text-base font-serif font-bold text-stone-950">
@@ -578,7 +578,7 @@ export const PriestProfilePage: React.FC = () => {
           </div>
 
           <div className="space-y-4 text-xs">
-            <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-2">
+            <div className="p-4 rounded-md bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-stone-700 flex items-center gap-1.5">
                   <Phone className="w-3.5 h-3.5 text-red-700" /> Registered Mobile
@@ -598,7 +598,7 @@ export const PriestProfilePage: React.FC = () => {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-2">
+            <div className="p-4 rounded-md bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-stone-700 flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-amber-600" /> Registered Email
@@ -622,7 +622,7 @@ export const PriestProfilePage: React.FC = () => {
       </div>
 
       {/* 5. Vedic Lineage & Bio */}
-      <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-3">
+      <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-3">
         <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
           <BookOpen className="w-4 h-4 text-red-700" />
           <h3 className="text-base font-serif font-bold text-stone-950">
@@ -637,7 +637,7 @@ export const PriestProfilePage: React.FC = () => {
           value={bio}
           onChange={(e) => setBio(e.target.value)}
           placeholder="Vedic scholar trained in Varanasi Gurukul. Specializes in Griha Pravesh, Vastu Shanti, and Satyanarayan Katha with over 18 years of ritual expertise..."
-          className="text-xs leading-relaxed resize-y rounded-2xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+          className="text-xs leading-relaxed resize-y rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
         />
         <div className="flex justify-between items-center text-[11px] text-stone-500 pt-1 font-medium">
           <span>Minimum 20 characters. Authentic background helps devotees build trust.</span>
@@ -648,7 +648,7 @@ export const PriestProfilePage: React.FC = () => {
       {/* 6 & 7. Languages & Offerings Deck (100% Flexbox, Zero CSS Grids) */}
       <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
         {/* Languages Spoken */}
-        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+        <div className="flex-1 rounded-xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
             <LanguagesIcon className="w-4 h-4 text-red-700" />
             <h3 className="text-base font-serif font-bold text-stone-950">
@@ -667,7 +667,7 @@ export const PriestProfilePage: React.FC = () => {
                   key={lang}
                   type="button"
                   onClick={() => toggleLanguage(lang)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-sm text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
                     isSelected
                       ? "bg-[#780016] text-white border-amber-400 shadow-xs"
                       : "bg-white text-stone-700 hover:bg-amber-50 border-stone-300"
@@ -688,13 +688,13 @@ export const PriestProfilePage: React.FC = () => {
               placeholder="Add other language (e.g. Odia)..."
               value={customLanguage}
               onChange={(e) => setCustomLanguage(e.target.value)}
-              className="h-10 text-xs flex-1 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+              className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
             />
             <Button
               type="submit"
               size="sm"
               variant="outline"
-              className="h-10 text-xs gap-1 rounded-xl border-amber-300 font-bold"
+              className="h-10 text-xs gap-1 rounded-md border-amber-300 font-bold"
             >
               <Plus className="w-3.5 h-3.5 text-amber-600" /> Add
             </Button>
@@ -702,7 +702,7 @@ export const PriestProfilePage: React.FC = () => {
         </div>
 
         {/* Active Puja Services */}
-        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+        <div className="flex-1 rounded-xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-stone-200">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
@@ -714,7 +714,7 @@ export const PriestProfilePage: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs text-red-700 hover:text-red-800 border-amber-300 gap-1.5 h-8 px-3 rounded-xl font-bold"
+                className="text-xs text-red-700 hover:text-red-800 border-amber-300 gap-1.5 h-8 px-3 rounded-md font-bold"
               >
                 Manage All <ExternalLink className="w-3 h-3" />
               </Button>
@@ -727,7 +727,7 @@ export const PriestProfilePage: React.FC = () => {
                 {services.map((srv) => (
                   <div
                     key={srv.id}
-                    className="p-3 rounded-xl bg-amber-50/40 border border-amber-200 flex items-center justify-between gap-3"
+                    className="p-3 rounded-md bg-amber-50/40 border border-amber-200 flex items-center justify-between gap-3"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
@@ -749,7 +749,7 @@ export const PriestProfilePage: React.FC = () => {
       </div>
 
       {/* 8. Service Areas / Localities */}
-      <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-4">
+      <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
           <MapPin className="w-4 h-4 text-red-700" />
           <h3 className="text-base font-serif font-bold text-stone-950">
@@ -765,13 +765,13 @@ export const PriestProfilePage: React.FC = () => {
             <Badge
               key={area}
               variant="outline"
-              className="pl-3 pr-1.5 py-1 text-xs flex items-center gap-1.5 bg-amber-50/60 border-amber-300 font-bold text-stone-900 rounded-full"
+              className="pl-3 pr-1.5 py-1 text-xs flex items-center gap-1.5 bg-amber-50/60 border-amber-300 font-bold text-stone-900 rounded-sm"
             >
               <span>{area}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveArea(area)}
-                className="rounded-full p-0.5 hover:bg-red-700 hover:text-white transition-colors cursor-pointer"
+                className="rounded-xs p-0.5 hover:bg-red-700 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -787,13 +787,13 @@ export const PriestProfilePage: React.FC = () => {
             placeholder="Add locality (e.g. Bandra, Juhu, Powai)..."
             value={newAreaInput}
             onChange={(e) => setNewAreaInput(e.target.value)}
-            className="h-10 text-xs flex-1 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+            className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
           />
           <Button
             type="submit"
             size="sm"
             variant="outline"
-            className="h-10 text-xs gap-1 rounded-xl border-amber-300 font-bold"
+            className="h-10 text-xs gap-1 rounded-md border-amber-300 font-bold"
           >
             <Plus className="w-3.5 h-3.5 text-amber-600" /> Add Area
           </Button>
@@ -805,7 +805,7 @@ export const PriestProfilePage: React.FC = () => {
         <Button
           onClick={handleSave}
           disabled={isSaving}
-          className="gap-2 text-xs font-bold px-7 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+          className="gap-2 text-xs font-bold px-7 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-md shadow-xs cursor-pointer puja-btn-tap"
         >
           {isSaving ? (
             <>

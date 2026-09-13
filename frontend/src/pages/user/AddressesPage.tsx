@@ -209,9 +209,9 @@ export const AddressesPage: React.FC = () => {
     <div className="w-full text-stone-900 py-6 sm:py-10 px-4">
       <div className="container max-w-3xl mx-auto space-y-6">
         {/* Header (100% Flexbox) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
               <span className="text-sm font-serif font-black leading-none">ॐ</span>
               <span>Ceremony Locations</span>
             </div>
@@ -227,7 +227,7 @@ export const AddressesPage: React.FC = () => {
             onClick={handleOpenAdd}
             disabled={addresses.length >= 2}
             size="sm"
-            className="gap-2 text-xs w-full sm:w-auto h-11 px-5 font-bold bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-xl shadow-xs cursor-pointer shrink-0 puja-btn-tap"
+            className="gap-2 text-xs w-full sm:w-auto h-11 px-5 font-bold bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-md shadow-xs cursor-pointer shrink-0 puja-btn-tap"
           >
             <Plus className="h-4 w-4" /> Add Address
           </Button>
@@ -239,9 +239,9 @@ export const AddressesPage: React.FC = () => {
             Loading saved addresses...
           </div>
         ) : addresses.length === 0 ? (
-          <div className="border-2 border-amber-300 rounded-3xl bg-white text-center py-12 px-6 shadow-sm">
+          <div className="border-2 border-amber-300 rounded-xl bg-white text-center py-12 px-6 shadow-sm">
             <div className="max-w-md mx-auto space-y-4">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 border border-amber-300">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-amber-100 text-amber-800 border border-amber-300">
                 <MapPin className="h-7 w-7 text-amber-700" />
               </div>
               <h2 className="text-lg font-bold font-serif text-stone-900">No Saved Addresses</h2>
@@ -251,7 +251,7 @@ export const AddressesPage: React.FC = () => {
               <Button
                 onClick={handleOpenAdd}
                 size="sm"
-                className="text-xs gap-1.5 w-full sm:w-auto h-11 px-6 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+                className="text-xs gap-1.5 w-full sm:w-auto h-11 px-6 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-md shadow-xs cursor-pointer puja-btn-tap"
               >
                 <Plus className="h-4 w-4" /> Add Your Primary Address
               </Button>
@@ -262,7 +262,7 @@ export const AddressesPage: React.FC = () => {
             {addresses.map((addr) => (
               <div
                 key={addr.id}
-                className={`p-5 rounded-2xl transition-all shadow-xs border-2 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                className={`p-5 rounded-lg transition-all shadow-xs border-2 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                   addr.isDefault
                     ? 'border-red-700 ring-2 ring-red-700/20'
                     : 'border-amber-200 hover:border-amber-400'
@@ -293,7 +293,7 @@ export const AddressesPage: React.FC = () => {
 
                   <div className="space-y-1 flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-100 text-amber-800 shrink-0 border border-amber-300">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-100 text-amber-800 shrink-0 border border-amber-300">
                         <Home className="h-3.5 w-3.5 text-amber-800" />
                       </div>
                       <span className="font-bold text-sm text-stone-950">
@@ -317,7 +317,7 @@ export const AddressesPage: React.FC = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleOpenEdit(addr)}
-                    className="text-xs h-9 px-3 gap-1.5 border-stone-300 hover:border-amber-400 rounded-xl cursor-pointer font-semibold"
+                    className="text-xs h-9 px-3 gap-1.5 border-stone-300 hover:border-amber-400 rounded-md cursor-pointer font-semibold"
                   >
                     <Edit2 className="h-3.5 w-3.5 text-stone-600" /> Edit
                   </Button>
@@ -325,7 +325,7 @@ export const AddressesPage: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDelete(addr.id)}
-                    className="text-stone-400 hover:text-red-700 hover:bg-red-50 h-9 w-9 p-0 rounded-xl cursor-pointer"
+                    className="text-stone-400 hover:text-red-700 hover:bg-red-50 h-9 w-9 p-0 rounded-md cursor-pointer"
                     aria-label="Delete address"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -338,7 +338,7 @@ export const AddressesPage: React.FC = () => {
 
         {/* Add / Edit Address Modal with PIN Auto-Lookup */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="sm:max-w-md p-6 rounded-3xl max-h-[90vh] overflow-y-auto bg-white border-2 border-amber-300 shadow-xl">
+          <DialogContent className="sm:max-w-md p-6 rounded-lg max-h-[90vh] overflow-y-auto bg-white border-2 border-amber-300 shadow-xl">
             <DialogHeader className="space-y-1 pb-1">
               <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
                 <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
@@ -359,7 +359,7 @@ export const AddressesPage: React.FC = () => {
                     maxLength={6}
                     value={pinCode}
                     onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
-                    className="font-mono text-xs pr-9 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                    className="font-mono text-xs pr-9 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   />
                   {isLookingUpPin && (
                     <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin text-amber-600" />
@@ -374,7 +374,7 @@ export const AddressesPage: React.FC = () => {
                   <select
                     value={selectedVillageTown}
                     onChange={(e) => setSelectedVillageTown(e.target.value)}
-                    className="w-full h-10 rounded-xl border border-stone-300 bg-white px-3 py-1.5 text-xs focus:border-amber-500 focus:ring-amber-500 shadow-xs"
+                    className="w-full h-10 rounded-md border border-stone-300 bg-white px-3 py-1.5 text-xs focus:ring-2 focus:ring-amber-500 shadow-xs"
                   >
                     {pinLocations.map((loc, idx) => {
                       const val = loc.villageTown || loc.locality || loc.postOffice;
@@ -392,14 +392,14 @@ export const AddressesPage: React.FC = () => {
                   <Input
                     value={selectedVillageTown}
                     onChange={(e) => setSelectedVillageTown(e.target.value)}
-                    className="text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                    className="text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   />
                 </div>
               ) : null}
 
               {/* Auto-filled District & State */}
               {district && (
-                <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-amber-50/70 border border-amber-300">
+                <div className="flex items-center justify-between gap-4 p-3 rounded-md bg-amber-50/70 border border-amber-300">
                   <div className="flex-1 space-y-0.5">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block">
                       District
@@ -422,14 +422,14 @@ export const AddressesPage: React.FC = () => {
                   placeholder="e.g. Flat 402, Ganga Heights"
                   value={houseNo}
                   onChange={(e) => setHouseNo(e.target.value)}
-                  className="text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                 />
               </div>
 
               {/* Default Address Radio Option */}
               <div
                 onClick={() => setIsDefault(!isDefault)}
-                className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer select-none ${
+                className={`flex items-center gap-3 p-3 rounded-md border-2 transition-all cursor-pointer select-none ${
                   isDefault ? 'border-red-700 bg-red-50/50' : 'border-stone-200 hover:bg-stone-50'
                 }`}
               >
@@ -456,7 +456,7 @@ export const AddressesPage: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-xs w-full sm:w-auto h-10 px-4 rounded-xl cursor-pointer"
+                  className="text-xs w-full sm:w-auto h-10 px-4 rounded-md cursor-pointer"
                 >
                   Cancel
                 </Button>
@@ -464,7 +464,7 @@ export const AddressesPage: React.FC = () => {
                   type="submit"
                   size="sm"
                   disabled={isSaving || !pinCode || !houseNo}
-                  className="text-xs w-full sm:w-auto h-10 px-5 rounded-xl font-bold bg-[#780016] hover:bg-red-800 text-white border border-amber-400 shadow-xs cursor-pointer puja-btn-tap"
+                  className="text-xs w-full sm:w-auto h-10 px-5 rounded-md font-bold bg-[#780016] hover:bg-red-800 text-white border border-amber-400 shadow-xs cursor-pointer puja-btn-tap"
                 >
                   {isSaving ? 'Saving...' : editingAddress ? 'Update Address' : 'Save Address'}
                 </Button>

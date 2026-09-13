@@ -197,7 +197,7 @@ export const AdminProfilePage: React.FC = () => {
 
       {/* Avatar Dialog */}
       <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-        <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
+        <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
               <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
@@ -235,7 +235,7 @@ export const AdminProfilePage: React.FC = () => {
                 variant="destructive"
                 size="sm"
                 onClick={handleRemoveAvatar}
-                className="w-full sm:w-auto text-xs rounded-xl"
+                className="w-full sm:w-auto text-xs rounded-md"
               >
                 <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                 Remove Photo
@@ -250,7 +250,7 @@ export const AdminProfilePage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAvatarModalOpen(false)}
-                className="flex-1 sm:flex-none text-xs rounded-xl"
+                className="flex-1 sm:flex-none text-xs rounded-md"
               >
                 Cancel
               </Button>
@@ -258,7 +258,7 @@ export const AdminProfilePage: React.FC = () => {
                 type="button"
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
+                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-md cursor-pointer"
               >
                 <Upload className="w-3.5 h-3.5" />
                 Upload Photo
@@ -269,9 +269,9 @@ export const AdminProfilePage: React.FC = () => {
       </Dialog>
 
       {/* Page Header (100% Flexbox) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
         <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+          <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
             ॐ
           </div>
           <div>
@@ -286,13 +286,13 @@ export const AdminProfilePage: React.FC = () => {
       </div>
 
       {/* Admin Profile Overview Card */}
-      <div className="border-2 border-amber-300 bg-white rounded-3xl p-6 sm:p-7 shadow-sm">
+      <div className="border-2 border-amber-300 bg-white rounded-xl p-6 sm:p-7 shadow-sm">
         <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-5">
           <div className="relative group shrink-0">
             <button
               type="button"
               onClick={() => setIsAvatarModalOpen(true)}
-              className="relative block rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
+              className="relative block rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-offset-2 focus:ring-offset-white transition-transform hover:scale-105 cursor-pointer"
               title="Click to change profile picture"
             >
               <Avatar className="w-20 h-20 border-2 border-white">
@@ -337,7 +337,7 @@ export const AdminProfilePage: React.FC = () => {
       {/* Profile Details Deck (100% Flexbox, Zero CSS Grids) */}
       <div className="flex flex-col md:flex-row gap-6 w-full">
         {/* Edit Personal Profile Information Card */}
-        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
             <User className="w-4 h-4 text-red-700" />
             <h3 className="text-base font-bold font-serif text-stone-950">
@@ -360,7 +360,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="pl-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   placeholder="Enter full name"
                   required
                 />
@@ -383,7 +383,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="email"
                   value={adminEmail}
                   disabled
-                  className="pl-10 text-xs h-10 rounded-xl bg-stone-100 text-stone-600 font-medium cursor-not-allowed border-dashed border-stone-300"
+                  className="pl-10 text-xs h-10 rounded-md bg-stone-100 text-stone-600 font-medium cursor-not-allowed border-dashed border-stone-300"
                 />
               </div>
             </div>
@@ -404,7 +404,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="text"
                   value={adminPhone}
                   disabled
-                  className="pl-10 text-xs h-10 rounded-xl bg-stone-100 text-stone-600 font-mono font-bold cursor-not-allowed border-dashed border-stone-300"
+                  className="pl-10 text-xs h-10 rounded-md bg-stone-100 text-stone-600 font-mono font-bold cursor-not-allowed border-dashed border-stone-300"
                 />
               </div>
             </div>
@@ -413,7 +413,7 @@ export const AdminProfilePage: React.FC = () => {
               type="submit"
               size="sm"
               disabled={isSavingName}
-              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-md shadow-xs cursor-pointer puja-btn-tap"
             >
               <Save className="w-3.5 h-3.5" />
               {isSavingName ? "Saving..." : "Save Name Changes"}
@@ -422,7 +422,7 @@ export const AdminProfilePage: React.FC = () => {
         </div>
 
         {/* Change Security Password Card */}
-        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
             <KeyRound className="w-4 h-4 text-amber-600" />
             <h3 className="text-base font-bold font-serif text-stone-950">
@@ -445,7 +445,7 @@ export const AdminProfilePage: React.FC = () => {
                   type={showCurrentPassword ? "text" : "password"}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="pl-10 pr-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   placeholder="Enter current password"
                 />
                 <button
@@ -473,7 +473,7 @@ export const AdminProfilePage: React.FC = () => {
                   type={showNewPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="pl-10 pr-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   placeholder="Enter at least 6 characters"
                 />
                 <button
@@ -501,7 +501,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
                   placeholder="Re-enter new password"
                 />
               </div>
@@ -511,7 +511,7 @@ export const AdminProfilePage: React.FC = () => {
               type="submit"
               size="sm"
               disabled={isUpdatingPassword}
-              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-md shadow-xs cursor-pointer puja-btn-tap"
             >
               <KeyRound className="w-3.5 h-3.5" />
               {isUpdatingPassword ? "Updating..." : "Update Password"}

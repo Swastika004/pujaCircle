@@ -29,7 +29,7 @@ export const AuthRoleTabs: React.FC<AuthRoleTabsProps> = ({
   return (
     <div
       className={cn(
-        'w-full bg-white p-1.5 rounded-2xl border-2 border-amber-300 shadow-sm mb-4',
+        'w-full bg-white p-1.5 rounded-lg border-2 border-amber-300 shadow-sm mb-4',
         className
       )}
     >
@@ -39,7 +39,7 @@ export const AuthRoleTabs: React.FC<AuthRoleTabsProps> = ({
           type="button"
           onClick={() => triggerChange('USER')}
           className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
+            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
             activeRole === 'USER'
               ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
               : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'
@@ -60,7 +60,7 @@ export const AuthRoleTabs: React.FC<AuthRoleTabsProps> = ({
           type="button"
           onClick={() => triggerChange('PRIEST')}
           className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
+            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
             activeRole === 'PRIEST'
               ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
               : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'

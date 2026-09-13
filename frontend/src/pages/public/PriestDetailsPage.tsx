@@ -165,7 +165,7 @@ export const PriestDetailsPage: React.FC = () => {
           The requested priest profile does not exist or is currently pending approval.
         </p>
         <Link to="/user/priests">
-          <Button size="sm" variant="outline" className="border-2 border-amber-300 rounded-xl hover:bg-amber-50">
+          <Button size="sm" variant="outline" className="border-2 border-amber-300 rounded-md hover:bg-amber-50">
             ← Return to Priest Directory
           </Button>
         </Link>
@@ -187,12 +187,12 @@ export const PriestDetailsPage: React.FC = () => {
       </Link>
 
       {/* Priest Header Profile Card */}
-      <div className="bg-white border border-amber-300/90 rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row gap-6 items-start relative">
+      <div className="bg-white border border-amber-300/90 rounded-xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row gap-6 items-start relative">
         <div className="relative shrink-0 mx-auto md:mx-0">
           <img
             src={priest.profileImageUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200'}
             alt={priest.fullName}
-            className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl object-cover ring-2 ring-amber-400 ring-offset-2 shrink-0 bg-amber-50 shadow-sm"
+            className="h-28 w-28 sm:h-32 sm:w-32 rounded-md object-cover ring-2 ring-amber-400 ring-offset-2 shrink-0 bg-amber-50 shadow-sm"
           />
           <div
             className="absolute -bottom-1 -right-1 bg-red-700 text-white rounded-full p-1.5 shadow-sm border-2 border-white"
@@ -209,18 +209,18 @@ export const PriestDetailsPage: React.FC = () => {
                 <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
                   {priest.displayName || priest.fullName}
                 </h1>
-                <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-red-700 text-white text-xs font-semibold shadow-2xs">
+                <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-sm bg-red-700 text-white text-xs font-semibold shadow-2xs">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   <span>Vedic Verified</span>
                 </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 text-xs text-stone-600 mt-1.5">
-                <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
+                <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-100 px-2.5 py-0.5 rounded-sm border border-amber-300">
                   <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                   {priest.rating ? priest.rating.toFixed(1) : '4.9'} ({priest.reviewCount || 48} Reviews)
                 </span>
-                <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-400 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-400 px-2.5 py-0.5 rounded-sm">
                   <Clock className="h-3 w-3 text-stone-950" />
                   {priest.experienceYears}+ Yrs Shastric Exp
                 </span>
@@ -232,7 +232,7 @@ export const PriestDetailsPage: React.FC = () => {
 
             <Button
               onClick={() => handleStartBooking()}
-              className="gap-2 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-md h-11 px-5 cursor-pointer shrink-0"
+              className="gap-2 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded-md shadow-md h-11 px-5 cursor-pointer shrink-0"
             >
               <Calendar className="h-4 w-4" />
               <span>Schedule Ceremony</span>
@@ -269,14 +269,14 @@ export const PriestDetailsPage: React.FC = () => {
 
           <div className="space-y-3">
             {!priest.services || priest.services.length === 0 ? (
-              <div className="p-6 text-center text-xs text-stone-500 border-2 border-dashed border-amber-300 bg-amber-50/40 rounded-2xl">
+              <div className="p-6 text-center text-xs text-stone-500 border-2 border-dashed border-amber-300 bg-amber-50/40 rounded-md">
                 This priest has not published specific service rates yet.
               </div>
             ) : (
               priest.services.map((srv) => (
                 <div
                   key={srv.id}
-                  className={`p-4 rounded-2xl border-2 cursor-pointer transition-all shadow-xs bg-white flex items-center justify-between gap-4 ${
+                  className={`p-4 rounded-md border-2 cursor-pointer transition-all shadow-xs bg-white flex items-center justify-between gap-4 ${
                     selectedService?.id === srv.id
                       ? 'border-red-700 ring-2 ring-red-700/20 shadow-md bg-amber-50/30'
                       : 'border-amber-200 hover:border-amber-400'
@@ -304,7 +304,7 @@ export const PriestDetailsPage: React.FC = () => {
                     </span>
                     <Button
                       size="sm"
-                      className={`mt-2 h-8 text-xs px-3 rounded-lg font-bold cursor-pointer ${
+                      className={`mt-2 h-8 text-xs px-3 rounded-md font-bold cursor-pointer ${
                         selectedService?.id === srv.id
                           ? 'bg-red-700 hover:bg-red-800 text-white shadow-xs'
                           : 'border-2 border-amber-300 text-stone-800 hover:bg-amber-50'
@@ -332,11 +332,11 @@ export const PriestDetailsPage: React.FC = () => {
             <span>Auspicious Muhurat Slots</span>
           </h2>
 
-          <div className="bg-white border-2 border-amber-300 rounded-3xl p-5 shadow-xs space-y-4">
+          <div className="bg-white border-2 border-amber-300 rounded-xl p-5 shadow-xs space-y-4">
             <div className="pb-3 border-b border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">Select Ceremony Date</span>
-                <span className="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2 py-0.5 rounded-full">
+                <span className="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2 py-0.5 rounded-sm">
                   Verified Calendar
                 </span>
               </div>
@@ -348,7 +348,7 @@ export const PriestDetailsPage: React.FC = () => {
                   value={selectedDate}
                   min={todayStr}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="text-xs h-9 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  className="text-xs h-9 rounded-md border-amber-300 focus-visible:ring-red-700"
                 />
               </div>
             </div>
@@ -371,7 +371,7 @@ export const PriestDetailsPage: React.FC = () => {
                 activeBookableSlots.map((slot) => (
                   <div
                     key={slot.id}
-                    className={`p-3.5 rounded-2xl border-2 flex items-center justify-between cursor-pointer transition-all bg-white ${
+                    className={`p-3.5 rounded-md border-2 flex items-center justify-between cursor-pointer transition-all bg-white ${
                       selectedSlot?.id === slot.id
                         ? 'border-red-700 ring-2 ring-red-700/20 shadow-xs bg-amber-50/40'
                         : 'border-amber-200 hover:border-amber-400'
@@ -411,7 +411,7 @@ export const PriestDetailsPage: React.FC = () => {
             // Prevent auto-scrolling down into inner form inputs on modal open
             e.preventDefault();
           }}
-          className="sm:max-w-md w-[94vw] max-h-[85vh] flex flex-col p-4 sm:p-5 bg-white border-2 border-amber-300 rounded-2xl shadow-2xl gap-3.5"
+          className="sm:max-w-md w-[94vw] max-h-[85vh] flex flex-col p-4 sm:p-5 bg-white border-2 border-amber-300 rounded-lg shadow-2xl gap-3.5"
         >
           <DialogHeader className="shrink-0 space-y-1 text-left">
             <DialogTitle className="font-serif text-lg sm:text-xl font-bold text-stone-900">
@@ -425,7 +425,7 @@ export const PriestDetailsPage: React.FC = () => {
           {/* Scrollable Body with Sleek Custom Scrollbar & Comfortable Padding */}
           <div className="flex-1 overflow-y-auto pr-3 space-y-4 text-xs custom-scrollbar">
             {/* Price & Service Summary Box */}
-            <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 space-y-1.5 shadow-2xs">
+            <div className="p-3.5 rounded-md bg-amber-50 border border-amber-300 space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-stone-600">Appointed Purohit:</span>
                 <strong className="text-stone-900 font-serif text-xs sm:text-sm">{priest.displayName || priest.fullName}</strong>
@@ -463,12 +463,12 @@ export const PriestDetailsPage: React.FC = () => {
               </div>
 
               {userAddresses.length === 0 ? (
-                <div className="p-3 rounded-xl border border-amber-300 bg-amber-50 text-stone-800 space-y-2">
+                <div className="p-3 rounded-md border border-amber-300 bg-amber-50 text-stone-800 space-y-2">
                   <p className="text-xs">
                     You have no saved addresses. An address with PIN code is required for the priest to arrive.
                   </p>
                   <Link to="/user/addresses">
-                    <Button size="sm" className="text-xs h-7.5 bg-red-700 hover:bg-red-800 text-white rounded-lg">
+                    <Button size="sm" className="text-xs h-7.5 bg-red-700 hover:bg-red-800 text-white rounded-md">
                       Add Address Now
                     </Button>
                   </Link>
@@ -479,7 +479,7 @@ export const PriestDetailsPage: React.FC = () => {
                     <div
                       key={addr.id}
                       onClick={() => setSelectedAddressId(addr.id)}
-                      className={`p-2.5 rounded-xl border-2 cursor-pointer flex items-center justify-between bg-white transition-all ${
+                      className={`p-2.5 rounded-md border-2 cursor-pointer flex items-center justify-between bg-white transition-all ${
                         selectedAddressId === addr.id
                           ? 'border-red-700 ring-2 ring-red-700/20 shadow-2xs'
                           : 'border-amber-200 hover:border-amber-300'
@@ -508,12 +508,12 @@ export const PriestDetailsPage: React.FC = () => {
                 rows={3}
                 value={userNotes}
                 onChange={(e) => setUserNotes(e.target.value)}
-                className="text-xs rounded-xl border-2 border-amber-300 hover:border-amber-400 focus:border-red-700 focus:ring-0 focus-visible:ring-0 focus:outline-none focus-visible:outline-none transition-colors resize-none p-3 leading-relaxed w-full bg-white shadow-2xs"
+                className="text-xs rounded-md border-2 border-amber-300 hover:border-amber-400 focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:outline-none transition-colors resize-none p-3 leading-relaxed w-full bg-white shadow-2xs"
               />
             </div>
 
             {/* 5-Hour Response SLA Notice */}
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-[11px] text-stone-700">
+            <div className="flex items-start gap-2.5 p-3 rounded-md bg-red-50 border border-red-200 text-[11px] text-stone-700">
               <AlertCircle className="h-3.5 w-3.5 text-red-700 shrink-0 mt-0.5" />
               <span>
                 <strong>5-Hour Purohit Confirmation SLA:</strong> Priest will confirm within <strong>5 hours</strong>. Payment is strictly in cash upon ritual completion.
@@ -527,7 +527,7 @@ export const PriestDetailsPage: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={() => setIsBookingOpen(false)}
-              className="text-xs h-9 rounded-xl border-2 border-amber-300 hover:bg-amber-50 cursor-pointer"
+              className="text-xs h-9 rounded-md border-2 border-amber-300 hover:bg-amber-50 cursor-pointer"
               disabled={isSubmitting}
             >
               Cancel
@@ -536,7 +536,7 @@ export const PriestDetailsPage: React.FC = () => {
               size="sm"
               disabled={isSubmitting || !selectedSlot || !selectedAddressId || !selectedService}
               onClick={handleSubmitBooking}
-              className="text-xs font-bold bg-red-700 hover:bg-red-800 text-white h-9 px-4 rounded-xl shadow-md cursor-pointer"
+              className="text-xs font-bold bg-red-700 hover:bg-red-800 text-white h-9 px-4 rounded-md shadow-md cursor-pointer"
             >
               {isSubmitting ? 'Sending Request...' : 'Confirm Ceremony Booking'}
             </Button>

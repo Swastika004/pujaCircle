@@ -73,12 +73,12 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel */}
         <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center shadow-md select-none font-serif font-black text-2xl">
+              <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center shadow-md select-none font-serif font-black text-2xl">
                 ॐ
               </div>
               <div>
@@ -92,7 +92,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Sanctum Verification</span>
               </div>
@@ -134,7 +134,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
             <div className="space-y-1 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold mb-2">
                 {icon}
                 <span>Identity Verification</span>
               </div>
@@ -147,13 +147,13 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
+            <div className="mb-4 p-3 rounded-md bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
               <span className="font-bold text-stone-900">Development Mock OTP:</span>
               <span className="font-mono font-bold text-red-800 text-sm">123456</span>
             </div>
@@ -165,7 +165,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
                   maxLength={6}
                   placeholder="123456"
                   {...register('otp')}
-                  className="font-mono text-center tracking-widest text-base h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  className="font-mono text-center tracking-widest text-base h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                 />
                 {errors.otp && (
                   <p className="text-[11px] text-red-700 font-semibold">{errors.otp.message}</p>
@@ -187,7 +187,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-xl shadow-md cursor-pointer gap-2"
+                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
                 >
                   {isLoading ? 'Verifying Credentials...' : 'Verify & Continue'}
                   <ArrowRight className="h-4 w-4" />

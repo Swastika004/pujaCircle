@@ -26,7 +26,7 @@ export const HomePage: React.FC = () => {
         
         <section className="w-full flex flex-col items-center text-center gap-6">
           
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-[#C59A3F]/50 text-[#991B1B] text-xs font-bold shadow-xs hover:border-[#C59A3F] transition-all cursor-default">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm bg-white/95 border border-[#C59A3F]/50 text-[#991B1B] text-xs font-bold shadow-xs hover:border-[#C59A3F] transition-all cursor-default">
             <Sparkles className="h-3.5 w-3.5 text-[#B45309] animate-pulse" />
             <span className="font-serif tracking-wide text-[#780016]">॥ शुभं करोति कल्याणम् ॥</span>
             <span className="text-stone-300">|</span>
@@ -47,7 +47,7 @@ export const HomePage: React.FC = () => {
             <Link to="/advisor" className="w-full sm:w-auto flex-1">
               <Button
                 size="lg"
-                className="w-full h-13 text-base font-bold gap-2.5 bg-linear-to-r from-[#991B1B] via-[#851313] to-[#6E0E0E] hover:from-[#780016] hover:to-[#550808] text-amber-100 px-8 py-3.5 rounded-2xl border-2 border-amber-400/50 shadow-[0_10px_25px_-5px_rgba(153,27,27,0.45)] hover:shadow-[0_14px_30px_-4px_rgba(153,27,27,0.6)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                className="w-full h-13 text-base font-bold gap-2.5 bg-linear-to-r from-[#991B1B] via-[#851313] to-[#6E0E0E] hover:from-[#780016] hover:to-[#550808] text-amber-100 px-8 py-3.5 rounded-md border-2 border-amber-400/50 shadow-[0_10px_25px_-5px_rgba(153,27,27,0.45)] hover:shadow-[0_14px_30px_-4px_rgba(153,27,27,0.6)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
               >
                 <Compass className="h-4 w-4 text-amber-300" />
                 <span className="tracking-wide">Ask the Advisor</span>
@@ -59,7 +59,7 @@ export const HomePage: React.FC = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full h-13 px-7 text-sm sm:text-base font-bold border-2 border-[#C59A3F]/50 text-stone-800 bg-white/90 hover:bg-amber-50/90 hover:border-[#C59A3F] hover:text-[#780016] rounded-2xl shadow-sm hover:shadow-md active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full h-13 px-7 text-sm sm:text-base font-bold border-2 border-[#C59A3F]/50 text-stone-800 bg-white/90 hover:bg-amber-50/90 hover:border-[#C59A3F] hover:text-[#780016] rounded-md shadow-sm hover:shadow-md active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Users className="h-4 w-4 text-[#991B1B]" />
                 <span>Browse Priests</span>
@@ -68,7 +68,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           
-          <div className="w-full max-w-5xl mt-4 relative rounded-3xl overflow-hidden border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 bg-white shadow-xl">
+          <div className="w-full max-w-5xl mt-4 relative rounded-xl overflow-hidden border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 bg-white shadow-xl">
             <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden">
               <img
                 src="/images/hero_vedic_puja.jpg"
@@ -79,7 +79,7 @@ export const HomePage: React.FC = () => {
               <div className="absolute inset-0 bg-stone-950/20 pointer-events-none" />
 
               
-              <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:left-6 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/95 border border-[#C59A3F]/60 shadow-lg text-xs font-bold text-[#780016] backdrop-blur-xs">
+              <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:left-6 flex items-center gap-3 px-4 py-2 rounded-md bg-white/95 border border-[#C59A3F]/60 shadow-lg text-xs font-bold text-[#780016] backdrop-blur-xs">
                 <Flame className="h-4 w-4 text-[#991B1B]" />
                 <span>Sacred Vedic Vidhi, Samagri & Muhurat Guidance at Home</span>
               </div>
@@ -88,9 +88,9 @@ export const HomePage: React.FC = () => {
         </section>
 
         
-        <section className="w-full bg-[#780016] border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+        <section className="w-full bg-[#780016] border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 text-white rounded-xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
           <div className="text-center space-y-2 max-w-xl mx-auto mb-8 sm:mb-10 relative z-10">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-400 text-red-950 text-xs font-extrabold shadow-sm">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400 text-red-950 text-xs font-extrabold shadow-sm">
               <CheckCircle2 className="h-3.5 w-3.5 text-red-950" />
               <span>Sankalp Vidhi</span>
             </div>
@@ -104,7 +104,7 @@ export const HomePage: React.FC = () => {
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full relative z-10">
             
-            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-lg group cursor-default">
               <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 1
               </div>
@@ -119,7 +119,7 @@ export const HomePage: React.FC = () => {
             <div className="hidden md:block flex-1 border-t-2 border-dashed border-[#C59A3F]/50 mx-2" />
 
             
-            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-lg group cursor-default">
               <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 2
               </div>
@@ -134,7 +134,7 @@ export const HomePage: React.FC = () => {
             <div className="hidden md:block flex-1 border-t-2 border-dashed border-[#C59A3F]/50 mx-2" />
 
             
-            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-lg group cursor-default">
               <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 3
               </div>
@@ -173,11 +173,11 @@ export const HomePage: React.FC = () => {
             {featuredPujas.map((puja) => (
               <div
                 key={puja.id}
-                className="rounded-2xl border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-md hover:border-[#C59A3F] transition-all flex flex-col justify-between"
+                className="rounded-lg border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-md hover:border-[#C59A3F] transition-all flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-[#B45309] border border-amber-200">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-amber-50 text-[#B45309] border border-amber-200">
                       {puja.category.replace('-', ' ')}
                     </span>
                   </div>
@@ -199,7 +199,7 @@ export const HomePage: React.FC = () => {
                 <div className="pt-4 mt-4 border-t border-stone-100">
                   <Link
                     to={`/advisor/ritual-kit?id=${puja.id}`}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-[#991B1B] hover:text-[#780016] bg-amber-50/60 hover:bg-amber-100/80 rounded-xl transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-[#991B1B] hover:text-[#780016] bg-amber-50/60 hover:bg-amber-100/80 rounded-md transition-colors"
                   >
                     <span>View Ritual Kit & Vidhi</span>
                     <ArrowRight className="w-3 h-3" />

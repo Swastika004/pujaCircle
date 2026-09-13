@@ -47,7 +47,7 @@ export const BookingTimelineCard: React.FC<BookingTimelineCardProps> = ({
   ];
 
   return (
-    <div className="w-full bg-white border-2 border-amber-300 rounded-2xl p-5 shadow-xs">
+    <div className="w-full bg-white border-2 border-amber-300 rounded-lg p-5 shadow-xs">
       <h3 className="text-xs font-bold text-stone-700 uppercase tracking-wider mb-4 flex items-center gap-2">
         <span className="h-2 w-2 rounded-full bg-red-700" />
         <span>Sacred Ceremony Appointment Progress</span>
@@ -74,7 +74,7 @@ export const BookingTimelineCard: React.FC<BookingTimelineCardProps> = ({
           return (
             <div
               key={idx}
-              className={`flex-1 flex items-start gap-3 p-3.5 rounded-xl ${cardBorder} transition-all`}
+              className={`flex-1 flex items-start gap-3 p-3.5 rounded-md ${cardBorder} transition-all`}
             >
               <div
                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold ${badgeBg}`}
