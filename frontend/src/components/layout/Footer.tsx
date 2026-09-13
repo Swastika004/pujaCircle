@@ -1,142 +1,115 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { PujaCircleLogo } from "@/components/common/PujaCircleLogo";
-import { APP_CONFIG } from "@/lib/constants";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { PujaCircleLogo } from '@/components/common/PujaCircleLogo';
+import { useAuthStore } from '@/store/auth.store';
+import { TermsModal } from '@/components/legal/TermsModal';
+import { PrivacyModal } from '@/components/legal/PrivacyModal';
+import { CookiesModal } from '@/components/legal/CookiesModal';
 
-type PolicyType = "terms" | "privacy" | "cookies" | null;
-
-const POLICY_CONTENT = {
-  terms: {
-    title: "Terms of Service",
-    description: "Guidelines and terms for users and priests on PujaCircle.",
-    content: (
-      <div className="space-y-3.5 text-xs text-muted-foreground leading-relaxed">
-        <p>
-          <strong className="text-foreground">1. Platform Service:</strong> PujaCircle connects users with verified priests for home pujas and ceremonies across major cities.
-        </p>
-        <p>
-          <strong className="text-foreground">2. Transparent Pricing:</strong> Listed prices are clear and upfront. Payment is made directly in cash to the priest upon puja completion.
-        </p>
-        <p>
-          <strong className="text-foreground">3. Conduct & Rescheduling:</strong> Users and priests agree to treat each other respectfully and provide advance notice for any unavoidable schedule changes.
-        </p>
-      </div>
-    ),
-  },
-  privacy: {
-    title: "Privacy Policy",
-    description: "How your personal information and puja address are protected.",
-    content: (
-      <div className="space-y-3.5 text-xs text-muted-foreground leading-relaxed">
-        <p>
-          <strong className="text-foreground">1. Data Collected:</strong> We collect your mobile number, email, and address solely to coordinate your puja booking and priest arrival.
-        </p>
-        <p>
-          <strong className="text-foreground">2. Data Security:</strong> Your personal information is secure and never sold, rented, or shared with third-party advertisers.
-        </p>
-        <p>
-          <strong className="text-foreground">3. Address Privacy:</strong> Your exact location address is only shared with the booked priest once your booking is confirmed.
-        </p>
-      </div>
-    ),
-  },
-  cookies: {
-    title: "Cookie Policy",
-    description: "Information regarding essential cookies used on PujaCircle.",
-    content: (
-      <div className="space-y-3.5 text-xs text-muted-foreground leading-relaxed">
-        <p>
-          <strong className="text-foreground">1. Essential Cookies:</strong> We only use secure, HTTP-only session cookies necessary for maintaining authenticated login state, security tokens, and user preferences.
-        </p>
-        <p>
-          <strong className="text-foreground">2. No Ad Trackers:</strong> PujaCircle does not employ intrusive third-party cross-site advertising or behavioral tracking cookies.
-        </p>
-      </div>
-    ),
-  },
-};
-
-/**
- * Minimalist Website Footer
- * Features:
- * - Brand Logo & Title (Left)
- * - Centered Copyright Notice (Center)
- * - Basic Modal Dialogs for Terms, Privacy, and Cookies (Right)
- */
+// Footer
+// Renders strictly inside PublicLayout (never inside DashboardSidebarShell).
+// Content:
+// 1. Logo + one-line tagline
+// 2. Quick links: About, Contact, Browse Priests, Advisor
+// 3. Short West Bengal service-area line
+// 4. Legal row with three modal buttons (Terms, Privacy, Cookies) and copyright line
 export const Footer: React.FC = () => {
-  const [activePolicy, setActivePolicy] = useState<PolicyType>(null);
+  const { user } = useAuthStore();
+  const [openModal, setOpenModal] = useState<'terms' | 'privacy' | 'cookies' | null>(null);
 
-  const currentPolicy = activePolicy ? POLICY_CONTENT[activePolicy] : null;
+  const defaultTermsSection: 'devotee' | 'priest' | undefined =
+    user?.role === 'PRIEST' ? 'priest' : user?.role === 'USER' ? 'devotee' : undefined;
 
   return (
-    <footer className="border-t border-border/80 bg-background text-muted-foreground mt-auto py-5 sm:py-6">
-      <div className="container flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-        {/* 1. Left: Brand Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-2.5 group select-none shrink-0"
-        >
-          <PujaCircleLogo size={26} className="shadow-xs transition-transform group-hover:scale-105" />
-          <span className="font-serif font-bold text-sm text-foreground tracking-tight">
-            Puja<span className="text-primary font-sans">Circle</span>
-          </span>
-        </Link>
+    <footer className="relative z-20 border-t-2 border-amber-300/90 bg-[#FAF7F2] text-stone-900 mt-auto shadow-sm">
+      <div className="container py-10 sm:py-12">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 border-b border-amber-200/80 pb-8">
+          {/* Brand Logo & One-line Tagline */}
+          <div className="space-y-2 max-w-md">
+            <Link to="/" className="flex items-center gap-2.5 select-none shrink-0 group">
+              <PujaCircleLogo size={32} className="shadow-xs transition-transform group-hover:scale-105" />
+              <span className="font-serif font-black text-xl text-stone-950 tracking-tight">
+                Puja<span className="text-[#991B1B] font-sans font-bold">Circle</span>
+              </span>
+            </Link>
+            <p className="text-xs text-stone-600 leading-relaxed font-medium">
+              Connecting families with verified Gurukul-trained Vedic scholars across West Bengal with transparent dakshina.
+            </p>
+          </div>
 
-        {/* 2. Center: Copyright */}
-        <div className="text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} {APP_CONFIG.APP_NAME}. All rights reserved.
+          {/* Quick Links */}
+          <div className="flex flex-wrap items-center gap-6 text-xs font-semibold text-stone-700">
+            <Link to="/about" className="hover:text-[#991B1B] transition-colors">
+              About
+            </Link>
+            <Link to="/contact" className="hover:text-[#991B1B] transition-colors">
+              Contact
+            </Link>
+            <Link to="/priests" className="hover:text-[#991B1B] transition-colors">
+              Browse Priests
+            </Link>
+            <Link to="/advisor" className="hover:text-[#991B1B] transition-colors">
+              Sankalp Advisor
+            </Link>
+          </div>
         </div>
 
-        {/* 3. Right: Legal / Policy Dialog Triggers */}
-        <div className="flex items-center gap-5 sm:gap-6 text-xs shrink-0">
-          <button
-            type="button"
-            onClick={() => setActivePolicy("terms")}
-            className="hover:text-foreground transition-colors cursor-pointer"
-          >
-            Terms
-          </button>
-          <button
-            type="button"
-            onClick={() => setActivePolicy("privacy")}
-            className="hover:text-foreground transition-colors cursor-pointer"
-          >
-            Privacy
-          </button>
-          <button
-            type="button"
-            onClick={() => setActivePolicy("cookies")}
-            className="hover:text-foreground transition-colors cursor-pointer"
-          >
-            Cookies
-          </button>
+        {/* Service Area Notice */}
+        <div className="py-4 border-b border-amber-200/60 text-[11px] text-stone-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <span>
+            📍 <strong>Service Area:</strong> Serving Kolkata, Howrah, North & South 24 Parganas, Hooghly, Nadia, and districts across West Bengal.
+          </span>
+          <span className="text-stone-500 font-medium">
+            100% Direct Cash Dakshina after ritual completion
+          </span>
+        </div>
+
+        {/* Legal Row & Copyright Strip */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600">
+          <div>
+            © {new Date().getFullYear()} PujaCircle Technologies. All rights reserved.
+          </div>
+
+          <div className="flex items-center gap-5 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setOpenModal('terms')}
+              className="text-stone-700 hover:text-[#991B1B] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            >
+              Terms of Service
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpenModal('privacy')}
+              className="text-stone-700 hover:text-[#991B1B] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            >
+              Privacy Policy
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpenModal('cookies')}
+              className="text-stone-700 hover:text-[#991B1B] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            >
+              Cookie Policy
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Basic Policy Dialog */}
-      <Dialog open={activePolicy !== null} onOpenChange={(open) => !open && setActivePolicy(null)}>
-        <DialogContent className="max-w-md p-6 bg-card border-border/90 shadow-lg sm:rounded-lg">
-          <DialogHeader className="space-y-1 text-left pb-2">
-            <DialogTitle className="text-lg font-bold font-serif text-foreground">
-              {currentPolicy?.title}
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              {currentPolicy?.description}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="py-2 border-t border-border/60">
-            {currentPolicy?.content}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Legal Modals */}
+      <TermsModal
+        isOpen={openModal === 'terms'}
+        onClose={() => setOpenModal(null)}
+        defaultExpandedSection={defaultTermsSection}
+      />
+      <PrivacyModal
+        isOpen={openModal === 'privacy'}
+        onClose={() => setOpenModal(null)}
+      />
+      <CookiesModal
+        isOpen={openModal === 'cookies'}
+        onClose={() => setOpenModal(null)}
+      />
     </footer>
   );
 };

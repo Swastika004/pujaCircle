@@ -5,8 +5,8 @@
 
 @theme {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
-  --font-serif: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-heading: 'Outfit', 'Inter', sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-heading: 'Fraunces', Georgia, serif;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -35,7 +35,17 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  /* Brand Signature Colors */
+  /* Brand Signature Colors v2.0 per DESIGN §2 */
+  --color-brand-primary: hsl(var(--brand-primary));
+  --color-brand-primary-dark: hsl(var(--brand-primary-dark));
+  --color-brand-secondary: hsl(var(--brand-secondary));
+  --color-brand-accent: hsl(var(--brand-accent));
+  --color-brand-accent-soft: hsl(var(--brand-accent-soft));
+  --color-surface-alt: hsl(var(--surface-alt));
+  --color-advisor-accent: hsl(var(--advisor-accent));
+  --color-advisor-accent-soft: hsl(var(--advisor-accent-soft));
+
+  /* Backward-compatible color aliases */
   --color-brand-saffron: hsl(var(--brand-saffron));
   --color-brand-saffron-dark: hsl(var(--brand-saffron-dark));
   --color-brand-maroon: hsl(var(--brand-maroon));
@@ -105,78 +115,91 @@
 
 :root {
   /* ==========================================================================
-     PujaCircle Master Palette - Modern Minimalist Sacred Architecture
-     Clean, calm porcelain canvas with high-contrast slate typography,
-     restrained sacred saffron actions, and refined Vedic accents.
+     PujaCircle Master Palette v2.0 (DESIGN.md)
+     Warm Ivory canvas, Deep Saffron primary, Regal Maroon secondary,
+     Muted Gold accent, Charcoal foreground, Advisor Accent violet.
      ========================================================================== */
 
-  /* Brand Signature Accent Tokens */
-  --brand-saffron: 20 88% 48%;
-  /* #E45314 — Restrained, dignified sacred saffron */
-  --brand-saffron-dark: 18 85% 40%;
-  /* #BF400B — Deep terracotta saffron (hover state) */
-  --brand-maroon: 350 60% 28%;
-  /* #721C29 — Subtle temple burgundy */
-  --brand-maroon-light: 350 45% 42%;
-  --brand-gold: 40 85% 48%;
-  /* #E0A010 — Polished warm brass/gold */
-  --brand-ivory: 40 20% 98.5%;
-  /* #FAF9F6 — Warm, serene porcelain */
-  --brand-charcoal: 222 47% 11%;
-  /* #0F172A — High-contrast deep slate ink */
+  /* Brand Signature Colors v2.0 per DESIGN §2 */
+  --brand-primary: 20 68% 48%;
+  --brand-primary-dark: 20 65% 38%;
+  --brand-secondary: 340 55% 22%;
+  --brand-accent: 42 50% 55%;
+  --brand-accent-soft: 42 50% 88%;
+  --background: 40 40% 96%;
+  --surface: 0 0% 100%;
+  --surface-alt: 40 33% 91%;
+  --foreground: 220 12% 12%;
+  --foreground-muted: 30 5% 40%;
+  --advisor-accent: 258 30% 40%;
+  --advisor-accent-soft: 258 35% 94%;
+
+  /* Backward-compatible color aliases */
+  --brand-saffron: var(--brand-primary);
+  --brand-saffron-dark: var(--brand-primary-dark);
+  --brand-maroon: var(--brand-secondary);
+  --brand-maroon-light: 340 55% 32%;
+  --brand-gold: var(--brand-accent);
+  --brand-ivory: var(--background);
+  --brand-charcoal: var(--foreground);
 
   /* Surface & Semantic Tokens */
-  --background: 40 20% 98.5%;
-  /* Clean, serene porcelain canvas */
-  --foreground: 222 47% 11%;
-  /* High-legibility deep slate text */
-
   --card: 0 0% 100%;
-  /* Crisp white card surface */
-  --card-foreground: 222 47% 11%;
-
+  --card-foreground: 220 12% 12%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 220 12% 12%;
 
-  /* Primary Action: Sacred Saffron */
-  --primary: 20 88% 48%;
+  --primary: 20 68% 48%;
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: Dignified Temple Burgundy */
-  --secondary: 350 60% 28%;
+  --secondary: 340 55% 22%;
   --secondary-foreground: 0 0% 100%;
 
-  /* Muted: Soft Warm Gray / Sand */
-  --muted: 40 12% 95%;
-  --muted-foreground: 220 12% 46%;
+  --muted: 40 33% 91%;
+  --muted-foreground: 30 5% 40%;
 
-  /* Accent: Subtle Champagne Glint */
-  --accent: 40 30% 94%;
-  --accent-foreground: 222 47% 11%;
+  --accent: 42 50% 88%;
+  --accent-foreground: 340 55% 22%;
 
-  /* Destructive */
-  --destructive: 0 72% 51%;
+  --destructive: 4 51% 42%;
   --destructive-foreground: 0 0% 100%;
 
   /* Status Tokens */
-  --success: 142 65% 40%;
+  --success: 133 33% 36%;
   --success-foreground: 0 0% 100%;
-  --warning: 38 92% 48%;
+  --warning: 39 60% 45%;
   --warning-foreground: 0 0% 100%;
+  --danger: 4 51% 42%;
+  --danger-foreground: 0 0% 100%;
   --info: 217 85% 55%;
   --info-foreground: 0 0% 100%;
 
-  /* Crisp Minimalist Borders & Radii */
-  --border: 38 14% 89%;
-  --input: 38 14% 89%;
-  --ring: 20 88% 48%;
+  /* Crisp Structural Hairline Borders & Radii per DESIGN §4 */
+  --border: 40 15% 85%;
+  --input: 40 15% 85%;
+  --ring: 20 68% 48%;
 
-  --radius: 0.375rem;
+  --radius: 0.75rem;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
 
-  /* Grid & Shimmer Aesthetics - Minimalist */
-  --grid-color: hsl(222 47% 11% / 0.035);
-  --grid-shimmer-color: hsl(20 88% 48% / 0.3);
-  --grid-glow-filter: drop-shadow(0 0 1px hsl(var(--primary) / 0.35)) drop-shadow(0 0 4px hsl(var(--brand-gold) / 0.2));
+  /* Shadows per DESIGN §4 */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-raised: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+
+  /* Motion Tokens per DESIGN §5 */
+  --motion-fast: 150ms;
+  --motion-base: 300ms;
+
+  /* Type Scale Tokens per DESIGN §3 */
+  --text-display: 2.75rem;
+  --text-h1: 2rem;
+  --text-h2: 1.5rem;
+  --text-h3: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-micro: 0.75rem;
 }
 
 .dark {
@@ -238,7 +261,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-foreground;
+    @apply bg-background text-stone-900 antialiased selection:bg-primary/20 selection:text-foreground;
     font-family: var(--font-sans);
   }
 
@@ -322,9 +345,158 @@
   }
 }
 
-@utility bg-grid {
-  background-size: 40px 40px;
-  background-image:
-    linear-gradient(to right, hsl(var(--primary) / 0.09) 1px, transparent 1px),
-    linear-gradient(to bottom, hsl(var(--primary) / 0.09) 1px, transparent 1px);
+/* Sacred Micro-Interactions */
+.puja-card-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.puja-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+}
+
+.puja-btn-tap {
+  transition: transform 0.15s ease-out;
+}
+.puja-btn-tap:active {
+  transform: scale(0.98);
+}
+
+/* Sacred Vedic Background Animations */
+@keyframes spin-mandala-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-mandala-ccw {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes float-diya-sparkle {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(50vh) translateX(24px) scale(1);
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(-18px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+.animate-spin-mandala-cw {
+  animation: spin-mandala-cw 85s linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.animate-spin-mandala-ccw {
+  animation: spin-mandala-ccw 115s linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Micro & Interactive Animations */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.shimmer-badge {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(251,191,36,0.35) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer-sweep 3.5s infinite;
+}
+
+/* ==========================================================================
+   Global Sleek Vedic Custom Scrollbar (Applied Across Entire Website)
+   Replaces default OS scrollbars with a sleek, rounded amber-gold hairline
+   ========================================================================== */
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 119, 6, 0.45) transparent;
+}
+
+/* Chrome, Edge, Safari, Brave, Opera */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(217, 119, 6, 0.4);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(180, 83, 9, 0.8);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+

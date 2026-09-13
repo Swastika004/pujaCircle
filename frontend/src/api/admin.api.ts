@@ -73,6 +73,30 @@ export const adminApi = {
     }
   },
 
+  unbanPriest: async (priestId: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      return await mockApi.mockAdminUnbanPriest(priestId);
+    } catch (error) {
+      logAppError('adminApi.unbanPriest', error, { priestId });
+      return {
+        success: false,
+        message: getUserFriendlyErrorMessage(error, 'Failed to unban priest account.'),
+      };
+    }
+  },
+
+  reopenPriestApplication: async (priestId: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      return await mockApi.mockAdminReopenPriestApplication(priestId);
+    } catch (error) {
+      logAppError('adminApi.reopenPriestApplication', error, { priestId });
+      return {
+        success: false,
+        message: getUserFriendlyErrorMessage(error, 'Failed to reopen priest application.'),
+      };
+    }
+  },
+
   // Devotee / User Management
   getAllUsers: async (): Promise<any[]> => {
     try {

@@ -29,7 +29,8 @@ const HomePage = lazy(() => import('@/pages/public/HomePage'));
 const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 
-// User Auth Pages
+// Unified & User Auth Pages
+const AuthPage = lazy(() => import('@/pages/auth/AuthPage'));
 const UserLoginPage = lazy(() => import('@/pages/auth/user/UserLoginPage'));
 const UserRegisterPage = lazy(() => import('@/pages/auth/user/UserRegisterPage'));
 const UserForgotPasswordPage = lazy(() => import('@/pages/auth/user/UserForgotPasswordPage'));
@@ -71,6 +72,14 @@ const AdminPriestsPage = lazy(() => import('@/pages/admin/AdminPriestsPage'));
 const AdminPriestDetailsPage = lazy(() => import('@/pages/admin/AdminPriestDetailsPage'));
 const AdminUsersPage = lazy(() => import('@/pages/admin/AdminUsersPage'));
 const AdminProfilePage = lazy(() => import('@/pages/admin/AdminProfilePage'));
+const AdminCatalogPage = lazy(() => import('@/pages/admin/AdminCatalogPage'));
+
+// Sankalp Advisor Pages
+const AdvisorIntakePage = lazy(() => import('@/pages/advisor/AdvisorIntakePage'));
+const AdvisorResultPage = lazy(() => import('@/pages/advisor/AdvisorResultPage'));
+const RitualKitPage = lazy(() => import('@/pages/advisor/RitualKitPage'));
+
+const AdminAdvisorPreviewPage = lazy(() => import('@/pages/admin/AdminAdvisorPreviewPage'));
 
 export const appRouter = createBrowserRouter([
   // ==========================================
@@ -90,6 +99,7 @@ export const appRouter = createBrowserRouter([
       { path: 'contact', element: <GuestOnlyRoute>{LazyPage(ContactPage)}</GuestOnlyRoute> },
 
       // Guest Auth Routes
+      { path: 'login', element: <GuestOnlyRoute>{LazyPage(AuthPage)}</GuestOnlyRoute> },
       { path: 'user/login', element: <GuestOnlyRoute>{LazyPage(UserLoginPage)}</GuestOnlyRoute> },
       { path: 'user/register', element: <GuestOnlyRoute>{LazyPage(UserRegisterPage)}</GuestOnlyRoute> },
       { path: 'user/forgot-password', element: <GuestOnlyRoute>{LazyPage(UserForgotPasswordPage)}</GuestOnlyRoute> },
@@ -106,14 +116,26 @@ export const appRouter = createBrowserRouter([
 
       { path: 'admin/login', element: <GuestOnlyRoute>{LazyPage(AdminLoginPage)}</GuestOnlyRoute> },
 
+      // Public Priest Discovery (Accessible to both Guests and Devotees)
+      { path: 'priests', element: LazyPage(PriestListingPage) },
+      { path: 'priests/:id', element: LazyPage(PriestDetailsPage) },
+      { path: 'user/priests', element: LazyPage(PriestListingPage) },
+      { path: 'user/priests/:id', element: LazyPage(PriestDetailsPage) },
+
       // Canonical Devotee Features (USER Role Only)
       { path: 'user/home', element: <UserRouteGuard>{LazyPage(UserHomePage)}</UserRouteGuard> },
-      { path: 'user/priests', element: <UserRouteGuard>{LazyPage(PriestListingPage)}</UserRouteGuard> },
-      { path: 'user/priests/:id', element: <UserRouteGuard>{LazyPage(PriestDetailsPage)}</UserRouteGuard> },
       { path: 'user/bookings', element: <UserRouteGuard>{LazyPage(BookingsPage)}</UserRouteGuard> },
       { path: 'user/bookings/:id', element: <UserRouteGuard>{LazyPage(BookingDetailsPage)}</UserRouteGuard> },
       { path: 'user/addresses', element: <UserRouteGuard>{LazyPage(AddressesPage)}</UserRouteGuard> },
       { path: 'user/profile', element: <UserRouteGuard>{LazyPage(ProfilePage)}</UserRouteGuard> },
+
+      // Sankalp Advisor (Public & Devotee)
+      { path: 'advisor', element: LazyPage(AdvisorIntakePage) },
+      { path: 'advisor/results', element: LazyPage(AdvisorResultPage) },
+      { path: 'advisor/ritual-kit', element: LazyPage(RitualKitPage) },
+      { path: 'user/advisor', element: LazyPage(AdvisorIntakePage) },
+      { path: 'user/advisor/results', element: LazyPage(AdvisorResultPage) },
+      { path: 'user/advisor/ritual-kit', element: LazyPage(RitualKitPage) },
     ],
   },
 
@@ -156,6 +178,8 @@ export const appRouter = createBrowserRouter([
       { path: 'priests/:id', element: LazyPage(AdminPriestDetailsPage) },
       { path: 'users', element: LazyPage(AdminUsersPage) },
       { path: 'profile', element: LazyPage(AdminProfilePage) },
+      { path: 'catalog', element: LazyPage(AdminCatalogPage) },
+      { path: 'advisor-preview', element: LazyPage(AdminAdvisorPreviewPage) },
     ],
   },
 

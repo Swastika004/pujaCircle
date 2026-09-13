@@ -10,7 +10,6 @@ import {
 } from "@/components/admin/UserManagementTable";
 import { SuspendUserDialog } from "@/components/admin/UserActionDialogs";
 import { DeleteConfirmDialog } from "@/components/admin/PriestActionDialogs";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/common/EmptyState";
@@ -20,6 +19,11 @@ import { toast } from "sonner";
 
 type DevoteeFilter = "ALL" | "ACTIVE" | "SUSPENDED";
 
+/**
+ * AdminUsersPage
+ * Devotee registry management and account moderation for platform administrators.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
 export const AdminUsersPage: React.FC = () => {
   const [users, setUsers] = useState<DevoteeRecord[]>([]);
   const [activeTab, setActiveTab] = useState<DevoteeFilter>("ALL");
@@ -60,7 +64,6 @@ export const AdminUsersPage: React.FC = () => {
     fetchUsers();
   }, []);
 
-  // Handlers
   const handleSuspendConfirm = async (reason: string) => {
     if (!suspendTarget) return;
     const res = await mockAdminBanUser(suspendTarget.id, reason);
@@ -89,136 +92,141 @@ export const AdminUsersPage: React.FC = () => {
     setDeleteTarget(null);
   };
 
-  // Metrics
   const activeCount = users.filter((u) => u.status === "ACTIVE").length;
   const suspendedCount = users.filter((u) => u.status === "SUSPENDED").length;
 
-  // Filter users by active tab and search query
   const filteredUsers = users.filter((u) => {
     if (activeTab === "ACTIVE" && u.status !== "ACTIVE") return false;
     if (activeTab === "SUSPENDED" && u.status !== "SUSPENDED") return false;
 
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      const nameMatch = u.name.toLowerCase().includes(query);
-      const emailMatch = (u.email || "").toLowerCase().includes(query);
-      const phoneMatch = u.phoneNumber.includes(query);
-      return nameMatch || emailMatch || phoneMatch;
+      const q = searchQuery.toLowerCase();
+      const matchName = u.name?.toLowerCase().includes(q);
+      const matchEmail = u.email?.toLowerCase().includes(q);
+      const matchPhone = u.phoneNumber?.toLowerCase().includes(q);
+      return matchName || matchEmail || matchPhone;
     }
     return true;
   });
 
   return (
-    <div className="space-y-6 pb-12 max-w-5xl">
+    <div className="space-y-6 pb-12 w-full max-w-7xl text-stone-900">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-foreground">
-            Devotee Directory
-          </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Monitor registered devotees, bookings history, and manage account
-            statuses.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+            ॐ
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Devotee Accounts Directory
+            </h1>
+            <p className="text-xs text-stone-600 mt-1 leading-relaxed">
+              Platform registered user accounts, ceremony booking history, and account moderation.
+            </p>
+          </div>
         </div>
+
         <Button
           variant="outline"
           size="sm"
           onClick={fetchUsers}
-          className="gap-1.5 text-xs w-full sm:w-auto h-9 font-medium"
+          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-xl border-stone-300 hover:border-amber-400"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
           Refresh
         </Button>
       </div>
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-xs border">
-          <CardHeader className="py-3 px-4 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      {/* Metrics Row (100% Flexbox, Zero CSS Grids) */}
+      <div className="flex flex-wrap gap-4 w-full">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+          <div className="flex flex-row items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Total Devotees
-            </CardTitle>
-            <Users className="w-4 h-4 text-primary" />
-          </CardHeader>
-          <CardContent className="px-4 pb-3">
-            <div className="text-2xl font-bold font-serif text-foreground">
-              {users.length}
+            </span>
+            <div className="h-8 w-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
+              <Users className="w-4 h-4" />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="text-3xl font-extrabold font-serif text-stone-900 mt-2">
+            {users.length}
+          </div>
+        </div>
 
-        <Card className="shadow-xs border">
-          <CardHeader className="py-3 px-4 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+          <div className="flex flex-row items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Active Profiles
-            </CardTitle>
-            <UserCheck className="w-4 h-4 text-emerald-600" />
-          </CardHeader>
-          <CardContent className="px-4 pb-3">
-            <div className="text-2xl font-bold font-serif text-emerald-600">
-              {activeCount}
+            </span>
+            <div className="h-8 w-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+              <UserCheck className="w-4 h-4" />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="text-3xl font-extrabold font-serif text-emerald-700 mt-2">
+            {activeCount}
+          </div>
+        </div>
 
-        <Card className="shadow-xs border">
-          <CardHeader className="py-3 px-4 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="w-full sm:w-[calc(33.333%-11px)] p-5 border-2 border-amber-300 border-t-4 border-t-stone-700 bg-white shadow-xs rounded-2xl flex flex-col justify-between">
+          <div className="flex flex-row items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
               Suspended
-            </CardTitle>
-            <UserX className="w-4 h-4 text-rose-600" />
-          </CardHeader>
-          <CardContent className="px-4 pb-3">
-            <div className="text-2xl font-bold font-serif text-rose-600">
-              {suspendedCount}
+            </span>
+            <div className="h-8 w-8 rounded-xl bg-stone-200 text-stone-700 flex items-center justify-center font-bold">
+              <UserX className="w-4 h-4" />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="text-3xl font-extrabold font-serif text-stone-800 mt-2">
+            {suspendedCount}
+          </div>
+        </div>
       </div>
 
       {/* Tabs & Search */}
-      <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <Tabs
           value={activeTab}
           onValueChange={(val) => setActiveTab(val as DevoteeFilter)}
         >
-          <TabsList className="grid grid-cols-3 w-full max-w-sm h-9">
-            <TabsTrigger value="ALL" className="text-xs">
+          <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
+            <TabsTrigger value="ALL" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
               All ({users.length})
             </TabsTrigger>
-            <TabsTrigger value="ACTIVE" className="text-xs">
+            <TabsTrigger value="ACTIVE" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-emerald-700 transition-all">
               Active ({activeCount})
             </TabsTrigger>
-            <TabsTrigger value="SUSPENDED" className="text-xs">
+            <TabsTrigger value="SUSPENDED" className="text-xs px-4 py-2 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-red-700 transition-all">
               Suspended ({suspendedCount})
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <Input
             placeholder="Search by devotee name, email, or mobile..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 text-xs h-9"
+            className="pl-10 text-xs h-11 rounded-2xl border-2 border-stone-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table Container */}
       {filteredUsers.length > 0 ? (
-        <UserManagementTable
-          users={filteredUsers}
-          onOpenSuspend={(u) => setSuspendTarget(u)}
-          onReactivate={handleReactivate}
-          onOpenDelete={(u) => setDeleteTarget(u)}
-        />
+        <div className="rounded-3xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
+          <UserManagementTable
+            users={filteredUsers}
+            onOpenSuspend={(u) => setSuspendTarget(u)}
+            onReactivate={handleReactivate}
+            onOpenDelete={(u) => setDeleteTarget(u)}
+          />
+        </div>
       ) : (
         <EmptyState
           icon={Users}
-          title="No Devotees found"
+          title="No Devotees Found"
           description={
             searchQuery
               ? "No profiles match your search criteria."

@@ -7,10 +7,9 @@ import {
   mockUpdateUserProfile,
   mockResetPassword,
 } from '@/mocks/mock-api';
-import { mockDb } from '@/mocks/db';
+import { mockDb } from '@/mocks/data';
 import { updateUserProfileSchema, changePasswordSchema } from '@/schemas/user.schema';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +23,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { PageHeader } from '@/components/common/PageHeader';
 import {
   User,
   Phone,
@@ -46,47 +44,44 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+/**
+ * ProfilePage
+ * Devotee spiritual profile, verified contacts, and security credentials.
+ * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, deep vermilion accents.
+ */
 export const ProfilePage: React.FC = () => {
   const { user, setUser } = useAuthStore();
 
-  // 1. Identify active user from AuthStore or fallback to mock user
   const devoteeId = user?.id || 'user-devotee-1';
   const dbUser = mockDb.users.find((u) => u.id === devoteeId) || mockDb.users[0];
 
-  // 2. Local state for devotee statistics
   const [addressCount, setAddressCount] = useState<number>(0);
   const [bookingCount, setBookingCount] = useState<number>(0);
 
-  // 3. Avatar profile photo state
   const [avatarUrl, setAvatarUrl] = useState<string | null>(() => {
     return localStorage.getItem(`devotee_avatar_${devoteeId}`) || null;
   });
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 4. Personal Information edit state (Only name is editable)
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [fullName, setFullName] = useState<string>(user?.name || dbUser?.name || 'Devotee');
   const [isSavingProfile, setIsSavingProfile] = useState<boolean>(false);
 
-  // Read-only email and phone
   const email = user?.email || dbUser?.email || 'devotee@pujacircle.com';
   const phoneNumber = user?.phoneNumber || dbUser?.phoneNumber || '+91 9876543210';
 
-  // 5. Password update form state
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState<boolean>(false);
 
-  // Sync full name when user auth store changes
   useEffect(() => {
     if (user?.name) {
       setFullName(user.name);
     }
   }, [user]);
 
-  // Load bookings and addresses count from mock API
   useEffect(() => {
     async function loadDevoteeStats() {
       try {
@@ -105,7 +100,6 @@ export const ProfilePage: React.FC = () => {
     loadDevoteeStats();
   }, [devoteeId, dbUser]);
 
-  // Helper for 2-letter avatar fallback initials
   const initials = fullName
     .split(' ')
     .filter(Boolean)
@@ -114,12 +108,10 @@ export const ProfilePage: React.FC = () => {
     .toUpperCase()
     .slice(0, 2) || 'DV';
 
-  // Format member joined date
   const memberSince = dbUser?.createdAt
     ? new Date(dbUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : 'January 2026';
 
-  // Handler: Upload new profile photo
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -134,24 +126,25 @@ export const ProfilePage: React.FC = () => {
       const dataUrl = reader.result as string;
       setAvatarUrl(dataUrl);
       localStorage.setItem(`devotee_avatar_${devoteeId}`, dataUrl);
+      if (user) {
+        setUser({ ...user, avatarUrl: dataUrl });
+      }
       setIsAvatarModalOpen(false);
-      toast.success('Profile picture updated successfully!');
+      toast.success('Sacred profile photo updated successfully!');
     };
     reader.readAsDataURL(file);
   };
 
-  // Handler: Remove profile photo
   const handleRemoveAvatar = () => {
     setAvatarUrl(null);
     localStorage.removeItem(`devotee_avatar_${devoteeId}`);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    if (user) {
+      setUser({ ...user, avatarUrl: undefined });
     }
     setIsAvatarModalOpen(false);
     toast.success('Profile picture removed successfully.');
   };
 
-  // Handler: Save profile name changes
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -183,13 +176,11 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  // Handler: Cancel editing
   const handleCancelEdit = () => {
     setFullName(user?.name || dbUser?.name || '');
     setIsEditing(false);
   };
 
-  // Handler: Change password
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -231,274 +222,279 @@ export const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="container max-w-5xl py-8 space-y-8 animate-in fade-in-50 duration-300">
-      {/* Hidden File Input for Avatar */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/png, image/jpeg, image/webp"
-        className="hidden"
-      />
+    <div className="w-full text-stone-900 py-6 sm:py-10 px-4">
+      <div className="container max-w-4xl mx-auto space-y-6">
+        {/* Hidden File Input for Avatar */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/png, image/jpeg, image/webp"
+          className="hidden"
+        />
 
-      {/* Avatar Management Modal */}
-      <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-serif text-xl">Profile Picture</DialogTitle>
-            <DialogDescription className="text-xs">
-              Upload a clear photo for your profile or reset to default initials.
-            </DialogDescription>
-          </DialogHeader>
+        {/* Avatar Management Modal */}
+        <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
+          <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
+            <DialogHeader>
+              <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
+                <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+                <span>Devotee Profile Picture</span>
+              </DialogTitle>
+              <DialogDescription className="text-xs text-stone-600">
+                Upload a clear photo for your profile or reset to default initials.
+              </DialogDescription>
+            </DialogHeader>
 
-          <div className="flex flex-col items-center justify-center py-6 gap-4">
-            <div className="p-1 rounded-full bg-linear-to-tr from-primary via-brand-saffron to-amber-500 shadow-md">
-              <Avatar className="w-28 h-28 border-2 border-background">
-                {avatarUrl ? (
-                  <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />
-                ) : null}
-                <AvatarFallback className="bg-primary/10 text-primary font-serif text-3xl font-bold">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            <p className="text-xs text-muted-foreground">Supported formats: JPG, PNG, WEBP (Max 5MB)</p>
-          </div>
-
-          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
-            {avatarUrl ? (
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={handleRemoveAvatar}
-                className="w-full sm:w-auto text-xs"
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Remove Photo
-              </Button>
-            ) : <div />}
-
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsAvatarModalOpen(false)}
-                className="flex-1 sm:flex-none text-xs"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground flex-1 sm:flex-none text-xs gap-1.5 cursor-pointer"
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Upload New Photo
-              </Button>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Top Header & Quick Links */}
-      <PageHeader
-        title="User Profile"
-        description="Manage your personal details, verified contacts, and security settings."
-        badgeText="Verified Account"
-      >
-        <Link to="/user/addresses" className="w-full sm:w-auto">
-          <Button variant="outline" className="border-border hover:border-primary/40 hover:bg-primary/5 w-full sm:w-auto h-9 text-xs">
-            <MapPin className="w-4 h-4 mr-2 text-primary" />
-            Manage Addresses
-          </Button>
-        </Link>
-        <Link to="/user/bookings" className="w-full sm:w-auto">
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs w-full sm:w-auto h-9 text-xs">
-            <BookOpen className="w-4 h-4 mr-2" />
-            Puja Bookings
-          </Button>
-        </Link>
-      </PageHeader>
-
-      {/* Hero User Card */}
-      <div className="relative overflow-hidden rounded-lg border bg-card p-5 sm:p-6 md:p-8 shadow-xs">
-        {/* Subtle background decoration */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 -mb-16 w-48 h-48 rounded-full bg-amber-500/10 blur-2xl pointer-events-none" />
-
-        <div className="relative flex flex-col md:flex-row items-center md:items-center justify-between gap-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-5 w-full sm:w-auto text-center sm:text-left">
-            {/* Clickable Avatar to Change Photo */}
-            <div className="relative group shrink-0">
-              <button
-                type="button"
-                onClick={() => setIsAvatarModalOpen(true)}
-                className="relative block p-1 rounded-full bg-linear-to-tr from-primary via-brand-saffron to-amber-500 shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-transform hover:scale-105 cursor-pointer"
-                title="Click to change profile picture"
-              >
-                <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-background">
+            <div className="flex flex-col items-center justify-center py-6 gap-4">
+              <div className="p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm">
+                <Avatar className="w-28 h-28 border-2 border-white">
                   {avatarUrl ? (
                     <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />
                   ) : null}
-                  <AvatarFallback className="bg-primary/10 text-primary font-serif text-2xl font-bold">
+                  <AvatarFallback className="bg-[#780016] text-white font-serif text-3xl font-bold">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
-
-                {/* Camera Overlay on Hover */}
-                <div className="absolute inset-1 rounded-full bg-black/40 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xs">
-                  <Camera className="w-5 h-5 mb-0.5" />
-                  <span className="text-[9px] font-medium tracking-wide uppercase">Edit</span>
-                </div>
-              </button>
-
-              <div className="absolute bottom-0 right-0 bg-emerald-500 text-white rounded-full p-1 border-2 border-background shadow-xs pointer-events-none" title="Active User">
-                <CheckCircle2 className="w-3.5 h-3.5" />
               </div>
+              <p className="text-xs text-stone-500 font-medium">Supported formats: JPG, PNG, WEBP (Max 5MB)</p>
             </div>
 
-            {/* Devotee Info */}
-            <div className="space-y-1.5 flex-1">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h2 className="text-xl sm:text-2xl font-bold font-serif text-foreground">{fullName}</h2>
-                <Badge className="bg-brand-maroon text-white hover:bg-brand-maroon/90 text-xs">
-                  Devotee
-                </Badge>
-                <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 bg-emerald-500/10 text-xs">
-                  Active
-                </Badge>
-              </div>
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
+              {avatarUrl ? (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleRemoveAvatar}
+                  className="w-full sm:w-auto text-xs rounded-xl"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Remove Photo
+                </Button>
+              ) : <div />}
 
-              {/* Verified Contact Badges */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs text-muted-foreground pt-1">
-                <div className="flex items-center gap-1.5 bg-muted/60 px-2.5 py-1 rounded-md" title="Verified Mobile">
-                  <Phone className="w-3.5 h-3.5 text-brand-saffron" />
-                  <span className="font-mono font-medium text-foreground">{phoneNumber}</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
-                </div>
-
-                <div className="flex items-center gap-1.5 bg-muted/60 px-2.5 py-1 rounded-md" title="Verified Email">
-                  <Mail className="w-3.5 h-3.5 text-brand-saffron" />
-                  <span className="text-foreground">{email}</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
-                </div>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsAvatarModalOpen(false)}
+                  className="flex-1 sm:flex-none text-xs rounded-xl"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="bg-[#780016] hover:bg-red-800 text-white border border-amber-400 font-bold flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload New Photo
+                </Button>
               </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-              <div className="flex items-center justify-center sm:justify-start gap-4 text-xs text-muted-foreground pt-0.5">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                  Member since {memberSince}
-                </span>
-              </div>
+        {/* Top Header & Quick Links (100% Flexbox Responsive) */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-5 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
+              <span className="text-sm font-serif font-black leading-none">ॐ</span>
+              <span>Devotee Sanctuary Profile</span>
             </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Devotee Settings
+            </h1>
+            <p className="text-xs sm:text-sm text-stone-600">
+              Manage your personal information, verified communication channels, and security credentials.
+            </p>
           </div>
 
-          {/* Quick Action Button */}
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
-            {!isEditing ? (
+          {/* Quick Action Navigation Links - Fully Responsive */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
+            <Link to="/user/addresses" className="w-full sm:w-auto">
               <Button
-                type="button"
-                onClick={() => setIsEditing(true)}
-                className="bg-brand-saffron hover:bg-brand-saffron-dark text-white shadow-xs w-full sm:w-auto text-xs h-9"
-              >
-                <Edit3 className="w-3.5 h-3.5 mr-1.5" />
-                Edit Profile
-              </Button>
-            ) : (
-              <Button
-                type="button"
                 variant="outline"
-                onClick={() => {
-                  setFullName(user?.name || '');
-                  setIsEditing(false);
-                }}
-                className="w-full sm:w-auto text-xs h-9"
+                className="w-full sm:w-auto border-stone-300 hover:border-amber-400 hover:bg-amber-50 h-11 px-4 text-xs font-bold rounded-xl shadow-2xs transition-all flex items-center justify-center cursor-pointer"
               >
-                <X className="w-3.5 h-3.5 mr-1.5" />
-                Cancel Editing
+                <MapPin className="w-4 h-4 mr-1.5 text-amber-600" />
+                <span>Manage Addresses</span>
               </Button>
-            )}
+            </Link>
+            <Link to="/user/bookings" className="w-full sm:w-auto">
+              <Button
+                className="w-full sm:w-auto bg-[#780016] hover:bg-red-800 text-white border border-amber-400 h-11 px-4 text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center cursor-pointer"
+              >
+                <BookOpen className="w-4 h-4 mr-1.5 text-amber-300" />
+                <span>Puja Bookings</span>
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Devotee Quick Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 mt-6 border-t border-border/60">
-          <div className="p-3.5 rounded-md bg-muted/40 border border-border/60 flex flex-col justify-center">
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-brand-saffron" />
-              Ceremonies Booked
-            </span>
-            <span className="text-2xl font-bold font-serif text-foreground mt-0.5">
-              {bookingCount}
-            </span>
-          </div>
+        {/* Hero User Profile Card (Pure White, Zero Gradients, Zero Blurs) */}
+        <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto text-center sm:text-left">
+              {/* Clickable Avatar to Change Photo */}
+              <div className="relative group shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsAvatarModalOpen(true)}
+                  className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
+                  title="Click to change profile picture"
+                >
+                  <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-white">
+                    {avatarUrl ? (
+                      <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />
+                    ) : null}
+                    <AvatarFallback className="bg-[#780016] text-white font-serif text-2xl font-bold">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
 
-          <div className="p-3.5 rounded-md bg-muted/40 border border-border/60 flex flex-col justify-center">
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-brand-saffron" />
-              Saved Addresses
-            </span>
-            <span className="text-2xl font-bold font-serif text-foreground mt-0.5">
-              {addressCount}
-            </span>
-          </div>
+                  {/* Camera Overlay on Hover */}
+                  <div className="absolute inset-1 rounded-full bg-stone-950/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera className="w-5 h-5 mb-0.5" />
+                    <span className="text-[9px] font-bold tracking-wide uppercase">Edit</span>
+                  </div>
+                </button>
 
-          <div className="p-3.5 rounded-md bg-muted/40 border border-border/60 flex flex-col justify-center">
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              Account Status
-            </span>
-            <span className="text-base font-semibold text-emerald-600 mt-1 flex items-center gap-1">
-              Active & Verified
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Tabs Section */}
-      <Tabs defaultValue="personal" className="w-full space-y-6">
-        <TabsList className="grid grid-cols-2 w-full sm:max-w-sm bg-muted/80 p-1 border">
-          <TabsTrigger value="personal" className="text-xs sm:text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
-            <User className="w-4 h-4 mr-1.5 hidden sm:inline-block text-brand-saffron" />
-            Personal Details
-          </TabsTrigger>
-          <TabsTrigger value="security" className="text-xs sm:text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
-            <KeyRound className="w-4 h-4 mr-1.5 hidden sm:inline-block text-brand-maroon" />
-            Security & Passwords
-          </TabsTrigger>
-        </TabsList>
-
-        {/* TAB 1: Personal Details */}
-        <TabsContent value="personal" className="space-y-6 focus-visible:outline-none">
-          <Card className="border shadow-sm">
-            <CardHeader className="p-4 sm:p-6 pb-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-1">
-                  <CardTitle className="text-lg sm:text-xl font-serif">Personal Information</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm">
-                    Your primary profile details used during ritual bookings and priest communication.
-                  </CardDescription>
+                <div className="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full p-1 border-2 border-white shadow-xs pointer-events-none" title="Active Devotee">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                 </div>
-                {!isEditing && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsEditing(true)}
-                    className="border-brand-saffron/40 hover:border-brand-saffron text-brand-saffron hover:bg-brand-saffron/10 w-full sm:w-auto h-9 text-xs shrink-0"
-                  >
-                    <Edit3 className="w-3.5 h-3.5 mr-1" />
-                    Edit
-                  </Button>
-                )}
               </div>
-            </CardHeader>
-            <CardContent>
+
+              {/* Devotee Info */}
+              <div className="space-y-1.5 flex-1">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-950">{fullName}</h2>
+                  <Badge className="bg-[#780016] text-white border border-amber-400 text-xs font-bold">
+                    Devotee
+                  </Badge>
+                  <Badge variant="outline" className="border-emerald-500 text-emerald-800 bg-emerald-50 text-xs font-bold">
+                    Active
+                  </Badge>
+                </div>
+
+                {/* Verified Contact Badges */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs text-stone-600 pt-1">
+                  <div className="flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-xl border border-stone-200" title="Verified Mobile">
+                    <Phone className="w-3.5 h-3.5 text-amber-600" />
+                    <span className="font-mono font-bold text-stone-900">{phoneNumber}</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
+                  </div>
+
+                  <div className="flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-xl border border-stone-200" title="Verified Email">
+                    <Mail className="w-3.5 h-3.5 text-amber-600" />
+                    <span className="font-medium text-stone-900">{email}</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-center sm:justify-start gap-4 text-xs text-stone-500 pt-0.5">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                    Devotee since {memberSince}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Action Button - Symmetrically aligned to right */}
+            <div className="flex items-center gap-2 w-full md:w-auto justify-center md:justify-end shrink-0">
+              {!isEditing ? (
+                <Button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 shadow-xs w-full sm:w-auto text-xs h-11 px-6 rounded-xl cursor-pointer transition-all hover:shadow-md"
+                >
+                  <Edit3 className="w-4 h-4 mr-2" />
+                  <span>Edit Profile</span>
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancelEdit}
+                  className="w-full sm:w-auto text-xs h-11 px-6 rounded-xl border-stone-300"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  <span>Cancel Editing</span>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Devotee Quick Stats Row (100% Flexbox, Zero CSS Grids) */}
+          <div className="flex flex-col sm:flex-row items-stretch justify-between gap-3 pt-6 mt-6 border-t border-amber-200">
+            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+              <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
+                <Calendar className="w-3.5 h-3.5 text-red-700" />
+                Ceremonies Booked
+              </span>
+              <span className="text-2xl font-bold font-serif text-stone-900 mt-1">
+                {bookingCount}
+              </span>
+            </div>
+
+            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+              <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
+                <MapPin className="w-3.5 h-3.5 text-amber-600" />
+                Saved Addresses
+              </span>
+              <span className="text-2xl font-bold font-serif text-stone-900 mt-1">
+                {addressCount}
+              </span>
+            </div>
+
+            <div className="flex-1 p-4 rounded-2xl bg-white border-2 border-amber-200 shadow-xs flex flex-col justify-center">
+              <span className="text-xs text-stone-600 flex items-center gap-1 font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                Devotee Trust Status
+              </span>
+              <span className="text-base font-bold text-emerald-700 mt-1 flex items-center gap-1">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Verified Member
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Tabs Section */}
+        <Tabs defaultValue="personal" className="w-full space-y-6">
+          <TabsList className="flex items-center gap-2 w-full sm:max-w-sm bg-white p-1.5 border-2 border-amber-300 rounded-2xl shadow-xs">
+            <TabsTrigger
+              value="personal"
+              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-xl data-[state=active]:shadow-sm transition-all"
+            >
+              <User className="w-4 h-4 mr-1.5 hidden sm:inline-block" />
+              Personal Details
+            </TabsTrigger>
+            <TabsTrigger
+              value="security"
+              className="flex-1 text-xs sm:text-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white rounded-xl data-[state=active]:shadow-sm transition-all"
+            >
+              <KeyRound className="w-4 h-4 mr-1.5 hidden sm:inline-block" />
+              Security & Credentials
+            </TabsTrigger>
+          </TabsList>
+
+          {/* TAB 1: Personal Details */}
+          <TabsContent value="personal" className="space-y-6 focus-visible:outline-none">
+            <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="space-y-1">
+                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Personal Information</h3>
+                <p className="text-xs text-stone-600">
+                  Your primary profile details used during ritual bookings and Purohit coordination.
+                </p>
+              </div>
+
               <form onSubmit={handleSaveProfile} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Full Name (Editable) */}
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Full Name {isEditing && <span className="text-brand-saffron">*</span>}
+                <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
+                  {/* Full Name */}
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="fullName" className="text-xs font-bold uppercase tracking-wider text-stone-700">
+                      Full Name {isEditing && <span className="text-red-700">*</span>}
                     </Label>
                     {isEditing ? (
                       <Input
@@ -506,69 +502,59 @@ export const ProfilePage: React.FC = () => {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Aditi Sharma"
-                        className="focus-visible:ring-brand-saffron"
+                        className="h-11 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs font-medium"
                         required
                       />
                     ) : (
-                      <div className="p-3 bg-muted/30 rounded-lg border border-border/50 text-sm font-medium text-foreground flex items-center justify-between">
+                      <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200 text-sm font-bold text-stone-900 flex items-center justify-between">
                         <span>{fullName}</span>
-                        <User className="w-4 h-4 text-muted-foreground" />
+                        <User className="w-4 h-4 text-stone-400" />
                       </div>
                     )}
                   </div>
 
                   {/* Email Address (Read-Only) */}
-                  <div className="space-y-2">
+                  <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-stone-700">
                         Email Address
                       </Label>
-                      <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-0.5">
-                        <ShieldCheck className="w-3 h-3" /> Verified
+                      <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-0.5">
+                        <ShieldCheck className="w-3 h-3 text-emerald-600" /> Verified
                       </span>
                     </div>
-                    <div className="p-3 bg-muted/50 rounded-lg border border-border/50 text-sm text-muted-foreground flex items-center justify-between cursor-not-allowed">
+                    <div className="p-3.5 bg-stone-100 rounded-xl border border-stone-200 text-sm text-stone-700 font-medium flex items-center justify-between cursor-not-allowed">
                       <span>{email}</span>
-                      <Lock className="w-4 h-4 text-muted-foreground/70" />
+                      <Lock className="w-4 h-4 text-stone-400" />
                     </div>
-                    {isEditing && (
-                      <p className="text-[11px] text-muted-foreground">
-                        Email address is verified and cannot be modified.
-                      </p>
-                    )}
                   </div>
+                </div>
 
-                  {/* Phone Number (Read-Only) */}
-                  <div className="space-y-2 md:col-span-2">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Mobile Number
-                      </Label>
-                      <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-0.5">
-                        <ShieldCheck className="w-3 h-3" /> Primary OTP Verified
-                      </span>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg border border-border/50 text-sm font-mono text-muted-foreground flex items-center justify-between cursor-not-allowed">
-                      <span>{phoneNumber}</span>
-                      <Lock className="w-4 h-4 text-muted-foreground/70" />
-                    </div>
-                    {isEditing && (
-                      <p className="text-[11px] text-muted-foreground">
-                        Mobile number is linked to your OTP authentication and cannot be modified.
-                      </p>
-                    )}
+                {/* Phone Number (Read-Only) */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-stone-700">
+                      Primary Mobile Number
+                    </Label>
+                    <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-0.5">
+                      <ShieldCheck className="w-3 h-3 text-emerald-600" /> OTP Verified
+                    </span>
+                  </div>
+                  <div className="p-3.5 bg-stone-100 rounded-xl border border-stone-200 text-sm font-mono font-bold text-stone-900 flex items-center justify-between cursor-not-allowed">
+                    <span>{phoneNumber}</span>
+                    <Lock className="w-4 h-4 text-stone-400" />
                   </div>
                 </div>
 
                 {isEditing && (
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t">
-                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto h-9 text-xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t border-stone-200">
+                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto h-10 px-5 text-xs rounded-xl">
                       Cancel
                     </Button>
                     <Button
                       type="submit"
                       disabled={isSavingProfile}
-                      className="bg-brand-saffron hover:bg-brand-saffron-dark text-white w-full sm:w-auto h-9 text-xs"
+                      className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-6 text-xs rounded-xl shadow-xs cursor-pointer puja-btn-tap"
                     >
                       <Save className="w-4 h-4 mr-2" />
                       {isSavingProfile ? 'Saving Changes...' : 'Save Profile Changes'}
@@ -576,24 +562,23 @@ export const ProfilePage: React.FC = () => {
                   </div>
                 )}
               </form>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </div>
+          </TabsContent>
 
-        {/* TAB 2: Security & Passwords */}
-        <TabsContent value="security" className="space-y-6 focus-visible:outline-none">
-          <Card className="border shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-serif">Security & Password</CardTitle>
-              <CardDescription>
-                Update your account password and review device authentication status.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleUpdatePassword} className="space-y-6 max-w-xl">
+          {/* TAB 2: Security & Passwords */}
+          <TabsContent value="security" className="space-y-6 focus-visible:outline-none">
+            <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="space-y-1">
+                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Security & Credentials</h3>
+                <p className="text-xs text-stone-600">
+                  Update your account password and review device authentication protection.
+                </p>
+              </div>
+
+              <form onSubmit={handleUpdatePassword} className="space-y-5 max-w-xl">
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="currentPassword">Current Password</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="currentPassword" className="text-xs font-bold text-stone-800">Current Password</Label>
                     <div className="relative">
                       <Input
                         id="currentPassword"
@@ -601,15 +586,15 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="pr-10 focus-visible:ring-brand-saffron"
+                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
-                      <Lock className="w-4 h-4 absolute right-3 top-3 text-muted-foreground" />
+                      <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="newPassword" className="text-xs font-bold text-stone-800">New Password</Label>
                     <div className="relative">
                       <Input
                         id="newPassword"
@@ -617,18 +602,18 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="pr-10 focus-visible:ring-brand-saffron"
+                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
-                      <KeyRound className="w-4 h-4 absolute right-3 top-3 text-muted-foreground" />
+                      <KeyRound className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Must be at least 8 characters long with a combination of letters, numbers, and special characters.
+                    <p className="text-[11px] text-stone-500">
+                      Must be at least 8 characters long with uppercase, lowercase, and special characters.
                     </p>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="confirmPassword" className="text-xs font-bold text-stone-800">Confirm New Password</Label>
                     <div className="relative">
                       <Input
                         id="confirmPassword"
@@ -636,81 +621,77 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="pr-10 focus-visible:ring-brand-saffron"
+                        className="pr-10 h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
-                      <Lock className="w-4 h-4 absolute right-3 top-3 text-muted-foreground" />
+                      <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
                     </div>
                   </div>
                 </div>
 
-                <div className="p-4 bg-muted/40 rounded-xl border space-y-2 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-2 font-medium text-foreground">
+                <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-300 space-y-1.5 text-xs text-stone-700">
+                  <div className="flex items-center gap-2 font-bold text-stone-900">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Account Security Protection
+                    Account Credential Protection
                   </div>
-                  <p>
-                    All passwords are encrypted with high-grade security protocols. You will remain logged in on this browser after updating your password.
+                  <p className="text-[11px] leading-relaxed">
+                    All credentials are encrypted with bank-grade security protocols. You will remain logged in on this device after updating.
                   </p>
                 </div>
 
                 <Button
                   type="submit"
                   disabled={isUpdatingPassword}
-                  className="bg-brand-saffron hover:bg-brand-saffron-dark text-white w-full sm:w-auto h-9 text-xs"
+                  className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-11 px-6 text-xs rounded-xl shadow-xs cursor-pointer puja-btn-tap"
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   {isUpdatingPassword ? 'Updating Password...' : 'Update Password'}
                 </Button>
               </form>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+          </TabsContent>
+        </Tabs>
 
-      {/* Quick Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-        <Link to="/addresses" className="group">
-          <Card className="border hover:border-brand-saffron/60 transition-all shadow-sm hover:shadow-md bg-card">
-            <CardContent className="p-5 flex items-center justify-between">
+        {/* Quick Navigation Cards (100% Flexbox) */}
+        <div className="flex flex-col sm:flex-row items-stretch gap-4 pt-2 w-full">
+          <Link to="/user/addresses" className="flex-1 group">
+            <div className="p-6 rounded-3xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-brand-saffron/10 text-brand-saffron group-hover:scale-105 transition-transform">
-                  <MapPin className="w-5 h-5" />
+                <div className="p-3 rounded-2xl bg-amber-100 text-amber-800 border border-amber-300 group-hover:scale-105 transition-transform">
+                  <MapPin className="w-6 h-6 text-amber-700" />
                 </div>
                 <div>
-                  <h3 className="font-semibold font-serif text-base text-foreground group-hover:text-brand-saffron transition-colors">
+                  <h3 className="font-bold font-serif text-base text-stone-900 group-hover:text-red-700 transition-colors">
                     Manage Puja Locations
                   </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {addressCount} saved location{addressCount !== 1 ? 's' : ''} for home and temple ceremonies
+                  <p className="text-xs text-stone-600">
+                    {addressCount} saved location{addressCount !== 1 ? 's' : ''} for home ceremonies
                   </p>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-brand-saffron group-hover:translate-x-1 transition-all" />
-            </CardContent>
-          </Card>
-        </Link>
+              <ChevronRight className="w-5 h-5 text-stone-400 group-hover:text-red-700 group-hover:translate-x-1 transition-all" />
+            </div>
+          </Link>
 
-        <Link to="/bookings" className="group">
-          <Card className="border hover:border-brand-saffron/60 transition-all shadow-sm hover:shadow-md bg-card">
-            <CardContent className="p-5 flex items-center justify-between">
+          <Link to="/user/bookings" className="flex-1 group">
+            <div className="p-6 rounded-3xl border-2 border-amber-300 hover:border-amber-500 bg-white shadow-xs hover:shadow-md transition-all flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-brand-maroon/10 text-brand-maroon group-hover:scale-105 transition-transform">
-                  <BookOpen className="w-5 h-5" />
+                <div className="p-3 rounded-2xl bg-red-100 text-red-800 border border-red-200 group-hover:scale-105 transition-transform">
+                  <BookOpen className="w-6 h-6 text-red-700" />
                 </div>
                 <div>
-                  <h3 className="font-semibold font-serif text-base text-foreground group-hover:text-brand-maroon transition-colors">
+                  <h3 className="font-bold font-serif text-base text-stone-900 group-hover:text-red-700 transition-colors">
                     Ceremony Bookings & History
                   </h3>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-stone-600">
                     {bookingCount} past & upcoming Vedic ritual{bookingCount !== 1 ? 's' : ''}
                   </p>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-brand-maroon group-hover:translate-x-1 transition-all" />
-            </CardContent>
-          </Card>
-        </Link>
+              <ChevronRight className="w-5 h-5 text-stone-400 group-hover:text-red-700 group-hover:translate-x-1 transition-all" />
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

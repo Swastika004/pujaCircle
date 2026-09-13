@@ -54,9 +54,9 @@ export const PriestBookingDetailsDialog: React.FC<PriestBookingDetailsDialogProp
             </span>
           </div>
 
-          {/* Schedule Grid */}
-          <div className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/40 border">
-            <div className="space-y-1">
+          {/* Schedule Flex Row */}
+          <div className="flex items-center justify-between gap-4 p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
+            <div className="flex-1 space-y-1">
               <span className="text-muted-foreground text-[11px] flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-primary" />
                 Date

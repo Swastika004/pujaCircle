@@ -2,6 +2,8 @@ import * as mockApi from '@/mocks/mock-api';
 import { Address, CreateAddressRequest, UpdateAddressRequest, PincodeLookupResponse, PincodeLocation } from '@/types/address.types';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';
 
+export type { PincodeLocation, PincodeLookupResponse };
+
 export const addressApi = {
   getAddresses: async (userId: string = 'user-devotee-1'): Promise<Address[]> => {
     try {

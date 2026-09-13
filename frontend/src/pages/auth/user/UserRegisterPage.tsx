@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerUserPersonalSchema, RegisterUserPersonalInput } from '@/schemas/auth.schema';
+import {
+  registerUserPersonalSchema,
+  RegisterUserPersonalInput,
+} from '@/schemas/auth.schema';
+import { addressApi, PincodeLocation } from '@/api/address.api';
 import { useAuthStore } from '@/store/auth.store';
-import { addressApi } from '@/api/address.api';
-import { PincodeLocation } from '@/types/address.types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { AuthRoleTabs } from '@/components/auth/AuthRoleTabs';
-import { Phone, Mail, Lock, User, MapPin, CheckCircle2, ArrowRight, ArrowLeft, AlertCircle, Eye, EyeOff } from 'lucide-react';
-import { PujaCircleLogo } from '@/components/common/PujaCircleLogo';
+import {
+  User,
+  Phone,
+  Mail,
+  Lock,
+  ArrowRight,
+  ArrowLeft,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Sparkles,
+  Shield,
+  CheckCircle2,
+  MapPin,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 /**
  * UserRegisterPage
- * Multi-Step Devotee Registration Form
- * Uses React Hook Form + Zod for personal credentials, followed by OTP and PIN-code address detection.
+ * Premium Split-Card Multi-Step Devotee Registration Form
+ * Matches the rich aesthetic of AuthLoginForm:
+ * - Left Showcase Panel (Deep Vermilion `#780016`) with sacred promises & Sanskrit quote
+ * - Right Form Panel with integrated AuthRoleTabs, step indicators, and form flow
+ * - 100% Flexbox, zero CSS Grids, pure solid colors, Haldi gold trims
  */
-const UserRegisterPage: React.FC = () => {
+export const UserRegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
 
@@ -98,34 +115,49 @@ const UserRegisterPage: React.FC = () => {
         setSelectedLocation(res.locations[0]);
       }
     } catch {
-      toast.error('Could not resolve PIN code');
+      toast.error('Could not auto-fetch PIN details. Please fill manually.');
     } finally {
       setIsSearchingPin(false);
     }
   };
 
-  // Step 3: Complete Registration
+  // Step 3: Complete registration
   const handleCompleteRegistration = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (!houseBuilding.trim() || !street.trim() || !selectedLocation) {
-      setErrorMessage('Please complete your home address details.');
+    if (!selectedLocation && locations.length === 0 && pincode.length !== 6) {
+      setErrorMessage('Please provide a valid 6-digit PIN code.');
       return;
     }
 
     setIsSubmitting(true);
-    const formVals = getValues();
+    const personalData = getValues();
 
     const newUser = {
-      id: `user-devotee-${Date.now()}`,
-      name: formVals.fullName,
-      phoneNumber: formVals.phoneNumber.startsWith('+91')
-        ? formVals.phoneNumber
-        : `+91${formVals.phoneNumber.replace(/\D/g, '')}`,
-      email: formVals.email,
+      id: `devotee-${Date.now()}`,
+      name: personalData.fullName,
+      email: personalData.email,
+      phoneNumber: personalData.phoneNumber,
       role: 'USER' as const,
-      hasAddress: true,
+      isEmailVerified: true,
+      isPhoneVerified: true,
+      addresses: [
+        {
+          id: `addr-${Date.now()}`,
+          userId: `devotee-${Date.now()}`,
+          isDefault: true,
+          houseNo: houseBuilding,
+          street: street,
+          locality: selectedLocation ? selectedLocation.postOffice : 'Central Locality',
+          city: selectedLocation ? selectedLocation.city : 'Kolkata',
+          district: selectedLocation ? selectedLocation.district : 'Kolkata',
+          state: selectedLocation ? selectedLocation.state : 'West Bengal',
+          pincode: pincode,
+          addressType: 'HOME' as const,
+        },
+      ],
+      createdAt: new Date().toISOString(),
     };
 
     setTimeout(() => {
@@ -142,355 +174,494 @@ const UserRegisterPage: React.FC = () => {
     setValue('email', 'suresh.m@example.demo', { shouldValidate: true });
     setValue('password', 'User@123', { shouldValidate: true });
     setErrorMessage(null);
+    toast.info('Filled devotee demo registration values.');
   };
 
   return (
-    <div className="container max-w-lg py-8 sm:py-10 px-4">
-      {/* Role Switcher Tabs */}
-      <AuthRoleTabs
-        activeRole="USER"
-        onChange={(role) => {
-          if (role === 'PRIEST') navigate('/priest/register');
-        }}
-      />
+    <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+        {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Vermilion `#780016`) */}
+        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
+          <div className="space-y-6">
+            {/* Top Brand Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+                ॐ
+              </div>
+              <div>
+                <div className="font-serif font-black text-lg tracking-wider text-amber-300">
+                  PUJACIRCLE
+                </div>
+                <div className="text-[10px] text-amber-100 uppercase tracking-widest font-semibold">
+                  Sacred Vedic Sanctum
+                </div>
+              </div>
+            </div>
 
-      <Card className="shadow-md border-border/80">
-        <CardHeader className="text-center space-y-1 pb-4">
-          <PujaCircleLogo size={44} className="mx-auto shadow-sm mb-2" />
-          <CardTitle className="text-2xl font-bold font-serif text-foreground">
-            Create Account
-          </CardTitle>
-          <CardDescription className="text-xs">
-            Step {step} of 3 • {step === 1 ? 'Personal Details' : step === 2 ? 'Contact Verification' : 'Ceremony Address'}
-          </CardDescription>
+            {/* Headline & Value Propositions */}
+            <div className="space-y-3 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Devotee Registration</span>
+              </div>
+              <h2 className="text-2xl font-bold font-serif text-white leading-snug">
+                Join 25,000+ Devotee Families Across India
+              </h2>
+              <p className="text-xs text-amber-100/90 leading-relaxed">
+                Create your devotee sanctum in under two minutes. Experience traditional rituals with verified Gurukul-trained Purohits, transparent muhurat schedules, and direct cash dakshina.
+              </p>
+            </div>
 
-          {/* Stepper Indicator */}
-          <div className="flex items-center justify-center gap-2 pt-2">
-            <div className={`h-1.5 w-12 rounded-full ${step >= 1 ? 'bg-primary' : 'bg-muted'}`} />
-            <div className={`h-1.5 w-12 rounded-full ${step >= 2 ? 'bg-primary' : 'bg-muted'}`} />
-            <div className={`h-1.5 w-12 rounded-full ${step >= 3 ? 'bg-primary' : 'bg-muted'}`} />
+            {/* Sacred Commitments */}
+            <div className="space-y-2.5 pt-2">
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>1,200+ Verified Gurukul Scholars</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>100% Direct Cash Dakshina to Priest</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Zero Advance Fees & Instant Muhurats</span>
+              </div>
+            </div>
+
+            {/* Stepper Progress Indicator on Left Panel */}
+            <div className="p-3.5 rounded-2xl bg-black/25 border border-amber-400/30 space-y-2 pt-3">
+              <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                Registration Progress
+              </div>
+              <div className="space-y-1.5 text-xs">
+                <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? 'bg-amber-400 text-stone-950 font-bold' : step === 1 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step > 1 ? '✓' : '1'}
+                  </span>
+                  <span>Personal Credentials</span>
+                </div>
+                <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? 'bg-amber-400 text-stone-950 font-bold' : step === 2 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step > 2 ? '✓' : '2'}
+                  </span>
+                  <span>Contact Verification (OTP)</span>
+                </div>
+                <div className={`flex items-center gap-2 ${step >= 3 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 3 ? 'border border-amber-400 text-amber-300 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    3
+                  </span>
+                  <span>Sanctum Home Address</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </CardHeader>
 
-        {/* Error Notification */}
-        {errorMessage && (
-          <div className="mx-6 mb-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{errorMessage}</span>
+          {/* Bottom Sanskrit Quote */}
+          <div className="pt-6 border-t border-amber-400/30 space-y-1">
+            <div className="text-xs font-serif text-amber-200 italic">
+              “यज्ञो वै श्रेष्ठतमं कर्म — Yajna is the highest auspicious deed.”
+            </div>
+            <div className="text-[10px] text-amber-400 font-medium">
+              — Satapatha Brahmana
+            </div>
           </div>
-        )}
+        </div>
 
-        {/* ================= STEP 1: Personal Info (React Hook Form + Zod) ================= */}
-        {step === 1 && (
-          <form onSubmit={handleSubmit(onPersonalSubmit)}>
-            <CardContent className="space-y-3.5">
-              <div className="space-y-1">
-                <Label className="text-xs">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="e.g. Ramesh Chandra Sharma"
-                    {...register('fullName')}
-                    className="pl-9 text-xs"
-                  />
+        {/* Right Form Panel (Flexbox) */}
+        <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
+          <div>
+            {/* Top Row: Role Switch Tabs + Hidden Staff Shield */}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <AuthRoleTabs
+                activeRole="USER"
+                onRoleChange={(role) => {
+                  if (role === 'PRIEST') navigate('/priest/register');
+                }}
+                className="mb-0 flex-1"
+              />
+
+              <Link
+                to="/admin/login"
+                tabIndex={-1}
+                aria-label="Staff access"
+                title="Staff access"
+                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              >
+                <Shield className="h-4 w-4" />
+              </Link>
+            </div>
+
+            {/* Header Block with Step Tracker */}
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold font-serif text-stone-900">
+                Create Devotee Account
+              </h1>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Step {step} of 3 • {step === 1 ? 'Personal Credentials' : step === 2 ? 'Mobile & Email Verification' : 'Primary Puja Sanctum Address'}
+              </p>
+
+              {/* Progress Stepper Bar */}
+              <div className="flex items-center gap-2 pt-2">
+                <div className="flex items-center gap-1.5">
+                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                    step >= 1 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                  }`}>
+                    {step > 1 ? '✓' : '1'}
+                  </div>
+                  <span className="text-xs font-semibold text-stone-700">Details</span>
                 </div>
-                {errors.fullName && (
-                  <p className="text-[11px] text-destructive">{errors.fullName.message}</p>
-                )}
-              </div>
 
-              <div className="space-y-1">
-                <Label className="text-xs">Mobile Number (+91)</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    {...register('phoneNumber')}
-                    className="pl-9 text-xs"
-                  />
+                <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+
+                <div className="flex items-center gap-1.5">
+                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                    step >= 2 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                  }`}>
+                    {step > 2 ? '✓' : '2'}
+                  </div>
+                  <span className="text-xs font-semibold text-stone-700">Verify</span>
                 </div>
-                {errors.phoneNumber && (
-                  <p className="text-[11px] text-destructive">{errors.phoneNumber.message}</p>
-                )}
-              </div>
 
-              <div className="space-y-1">
-                <Label className="text-xs">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    {...register('email')}
-                    className="pl-9 text-xs"
-                  />
+                <div className={`h-1 flex-1 rounded-full ${step >= 3 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+
+                <div className="flex items-center gap-1.5">
+                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                    step >= 3 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                  }`}>
+                    3
+                  </div>
+                  <span className="text-xs font-semibold text-stone-700">Sanctum</span>
                 </div>
-                {errors.email && (
-                  <p className="text-[11px] text-destructive">{errors.email.message}</p>
-                )}
               </div>
+            </div>
 
-              <div className="space-y-1">
-                <Label className="text-xs">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a secure password"
-                    {...register('password')}
-                    className="pl-9 pr-9 text-xs"
-                  />
+            {/* Error Notification */}
+            {errorMessage && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
+            {/* ================= STEP 1: Personal Info ================= */}
+            {step === 1 && (
+              <form onSubmit={handleSubmit(onPersonalSubmit)} className="space-y-4">
+                <div className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        placeholder="e.g. Ramesh Chandra Sharma"
+                        {...register('fullName')}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.fullName && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.fullName.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Mobile Number (+91)</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type="tel"
+                        placeholder="+91 98765 43210"
+                        {...register('phoneNumber')}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.phoneNumber && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.phoneNumber.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        {...register('email')}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Create a secure password"
+                        {...register('password')}
+                        className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.password.message}</p>
+                    )}
+                  </div>
+
+                  {/* Demo Pre-fill Button */}
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    onClick={handleFillDemo}
+                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    ✨ Auto-fill demo credentials
                   </button>
                 </div>
-                {errors.password && (
-                  <p className="text-[11px] text-destructive">{errors.password.message}</p>
-                )}
-              </div>
 
-              {/* Demo Pre-fill Button */}
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="text-[11px] text-primary hover:underline font-medium block text-right w-full"
-              >
-                Auto-fill registration demo
-              </button>
-            </CardContent>
-
-            <CardFooter className="flex flex-col space-y-3 pt-2">
-              <Button type="submit" className="w-full text-xs gap-1.5">
-                Continue to Verification <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-              <div className="text-center text-xs text-muted-foreground">
-                Already have an account?{' '}
-                <Link to="/user/login" className="text-primary font-medium hover:underline">
-                  Sign In
-                </Link>
-              </div>
-            </CardFooter>
-          </form>
-        )}
-
-        {/* ================= STEP 2: Phone & Email OTP ================= */}
-        {step === 2 && (
-          <form onSubmit={handleVerifyOtpStep}>
-            <CardContent className="space-y-4">
-              <div className="p-3 bg-muted/40 rounded-lg border text-xs text-muted-foreground space-y-1">
-                <p className="font-semibold text-foreground">Development Testing OTP:</p>
-                <p>Use mock verification code: <strong className="text-primary font-mono text-sm">123456</strong></p>
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center">
-                  <Label className="text-xs">Mobile Verification Code</Label>
-                  <span className="text-[10px] text-muted-foreground">Sent to {getValues('phoneNumber')}</span>
+                <div className="space-y-3 pt-2">
+                  <Button
+                    type="submit"
+                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-xl shadow-md cursor-pointer gap-2"
+                  >
+                    <span>Continue to Verification</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
                 </div>
-                <Input
-                  maxLength={6}
-                  placeholder="Enter 6-digit phone OTP (123456)"
-                  value={phoneOtp}
-                  onChange={(e) => setPhoneOtp(e.target.value)}
-                  className="font-mono text-center tracking-widest text-sm"
-                  required
-                />
-              </div>
+              </form>
+            )}
 
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center">
-                  <Label className="text-xs">Email Verification Code</Label>
-                  <span className="text-[10px] text-muted-foreground">Sent to {getValues('email')}</span>
+            {/* ================= STEP 2: Phone & Email OTP ================= */}
+            {step === 2 && (
+              <form onSubmit={handleVerifyOtpStep} className="space-y-4">
+                <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 text-xs text-stone-700 space-y-1">
+                  <p className="font-bold text-stone-900">Development Testing OTP:</p>
+                  <p>Enter mock verification code: <strong className="text-red-800 font-mono text-sm">123456</strong></p>
                 </div>
-                <Input
-                  maxLength={6}
-                  placeholder="Enter 6-digit email OTP (123456)"
-                  value={emailOtp}
-                  onChange={(e) => setEmailOtp(e.target.value)}
-                  className="font-mono text-center tracking-widest text-sm"
-                  required
-                />
-              </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setPhoneOtp('123456');
-                  setEmailOtp('123456');
-                  setErrorMessage(null);
-                }}
-                className="text-[11px] text-primary hover:underline font-medium block text-right w-full"
-              >
-                Auto-fill mock OTP (123456)
-              </button>
-            </CardContent>
+                <div className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <Label className="text-xs font-bold text-stone-800">Mobile Verification Code</Label>
+                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues('phoneNumber')}</span>
+                    </div>
+                    <Input
+                      maxLength={6}
+                      placeholder="Enter 6-digit phone OTP (123456)"
+                      value={phoneOtp}
+                      onChange={(e) => setPhoneOtp(e.target.value)}
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      required
+                    />
+                  </div>
 
-            <CardFooter className="flex items-center justify-between gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setStep(1)}
-              >
-                <ArrowLeft className="h-3.5 w-3.5" /> Back
-              </Button>
-              <Button type="submit" size="sm" className="text-xs gap-1">
-                Verify & Continue <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </CardFooter>
-          </form>
-        )}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <Label className="text-xs font-bold text-stone-800">Email Verification Code</Label>
+                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues('email')}</span>
+                    </div>
+                    <Input
+                      maxLength={6}
+                      placeholder="Enter 6-digit email OTP (123456)"
+                      value={emailOtp}
+                      onChange={(e) => setEmailOtp(e.target.value)}
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      required
+                    />
+                  </div>
 
-        {/* ================= STEP 3: Mandatory Home Address ================= */}
-        {step === 3 && (
-          <form onSubmit={handleCompleteRegistration}>
-            <CardContent className="space-y-3.5">
-              <div className="p-2.5 bg-primary/10 rounded-lg text-xs text-primary flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 shrink-0" />
-                <span>Contacts verified! Set your address for ceremony muhurats.</span>
-              </div>
-
-              {/* PIN Code Lookup with Auto Detection */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <Label className="text-xs">PIN Code (Auto-detected)</Label>
-                  {isSearchingPin && (
-                    <span className="text-[10px] text-primary animate-pulse">
-                      Detecting area from Postal API...
-                    </span>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    maxLength={6}
-                    value={pincode}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, '');
-                      setPincode(val);
-                      if (val.length === 6) {
-                        handleLookupPin(val);
-                      }
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPhoneOtp('123456');
+                      setEmailOtp('123456');
+                      setErrorMessage(null);
                     }}
-                    placeholder="Enter 6-digit Indian PIN Code"
-                    className="text-xs font-mono"
-                    required
-                  />
+                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
+                  >
+                    ✨ Auto-fill mock OTP (123456)
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs shrink-0"
-                    onClick={() => handleLookupPin(pincode)}
-                    disabled={isSearchingPin || pincode.length < 6}
+                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    onClick={() => setStep(1)}
                   >
-                    {isSearchingPin ? 'Searching...' : 'Find Area'}
+                    <ArrowLeft className="h-3.5 w-3.5" /> Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                  >
+                    <span>Verify & Continue</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
-              </div>
+              </form>
+            )}
 
-              {/* Location Select (if multiple locations returned) */}
-              {locations.length > 0 && (
-                <div className="space-y-1.5 p-2.5 rounded-lg bg-muted/40 border">
-                  <Label className="text-xs font-medium text-foreground">
-                    Select Locality / Post Office ({locations.length} areas found)
-                  </Label>
-                  <select
-                    className="w-full text-xs p-2 rounded-md border bg-background text-foreground"
-                    value={selectedLocation?.postOffice}
-                    onChange={(e) => {
-                      const match = locations.find((l) => l.postOffice === e.target.value);
-                      if (match) setSelectedLocation(match);
-                    }}
-                  >
-                    {locations.map((loc, idx) => (
-                      <option key={idx} value={loc.postOffice}>
-                        {loc.postOffice} • {loc.city}, {loc.state}
-                      </option>
-                    ))}
-                  </select>
-
-                  {selectedLocation && (
-                    <div className="pt-1 flex flex-wrap gap-1.5 text-[11px] text-muted-foreground">
-                      <span className="bg-background px-2 py-0.5 rounded border flex items-center gap-1 font-medium">
-                        <MapPin className="h-3 w-3 text-primary" /> City: <strong className="text-foreground">{selectedLocation.city}</strong>
-                      </span>
-                      <span className="bg-background px-2 py-0.5 rounded border">
-                        District: <strong className="text-foreground">{selectedLocation.district}</strong>
-                      </span>
-                      <span className="bg-background px-2 py-0.5 rounded border">
-                        State: <strong className="text-foreground">{selectedLocation.state}</strong>
-                      </span>
-                    </div>
-                  )}
+            {/* ================= STEP 3: Mandatory Home Address ================= */}
+            {step === 3 && (
+              <form onSubmit={handleCompleteRegistration} className="space-y-3.5">
+                <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 flex items-center gap-2 font-semibold">
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-700" />
+                  <span>Contacts verified! Set your primary sanctum address for ceremony muhurats.</span>
                 </div>
-              )}
 
-              {/* House / Flat / Building */}
-              <div className="space-y-1">
-                <Label className="text-xs">House / Flat / Building</Label>
-                <Input
-                  placeholder="e.g. Flat 402, Ganga Heights"
-                  value={houseBuilding}
-                  onChange={(e) => setHouseBuilding(e.target.value)}
-                  className="text-xs"
-                  required
-                />
-              </div>
+                {/* PIN Code Lookup */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-stone-800">PIN Code (Auto-detects Locality)</Label>
+                    {isSearchingPin && (
+                      <span className="text-[10px] text-red-700 animate-pulse font-bold">
+                        Detecting area...
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      maxLength={6}
+                      value={pincode}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '');
+                        setPincode(val);
+                        if (val.length === 6) {
+                          handleLookupPin(val);
+                        }
+                      }}
+                      placeholder="Enter 6-digit PIN Code"
+                      className="text-xs font-mono h-10 rounded-xl border-amber-300 focus-visible:ring-red-700 flex-1"
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-xs shrink-0 h-10 px-3.5 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer font-bold"
+                      onClick={() => handleLookupPin(pincode)}
+                      disabled={isSearchingPin || pincode.length < 6}
+                    >
+                      {isSearchingPin ? 'Searching...' : 'Find Area'}
+                    </Button>
+                  </div>
+                </div>
 
-              {/* Street / Road */}
-              <div className="space-y-1">
-                <Label className="text-xs">Street / Road / Colony</Label>
-                <Input
-                  placeholder="e.g. Rashbehari Avenue"
-                  value={street}
-                  onChange={(e) => setStreet(e.target.value)}
-                  className="text-xs"
-                  required
-                />
-              </div>
+                {/* Location Select (if multiple locations returned) */}
+                {locations.length > 0 && (
+                  <div className="space-y-1.5 p-2.5 rounded-xl bg-amber-50 border border-amber-300">
+                    <Label className="text-xs font-bold text-stone-900">
+                      Select Locality ({locations.length} found)
+                    </Label>
+                    <select
+                      className="w-full text-xs p-2 rounded-xl border border-amber-300 bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-700 font-medium"
+                      value={selectedLocation?.postOffice}
+                      onChange={(e) => {
+                        const match = locations.find((l) => l.postOffice === e.target.value);
+                        if (match) setSelectedLocation(match);
+                      }}
+                    >
+                      {locations.map((loc, idx) => (
+                        <option key={idx} value={loc.postOffice}>
+                          {loc.postOffice} • {loc.city}, {loc.state}
+                        </option>
+                      ))}
+                    </select>
 
-              {/* Landmark */}
-              <div className="space-y-1">
-                <Label className="text-xs">Landmark (Optional)</Label>
-                <Input
-                  placeholder="e.g. Near Lake Mall"
-                  value={landmark}
-                  onChange={(e) => setLandmark(e.target.value)}
-                  className="text-xs"
-                />
-              </div>
-            </CardContent>
+                    {selectedLocation && (
+                      <div className="pt-0.5 flex flex-wrap gap-1.5 text-[10px] text-stone-700 font-medium">
+                        <span className="bg-white px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
+                          <MapPin className="h-2.5 w-2.5 text-red-700" /> City: <strong className="text-stone-900">{selectedLocation.city}</strong>
+                        </span>
+                        <span className="bg-white px-2 py-0.5 rounded border border-amber-200">
+                          State: <strong className="text-stone-900">{selectedLocation.state}</strong>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-            <CardFooter className="flex items-center justify-between gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setStep(2)}
-              >
-                <ArrowLeft className="h-3.5 w-3.5" /> Back
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="text-xs gap-1"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Creating Account...' : 'Complete & Sign In'}
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </CardFooter>
-          </form>
-        )}
-      </Card>
+                {/* House / Flat / Building */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">House / Flat / Building</Label>
+                  <Input
+                    placeholder="e.g. Flat 402, Ganga Heights"
+                    value={houseBuilding}
+                    onChange={(e) => setHouseBuilding(e.target.value)}
+                    className="text-xs h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    required
+                  />
+                </div>
+
+                {/* Street / Road */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Street / Road / Colony</Label>
+                  <Input
+                    placeholder="e.g. Rashbehari Avenue"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    className="text-xs h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    required
+                  />
+                </div>
+
+                {/* Landmark */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Landmark (Optional)</Label>
+                  <Input
+                    placeholder="e.g. Near Lake Mall"
+                    value={landmark}
+                    onChange={(e) => setLandmark(e.target.value)}
+                    className="text-xs h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    onClick={() => setStep(2)}
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" /> Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Creating Account...' : 'Complete & Sign In'}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </form>
+            )}
+          </div>
+
+          {/* Bottom Switch to Sign In */}
+          <div className="pt-6 text-center text-xs text-stone-600">
+            Already have an account?{' '}
+            <Link to="/user/login" className="text-[#780016] font-bold hover:underline">
+              Sign In to Devotee Account →
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

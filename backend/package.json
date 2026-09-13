@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -39,6 +41,7 @@
   },
   "overrides": {
     "esbuild": "^0.25.0",
-    "uuid": "^11.1.1"
+    "uuid": "^11.1.1",
+    "qs": "^6.16.0"
   }
 }

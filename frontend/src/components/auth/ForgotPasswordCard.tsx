@@ -6,15 +6,26 @@ import { forgotPasswordSchema, ForgotPasswordInput } from '@/schemas/auth.schema
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { AuthRoleTabs } from '@/components/auth/AuthRoleTabs';
-import { Mail, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import {
+  Mail,
+  ArrowRight,
+  AlertCircle,
+  Sparkles,
+  Shield,
+  CheckCircle2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 export interface ForgotPasswordCardProps {
   defaultRole?: 'USER' | 'PRIEST';
 }
 
+/**
+ * ForgotPasswordCard
+ * Ultra-Premium Split-Card Account Recovery for Devotees and Purohits.
+ * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, zero grids, zero gradients.
+ */
 export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
   defaultRole = 'USER',
 }) => {
@@ -27,20 +38,30 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isPriest = activeRole === 'PRIEST';
+
   const roleConfig = {
     USER: {
-      title: 'User Password Recovery',
-      subtitle: 'Enter your registered email to receive a password reset code.',
+      title: 'Devotee Account Recovery',
+      subtitle: 'Enter your registered email to receive an authentic OTP reset code.',
+      badge: 'Devotee Sanctum',
       demoEmail: 'user@example.demo',
       login: '/user/login',
       reset: '/user/reset-password',
+      panelBg: 'bg-[#780016]',
+      quote: 'सत्येन लभ्यस्तपसा ह्येष आत्मा — Truth and discipline reveal sacred purpose.',
+      source: 'Mundaka Upanishad',
     },
     PRIEST: {
-      title: 'Priest Password Recovery',
-      subtitle: 'Enter your registered priest email to receive a password reset code.',
+      title: 'Purohit Account Recovery',
+      subtitle: 'Enter your registered Acharya email to restore access to your ceremony calendar.',
+      badge: 'Purohit Sanctum',
       demoEmail: 'priest@example.demo',
       login: '/priest/login',
       reset: '/priest/reset-password',
+      panelBg: 'bg-[#450A0A]',
+      quote: 'विद्या ददाति विनयं विनयाद्याति पात्रताम् — True knowledge bestows humility and spiritual worth.',
+      source: 'Hitopadesha',
     },
   }[activeRole];
 
@@ -57,9 +78,8 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
     },
   });
 
-  const handleRoleChange = (newRole: string) => {
-    const role = newRole as 'USER' | 'PRIEST';
-    setActiveRole(role);
+  const handleRoleChange = (newRole: 'USER' | 'PRIEST') => {
+    setActiveRole(newRole);
     setError(null);
     reset({
       email: '',
@@ -79,80 +99,154 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
   const handleFillDemo = () => {
     setValue('email', roleConfig.demoEmail, { shouldValidate: true });
     setError(null);
+    toast.info(`Filled demo recovery email for ${activeRole}.`);
   };
 
   return (
-    <div className="container max-w-md py-8 sm:py-12 px-4">
-      {/* Role Switcher Tabs */}
-      <AuthRoleTabs activeRole={activeRole} onChange={handleRoleChange} />
+    <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+        {/* Left Showcase Panel */}
+        <div className={`hidden lg:flex flex-col justify-between w-5/12 ${roleConfig.panelBg} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
+          <div className="space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+                ॐ
+              </div>
+              <div>
+                <div className="font-serif font-black text-lg tracking-wider text-amber-300">
+                  PUJACIRCLE
+                </div>
+                <div className="text-[10px] text-amber-100 uppercase tracking-widest font-semibold">
+                  Account Recovery
+                </div>
+              </div>
+            </div>
 
-      <Card className="shadow-md border border-border/90 rounded-lg overflow-hidden">
-        <CardHeader className="text-center space-y-2 pb-4 pt-6">
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-md bg-primary/10 text-primary mb-1">
-            <Mail className="h-5 w-5" />
+            <div className="space-y-3 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>{roleConfig.badge}</span>
+              </div>
+              <h2 className="text-2xl font-bold font-serif text-white leading-snug">
+                Secure Sanctum Credential Recovery
+              </h2>
+              <p className="text-xs text-amber-100/90 leading-relaxed">
+                Protecting devotee privacy and Purohit portal security. We will dispatch a 6-digit verification code to your registered email address.
+              </p>
+            </div>
+
+            <div className="space-y-2.5 pt-2">
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Encrypted Security Verification</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Instant Mock OTP (123456) for Testing</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Seamless Session Restoration</span>
+              </div>
+            </div>
           </div>
-          <CardTitle className="text-2xl font-bold font-serif text-foreground">
-            {roleConfig.title}
-          </CardTitle>
-          <CardDescription className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-            {roleConfig.subtitle}
-          </CardDescription>
-        </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4 pt-1">
+          <div className="pt-6 border-t border-amber-400/30 space-y-1">
+            <div className="text-xs font-serif text-amber-200 italic">
+              “{roleConfig.quote}”
+            </div>
+            <div className="text-[10px] text-amber-400 font-medium">
+              — {roleConfig.source}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Form Panel */}
+        <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
+          <div>
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <AuthRoleTabs
+                activeRole={activeRole}
+                onRoleChange={handleRoleChange}
+                className="mb-0 flex-1"
+              />
+
+              <Link
+                to="/admin/login"
+                tabIndex={-1}
+                aria-label="Staff access"
+                title="Staff access"
+                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              >
+                <Shield className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold font-serif text-stone-900">
+                {roleConfig.title}
+              </h1>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                {roleConfig.subtitle}
+              </p>
+            </div>
+
             {error && (
-              <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium">Registered Email Address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="email"
-                  placeholder={roleConfig.demoEmail}
-                  {...register('email')}
-                  className="pl-9 text-xs"
-                />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-stone-800">Registered Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                  <Input
+                    type="email"
+                    placeholder={roleConfig.demoEmail}
+                    {...register('email')}
+                    className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                )}
               </div>
-              {errors.email && (
-                <p className="text-[11px] text-destructive">{errors.email.message}</p>
-              )}
-            </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleFillDemo}
-              className="w-full text-xs text-muted-foreground hover:text-foreground border-dashed h-8 gap-1.5"
-            >
-              <Sparkles className="h-3 w-3 text-primary" />
-              Fill Demo Email ({roleConfig.demoEmail})
-            </Button>
-          </CardContent>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-stone-500 font-mono">Mock: {roleConfig.demoEmail}</span>
+                <button
+                  type="button"
+                  onClick={handleFillDemo}
+                  className="text-xs text-amber-700 hover:text-amber-800 font-bold cursor-pointer hover:underline flex items-center gap-1"
+                >
+                  <Sparkles className="h-3 w-3" />
+                  <span>Fill Demo Email</span>
+                </button>
+              </div>
 
-          <CardFooter className="flex flex-col space-y-3.5 pb-6 pt-1">
-            <Button
-              type="submit"
-              className="w-full text-xs font-semibold h-10 gap-1.5 shadow-xs"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Sending Code...' : 'Send Password Reset Code'}
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-            <div className="text-center text-xs text-muted-foreground">
-              <Link to={roleConfig.login} className="text-primary hover:underline font-medium">
-                ← Return to Sign In
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Card>
+              <div className="space-y-3 pt-2">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-xl shadow-md cursor-pointer gap-2`}
+                >
+                  {isLoading ? 'Sending Reset Code...' : 'Send Recovery Code'}
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          <div className="pt-6 text-center text-xs text-stone-600">
+            <Link to={roleConfig.login} className="text-[#780016] font-bold hover:underline">
+              ← Return to {isPriest ? 'Purohit' : 'Devotee'} Sign In
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

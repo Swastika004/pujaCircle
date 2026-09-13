@@ -8,7 +8,6 @@ import { BookingTimelineCard } from '@/components/booking/BookingTimelineCard';
 import { CancelBookingDialog } from '@/components/booking/CancelBookingDialog';
 import { RatingModal } from '@/components/booking/RatingModal';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { formatINR, formatDate } from '@/lib/utils';
 import {
   Calendar,
@@ -16,13 +15,21 @@ import {
   MapPin,
   ArrowLeft,
   Phone,
-  User,
   Star,
   Ban,
   Check,
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  Copy,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+/**
+ * BookingDetailsPage
+ * Auspicious ceremony appointment details and live timeline for devotees.
+ * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, deep vermilion accents.
+ */
 export const BookingDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuthStore();
@@ -74,23 +81,39 @@ export const BookingDetailsPage: React.FC = () => {
     }
   };
 
+  const handleCopyAddress = (addrText: string) => {
+    navigator.clipboard.writeText(addrText);
+    toast.success('Venue address copied to clipboard.');
+  };
+
   if (isLoading) {
     return (
-      <div className="container py-12 text-center text-xs text-muted-foreground">
-        Loading ceremony details...
+      <div className="w-full min-h-[60vh] flex items-center justify-center bg-background">
+        <div className="text-center space-y-3">
+          <div className="h-10 w-10 mx-auto rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-xl shadow-sm animate-pulse">
+            ॐ
+          </div>
+          <p className="text-xs text-stone-600 font-medium">Loading sacred ceremony details...</p>
+        </div>
       </div>
     );
   }
 
   if (!booking) {
     return (
-      <div className="container py-12 text-center space-y-4">
-        <p className="text-sm font-semibold">Booking not found.</p>
-        <Link to="/user/bookings">
-          <Button size="sm" variant="outline" className="gap-1.5 text-xs">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to My Bookings
-          </Button>
-        </Link>
+      <div className="w-full min-h-[60vh] flex items-center justify-center bg-background px-4">
+        <div className="max-w-md w-full text-center space-y-4 p-8 rounded-3xl border-2 border-amber-300 bg-white shadow-md">
+          <div className="h-12 w-12 mx-auto rounded-2xl bg-[#780016] text-white flex items-center justify-center font-serif font-bold text-2xl">
+            ॐ
+          </div>
+          <h2 className="text-lg font-bold font-serif text-stone-900">Ceremony Record Not Found</h2>
+          <p className="text-xs text-stone-600">The requested ceremony appointment could not be located in your account.</p>
+          <Link to="/user/bookings">
+            <Button size="sm" className="gap-1.5 text-xs bg-[#780016] hover:bg-red-800 text-white font-bold rounded-xl h-10 px-5 border border-amber-400">
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to My Bookings
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -99,154 +122,246 @@ export const BookingDetailsPage: React.FC = () => {
   const canCancel = (booking.status === 'PENDING' || booking.status === 'CONFIRMED') && isDevoteeOwner;
   const canRate = booking.status === 'COMPLETED' && isDevoteeOwner;
 
+  const addressString = booking.address
+    ? `${booking.address.houseNo ? `${booking.address.houseNo}, ` : ''}${booking.address.villageTown ? `${booking.address.villageTown}, ` : ''}${booking.address.city}, ${booking.address.state} - ${booking.address.pincode}`
+    : 'Primary Devotee Residence';
+
+  const defaultSamagriItems = [
+    'Ganga Jal & Panchamrit (Milk, Curd, Honey, Sugar, Ghee)',
+    'Roli, Chandan, Haldi & Akshat (Unbroken Sacred Rice)',
+    'Betel Leaves (Paan), Supari, Clove & Cardamom',
+    'Fresh Yellow & Red Flowers, Tulsi Patra, Bel Patra',
+    'Coconut with Husk (Shriphal) & Red Kalava / Mauli Thread',
+    'Dhoop Cones, Camphor (Kapur) & Pure Cow Ghee Diya',
+    'Seasonal Fruits (5 varieties) & Sweets / Modak / Kheer Prasad',
+    'Havan Kund, Dry Mango Wood & Sacred Havan Samagri Herbs',
+  ];
+
   return (
-    <div className="container py-8 space-y-6 max-w-4xl">
-      {/* Top Breadcrumb & Action Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <Link to="/user/bookings" className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Bookings
-        </Link>
+    <div className="w-full text-stone-900 py-6 sm:py-10 px-4">
+      <div className="container max-w-4xl mx-auto space-y-6">
+        {/* Top Breadcrumb & Action Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <Link
+            to="/user/bookings"
+            className="text-xs text-stone-600 hover:text-red-700 flex items-center gap-1.5 font-bold transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back to My Bookings
+          </Link>
 
-        <div className="flex items-center gap-2">
-          {canRate && (
-            <Button
-              size="sm"
-              onClick={() => setIsRatingModalOpen(true)}
-              className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-white"
-            >
-              <Star className="w-3.5 h-3.5 fill-white" /> Rate Ceremony
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {canRate && (
+              <Button
+                size="sm"
+                onClick={() => setIsRatingModalOpen(true)}
+                className="gap-1.5 text-xs bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold rounded-xl active:scale-[0.98] transition-transform shadow-xs h-9 px-4 cursor-pointer"
+              >
+                <Star className="w-3.5 h-3.5 fill-stone-950" /> Rate Ceremony
+              </Button>
+            )}
 
-          {canCancel && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsCancelModalOpen(true)}
-              className="gap-1.5 text-xs text-destructive hover:text-destructive border-destructive/30"
-            >
-              <Ban className="w-3.5 h-3.5" /> Cancel Appointment
-            </Button>
-          )}
+            {canCancel && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsCancelModalOpen(true)}
+                className="gap-1.5 text-xs text-red-700 hover:text-red-800 border-red-200 hover:bg-red-50 rounded-xl active:scale-[0.98] transition-transform h-9 px-4 cursor-pointer"
+              >
+                <Ban className="w-3.5 h-3.5" /> Cancel Appointment
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Main Booking Master Card (Solid Pure White, Double Hairline Gold Border) */}
+        <div className="w-full bg-white border-2 border-amber-300 rounded-3xl shadow-md overflow-hidden">
+          {/* Header Banner (Solid Vermilion #780016 with Gold Trim) */}
+          <div className="p-6 sm:p-7 bg-[#780016] text-white border-b-2 border-amber-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+                ॐ
+              </div>
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 bg-white text-stone-900 rounded-md border border-amber-300">
+                    {booking.bookingReference || booking.id}
+                  </span>
+                  <span className="text-xs text-amber-100 font-medium">
+                    Requested on {formatDate(booking.createdAt)}
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-white tracking-tight">
+                  {booking.serviceName || 'Sacred Puja Ceremony'}
+                </h1>
+              </div>
+            </div>
+            <div className="self-start sm:self-center">
+              <BookingStatusBadge status={booking.status} />
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 space-y-6 bg-white">
+            {/* Progress Stepper (Flexbox Only, Pure White) */}
+            <BookingTimelineCard status={booking.status} />
+
+            {/* Details Deck: 100% Flexbox, Zero CSS Grids */}
+            <div className="flex flex-col md:flex-row items-stretch gap-6 pt-2 w-full">
+              {/* Schedule & Venue Card */}
+              <div className="flex-1 space-y-3 p-5 rounded-2xl border-2 border-amber-200 bg-white">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-red-700" />
+                  <span>Auspicious Muhurat & Venue</span>
+                </h3>
+
+                <div className="space-y-3 text-xs pt-1">
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-amber-50/50 border border-amber-200">
+                    <Calendar className="w-4 h-4 text-red-700 shrink-0" />
+                    <div>
+                      <span className="text-[10px] text-stone-500 uppercase font-semibold block">Date</span>
+                      <strong className="text-stone-900 text-xs">{formatDate(booking.bookingDate)}</strong>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-amber-50/50 border border-amber-200">
+                    <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                    <div>
+                      <span className="text-[10px] text-stone-500 uppercase font-semibold block">Time Window</span>
+                      <strong className="text-stone-900 text-xs">
+                        {booking.slot ? `${booking.slot.startTime} - ${booking.slot.endTime}` : 'Morning Shubh Muhurat (08:00 AM - 11:30 AM)'}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-stone-800 font-bold text-xs">
+                        <MapPin className="w-3.5 h-3.5 text-red-700" />
+                        <span>Sacred Venue</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyAddress(addressString)}
+                        className="text-[11px] text-amber-800 hover:text-red-700 font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Copy className="w-3 h-3" /> Copy
+                      </button>
+                    </div>
+                    <p className="text-stone-700 text-xs leading-relaxed font-medium">
+                      {addressString}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Priest & Dakshina Card */}
+              <div className="flex-1 space-y-3 p-5 rounded-2xl border-2 border-amber-200 bg-white">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-red-700" />
+                  <span>Appointed Purohit & Dakshina</span>
+                </h3>
+
+                <div className="space-y-3 text-xs pt-1">
+                  {/* Priest Bio Header */}
+                  <div className="p-3 rounded-xl bg-amber-50/50 border border-amber-200 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-bold text-base border-2 border-amber-500 shrink-0">
+                        {booking.priest?.displayName ? booking.priest.displayName.charAt(0) : 'प'}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-stone-900 text-xs sm:text-sm">
+                            {booking.priest?.displayName || booking.priest?.fullName || 'Acharya Pt. Ramesh Sharma'}
+                          </span>
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                        </div>
+                        <span className="text-[11px] text-stone-600 block">
+                          Verified Gurukul Lineage
+                        </span>
+                      </div>
+                    </div>
+
+                    {booking.status === 'CONFIRMED' && (
+                      <a
+                        href={`tel:${booking.priest?.phoneNumber || '+919876543211'}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs cursor-pointer"
+                      >
+                        <Phone className="w-3 h-3" /> Call
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Cash Dakshina Amount */}
+                  <div className="p-3.5 rounded-xl bg-white border-2 border-amber-300 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-stone-500 block">
+                        Cash Dakshina (On Completion)
+                      </span>
+                      <span className="text-[11px] text-stone-600">Zero platform markup</span>
+                    </div>
+                    <span className="text-2xl font-bold font-serif text-red-800">
+                      {formatINR(booking.servicePrice || booking.dakshinaAmount || 2100)}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 text-[11px] text-stone-700 pt-1">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Zero online advance deposit. Transparent pricing.</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Hand over dakshina directly in cash or UPI after puja.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sacred Samagri Checklist Section */}
+            <div className="w-full p-5 rounded-2xl border-2 border-amber-200 bg-white space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span>Sacred Samagri Preparation Checklist</span>
+                </h3>
+                <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                  Devotee Reference
+                </span>
+              </div>
+
+              <p className="text-xs text-stone-600">
+                Please keep the following sacred articles prepared before Pandit Ji arrives at your home:
+              </p>
+
+              <div className="flex flex-wrap gap-2 pt-1">
+                {defaultSamagriItems.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="w-full sm:w-[calc(50%-4px)] flex items-start gap-2 p-2.5 rounded-xl border border-stone-200 bg-white text-xs text-stone-800 font-medium"
+                  >
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cancellation / Decline Notes */}
+            {booking.rejectionReason && (
+              <div className="p-4 rounded-2xl bg-red-50 border-2 border-red-200 text-red-800 text-xs space-y-1">
+                <strong className="font-bold">Priest Decline Reason:</strong>
+                <p>{booking.rejectionReason}</p>
+              </div>
+            )}
+            {booking.cancellationReason && (
+              <div className="p-4 rounded-2xl bg-stone-100 border-2 border-stone-300 text-stone-700 text-xs space-y-1">
+                <strong className="font-bold">Cancellation Reason:</strong>
+                <p>{booking.cancellationReason}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Main Booking Summary Card */}
-      <Card className="border shadow-xs overflow-hidden bg-card">
-        <div className="p-6 bg-linear-to-r from-primary/15 via-primary/5 to-transparent border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <span className="text-xs font-mono font-bold px-2 py-0.5 bg-background border rounded-md">
-                {booking.bookingReference || booking.id}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                Booked on {formatDate(booking.createdAt)}
-              </span>
-            </div>
-            <h1 className="text-2xl font-bold font-serif text-foreground">
-              {booking.serviceName || 'Puja Ceremony'}
-            </h1>
-          </div>
-          <BookingStatusBadge status={booking.status} />
-        </div>
-
-        <CardContent className="p-6 space-y-6">
-          {/* Progress Stepper */}
-          <BookingTimelineCard status={booking.status} />
-
-          {/* Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-            {/* Schedule & Location */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Schedule & Venue
-              </h3>
-              <div className="space-y-3 p-4 rounded-xl bg-muted/40 border text-xs">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-primary shrink-0" />
-                  <span className="font-medium text-foreground">{formatDate(booking.bookingDate)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-primary shrink-0" />
-                  <span className="font-medium text-foreground">
-                    {booking.slot ? `${booking.slot.startTime} - ${booking.slot.endTime}` : 'Morning Muhurat'}
-                  </span>
-                </div>
-                {booking.address && (
-                  <div className="flex items-start gap-2 text-muted-foreground pt-1 border-t border-border/50">
-                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                    <span>
-                      {booking.address.houseNo && `${booking.address.houseNo}, `}
-                      {booking.address.villageTown && `${booking.address.villageTown}, `}
-                      {booking.address.city}, {booking.address.state} - {booking.address.pincode}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Priest & Payment */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Priest & Payment
-              </h3>
-              <div className="space-y-3 p-4 rounded-xl bg-muted/40 border text-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-primary" />
-                    <span className="font-bold text-foreground">
-                      {booking.priest?.displayName || booking.priest?.fullName || 'Assigned Priest'}
-                    </span>
-                  </div>
-                  {booking.status === 'CONFIRMED' && booking.priest?.phoneNumber && (
-                    <div className="flex items-center gap-1 font-mono text-primary">
-                      <Phone className="w-3 h-3" />
-                      <span>{booking.priest.phoneNumber}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-3 rounded-lg bg-background border flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Cash Payment
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">Pay direct on completion</span>
-                  </div>
-                  <span className="text-xl font-bold font-serif text-primary">
-                    {formatINR(booking.servicePrice || booking.dakshinaAmount || 2100)}
-                  </span>
-                </div>
-
-                <div className="space-y-1 text-[11px] text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>No advance online payment required.</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Pay in cash directly to the priest after puja completion.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Cancellation / Rejection Alerts */}
-          {booking.rejectionReason && (
-            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs space-y-1">
-              <strong>Decline Reason:</strong>
-              <p>{booking.rejectionReason}</p>
-            </div>
-          )}
-          {booking.cancellationReason && (
-            <div className="p-4 rounded-xl bg-muted border text-muted-foreground text-xs space-y-1">
-              <strong>Cancellation Reason:</strong>
-              <p>{booking.cancellationReason}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Modals */}
       <CancelBookingDialog

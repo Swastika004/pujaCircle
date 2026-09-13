@@ -22,6 +22,11 @@ import { toast } from "sonner";
 
 type StatusFilter = "ALL" | PriestApprovalStatus | "BANNED";
 
+/**
+ * AdminPriestsPage
+ * Priest applications and scholar roster management for administrators.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
 export const AdminPriestsPage: React.FC = () => {
   const [priests, setPriests] = useState<Priest[]>([]);
   const [activeTab, setActiveTab] = useState<StatusFilter>("ALL");
@@ -102,58 +107,62 @@ export const AdminPriestsPage: React.FC = () => {
     setDeleteTarget(null);
   };
 
-  // Filter priests by tab status and search text
-  const filteredPriests = priests.filter((p) => {
-    if (activeTab === "BANNED") {
-      if (p.accountStatus !== "BANNED") return false;
-    } else if (activeTab !== "ALL") {
-      if (p.approvalStatus !== activeTab) return false;
-    }
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const matchesName = (p.fullName || "").toLowerCase().includes(q);
-      const matchesPhone = (p.phoneNumber || "").includes(q);
-      const matchesCity = (p.city || "").toLowerCase().includes(q);
-      return matchesName || matchesPhone || matchesCity;
-    }
-    return true;
-  });
-
-  // Calculate status counts for tab badges
-  const pendingCount = priests.filter(
-    (p) => p.approvalStatus === "PENDING",
-  ).length;
+  // Status counts
+  const pendingCount = priests.filter((p) => p.approvalStatus === "PENDING").length;
   const approvedCount = priests.filter(
-    (p) => p.approvalStatus === "APPROVED",
+    (p) => p.approvalStatus === "APPROVED" && p.accountStatus !== "BANNED",
   ).length;
   const rejectedCount = priests.filter(
     (p) => p.approvalStatus === "REJECTED",
   ).length;
-  const bannedCount = priests.filter(
-    (p) => p.accountStatus === "BANNED",
-  ).length;
+  const bannedCount = priests.filter((p) => p.accountStatus === "BANNED").length;
+
+  // Filter priests
+  const filteredPriests = priests.filter((p) => {
+    if (activeTab === "PENDING" && p.approvalStatus !== "PENDING") return false;
+    if (
+      activeTab === "APPROVED" &&
+      (p.approvalStatus !== "APPROVED" || p.accountStatus === "BANNED")
+    )
+      return false;
+    if (activeTab === "REJECTED" && p.approvalStatus !== "REJECTED") return false;
+    if (activeTab === "BANNED" && p.accountStatus !== "BANNED") return false;
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchName = p.fullName?.toLowerCase().includes(q);
+      const matchCity = p.city?.toLowerCase().includes(q);
+      const matchPhone = p.phoneNumber?.toLowerCase().includes(q);
+      const matchEmail = p.email?.toLowerCase().includes(q);
+      return matchName || matchCity || matchPhone || matchEmail;
+    }
+    return true;
+  });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-12 w-full max-w-7xl text-stone-900">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold font-serif text-foreground">
-            Priest Applications & Directory
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Review onboarding requests, verify Gurukul credentials, and moderate
-            priest accounts.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+            ॐ
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Priest Applications & Directory
+            </h1>
+            <p className="text-xs text-stone-600 mt-1 leading-relaxed">
+              Review onboarding requests, verify Gurukul credentials, and moderate Vedic scholar profiles.
+            </p>
+          </div>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={fetchPriests}
-          className="h-9 gap-1.5 text-xs w-full sm:w-auto font-medium"
+          className="h-10 px-4 gap-1.5 text-xs w-full sm:w-auto font-bold rounded-xl border-stone-300 hover:border-amber-400"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
           Refresh List
         </Button>
       </div>
@@ -166,31 +175,34 @@ export const AdminPriestsPage: React.FC = () => {
             onValueChange={(val) => setActiveTab(val as StatusFilter)}
             className="w-full sm:w-auto min-w-max"
           >
-            <TabsList className="flex w-full sm:w-auto text-xs h-9">
-              <TabsTrigger value="ALL" className="text-xs px-3">
+            <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
+              <TabsTrigger
+                value="ALL"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
+              >
                 All ({priests.length})
               </TabsTrigger>
               <TabsTrigger
                 value="PENDING"
-                className="text-xs px-3 text-amber-600 font-semibold"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-amber-700 transition-all"
               >
                 Pending ({pendingCount})
               </TabsTrigger>
               <TabsTrigger
                 value="APPROVED"
-                className="text-xs px-3 text-emerald-600"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-emerald-700 transition-all"
               >
                 Approved ({approvedCount})
               </TabsTrigger>
               <TabsTrigger
                 value="REJECTED"
-                className="text-xs px-3 text-destructive"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-red-700 transition-all"
               >
                 Rejected ({rejectedCount})
               </TabsTrigger>
               <TabsTrigger
                 value="BANNED"
-                className="text-xs px-3 text-muted-foreground"
+                className="text-xs px-3.5 py-1.5 h-9 rounded-xl font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white text-stone-600 transition-all"
               >
                 Banned ({bannedCount})
               </TabsTrigger>
@@ -199,12 +211,12 @@ export const AdminPriestsPage: React.FC = () => {
         </div>
 
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <Input
             placeholder="Search by name, city, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 text-xs h-9"
+            className="pl-10 text-xs h-11 rounded-2xl border-2 border-stone-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
@@ -221,15 +233,17 @@ export const AdminPriestsPage: React.FC = () => {
           description="Try adjusting your search criteria or switching status tabs."
         />
       ) : (
-        <PriestApprovalTable
-          priests={filteredPriests}
-          onApprove={handleApprove}
-          onOpenReject={(p) => setRejectTarget(p)}
-          onOpenBan={(p) => setBanTarget(p)}
-          onUnban={handleUnban}
-          onOpenDelete={(p) => setDeleteTarget(p)}
-          isProcessing={isProcessing}
-        />
+        <div className="rounded-3xl border-2 border-amber-300 bg-white shadow-sm overflow-hidden">
+          <PriestApprovalTable
+            priests={filteredPriests}
+            onApprove={handleApprove}
+            onOpenReject={(p) => setRejectTarget(p)}
+            onOpenBan={(p) => setBanTarget(p)}
+            onUnban={handleUnban}
+            onOpenDelete={(p) => setDeleteTarget(p)}
+            isProcessing={isProcessing}
+          />
+        </div>
       )}
 
       {/* Action Dialogs */}

@@ -1,248 +1,215 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import {
   Sparkles,
   ArrowRight,
-  ShieldCheck,
-  Award,
-  ScrollText,
   Flame,
+  CheckCircle2,
+  BookOpen,
+  Compass,
+  Users,
 } from 'lucide-react';
+import { SEED_PUJA_CATALOG } from '@/mocks/data';
 
-/**
- * Marketing Landing Page (Unauthenticated Guests)
- * Clean, respectful, and focused on Vedic traditions and home ceremonies.
- */
+// HomePage
+// High-contrast festive Indian temple aesthetic.
+// Follows strict Phase 2 spec: Hero with dual CTAs, 3-step how-it-works, and 4 featured catalog cards.
+// Zero booking/login forms, no FAQ accordion, no trust badges, no dead routes.
 export const HomePage: React.FC = () => {
+  // First 4 featured catalog ceremonies for home showcase
+  const featuredPujas = SEED_PUJA_CATALOG.slice(0, 4);
+
   return (
-    <div className="space-y-12 sm:space-y-16 md:space-y-20 py-8 sm:py-12 md:py-16 px-4">
-      {/* 1. Hero Section */}
-      <section className="container max-w-4xl text-center space-y-5 sm:space-y-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] sm:text-xs font-medium">
-          <Sparkles className="h-3.5 w-3.5 shrink-0" />
-          <span>Vetted Vedic Scholars for Home Ceremonies</span>
-        </div>
-
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground font-serif leading-tight">
-          Authentic Vedic Pujas, <br className="hidden sm:inline" />
-          Conducted at Your Home
-        </h1>
-
-        <p className="text-muted-foreground text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed px-2">
-          PujaCircle matches your family with verified, knowledgeable Vedic Purohits across Indian cities. Experience sacred rituals with complete transparency and traditional customs.
-        </p>
-
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 pt-2 w-full max-w-xs sm:max-w-none mx-auto">
-          <Link to="/auth/user/register" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full sm:w-auto text-xs sm:text-sm font-medium gap-2 shadow-xs">
-              Create Devotee Account <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <Link to="/auth/user/login" className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="w-full sm:w-auto text-xs sm:text-sm font-medium">
-              Sign In
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Trust & Proof Badges Strip */}
-      <section className="container max-w-5xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-lg border border-border bg-card shadow-xs">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary shrink-0">
-              <ShieldCheck className="h-4 w-4" />
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-xs font-semibold text-foreground leading-snug">Pay After Puja</p>
-              <p className="text-[11px] text-muted-foreground leading-tight">No Advance Required</p>
-            </div>
+    <div className="flex flex-col text-stone-900 w-full">
+      <div className="flex flex-col gap-12 sm:gap-16 py-10 sm:py-14 px-4 max-w-6xl mx-auto w-full">
+        
+        <section className="w-full flex flex-col items-center text-center gap-6">
+          
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-[#C59A3F]/50 text-[#991B1B] text-xs font-bold shadow-xs hover:border-[#C59A3F] transition-all cursor-default">
+            <Sparkles className="h-3.5 w-3.5 text-[#B45309] animate-pulse" />
+            <span className="font-serif tracking-wide text-[#780016]">॥ शुभं करोति कल्याणम् ॥</span>
+            <span className="text-stone-300">|</span>
+            <span className="text-stone-800">Verified Vedic Purohits For Sacred Home Ceremonies</span>
           </div>
 
-          <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-lg border border-border bg-card shadow-xs">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-amber-500/10 text-amber-600 shrink-0">
-              <Award className="h-4 w-4" />
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-xs font-semibold text-foreground leading-snug">Verified Priests</p>
-              <p className="text-[11px] text-muted-foreground leading-tight">Experienced Purohits</p>
-            </div>
-          </div>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#991B1B] font-serif leading-[1.15] max-w-4xl">
+            Authentic Vedic Pujas, <br />
+            <span className="text-[#1A0507]">Conducted with Sanctity at Your Home</span>
+          </h1>
 
-          <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-lg border border-border bg-card shadow-xs">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary/10 text-secondary shrink-0">
-              <ScrollText className="h-4 w-4" />
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-xs font-semibold text-foreground leading-snug">Samagri Checklist</p>
-              <p className="text-[11px] text-muted-foreground leading-tight">Provided for Rituals</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-lg border border-border bg-card shadow-xs">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary shrink-0">
-              <Flame className="h-4 w-4" />
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-xs font-semibold text-foreground leading-snug">Traditional Vidhi</p>
-              <p className="text-[11px] text-muted-foreground leading-tight">Authentic Ceremonies</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. How PujaCircle Works (3-Step Simplicity) */}
-      <section className="container max-w-5xl space-y-8">
-        <div className="text-center space-y-1.5 max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold font-serif text-foreground">
-            How PujaCircle Works
-          </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Simple, transparent, and hassle-free from booking to puja completion.
+          <p className="text-stone-800 font-medium text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
+            PujaCircle matches your family with experienced, credentialed Vedic Purohits across West Bengal. Experience traditional rituals with complete transparency, tailored samagri checklists, and direct cash dakshina.
           </p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Step 1 */}
-          <Card className="border-border bg-card shadow-xs">
-            <CardContent className="p-6 space-y-3.5">
-              <div className="h-9 w-9 rounded-md bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 w-full max-w-md">
+            <Link to="/advisor" className="w-full sm:w-auto flex-1">
+              <Button
+                size="lg"
+                className="w-full h-13 text-base font-bold gap-2.5 bg-linear-to-r from-[#991B1B] via-[#851313] to-[#6E0E0E] hover:from-[#780016] hover:to-[#550808] text-amber-100 px-8 py-3.5 rounded-2xl border-2 border-amber-400/50 shadow-[0_10px_25px_-5px_rgba(153,27,27,0.45)] hover:shadow-[0_14px_30px_-4px_rgba(153,27,27,0.6)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+              >
+                <Compass className="h-4 w-4 text-amber-300" />
+                <span className="tracking-wide">Ask the Advisor</span>
+                <ArrowRight className="h-4 w-4 text-amber-300" />
+              </Button>
+            </Link>
+
+            <Link to="/priests" className="w-full sm:w-auto flex-1">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full h-13 px-7 text-sm sm:text-base font-bold border-2 border-[#C59A3F]/50 text-stone-800 bg-white/90 hover:bg-amber-50/90 hover:border-[#C59A3F] hover:text-[#780016] rounded-2xl shadow-sm hover:shadow-md active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Users className="h-4 w-4 text-[#991B1B]" />
+                <span>Browse Priests</span>
+              </Button>
+            </Link>
+          </div>
+
+          
+          <div className="w-full max-w-5xl mt-4 relative rounded-3xl overflow-hidden border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 bg-white shadow-xl">
+            <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden">
+              <img
+                src="/images/hero_vedic_puja.jpg"
+                alt="Sacred Vedic Puja & Havan Ceremony"
+                className="w-full h-full object-cover object-center select-none"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-stone-950/20 pointer-events-none" />
+
+              
+              <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:left-6 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/95 border border-[#C59A3F]/60 shadow-lg text-xs font-bold text-[#780016] backdrop-blur-xs">
+                <Flame className="h-4 w-4 text-[#991B1B]" />
+                <span>Sacred Vedic Vidhi, Samagri & Muhurat Guidance at Home</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+        <section className="w-full bg-[#780016] border border-[#C59A3F]/60 ring-2 ring-[#C59A3F]/20 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+          <div className="text-center space-y-2 max-w-xl mx-auto mb-8 sm:mb-10 relative z-10">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-400 text-red-950 text-xs font-extrabold shadow-sm">
+              <CheckCircle2 className="h-3.5 w-3.5 text-red-950" />
+              <span>Sankalp Vidhi</span>
+            </div>
+            <h2 className="text-white font-serif text-3xl sm:text-4xl font-bold text-center">
+              How PujaCircle Works
+            </h2>
+            <p className="text-amber-100/90 text-xs sm:text-sm text-center">
+              Three simple, transparent steps from ceremony scheduling to divine completion.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full relative z-10">
+            
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+              <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 1
               </div>
-              <h3 className="font-semibold text-base text-foreground">Select Ceremony</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Choose from ceremonies including Griha Pravesh, Satyanarayan Katha, Rudrabhishek, and Havans.
+              <h3 className="text-white font-bold font-serif text-base mt-3 md:mt-4">
+                Select Your Ceremony
+              </h3>
+              <p className="text-amber-100/80 text-xs leading-relaxed mt-1.5 max-w-xs">
+                Choose from Vedic rituals or ask the Sankalp Advisor for ceremony recommendations tailored to your family needs.
               </p>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Step 2 */}
-          <Card className="border-border bg-card shadow-xs">
-            <CardContent className="p-6 space-y-3.5">
-              <div className="h-9 w-9 rounded-md bg-secondary/10 text-secondary flex items-center justify-center font-bold text-sm">
+            <div className="hidden md:block flex-1 border-t-2 border-dashed border-[#C59A3F]/50 mx-2" />
+
+            
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+              <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 2
               </div>
-              <h3 className="font-semibold text-base text-foreground">Match with Local Priest</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Browse verified priests servicing your area with transparent prices and authentic reviews.
+              <h3 className="text-white font-bold font-serif text-base mt-3 md:mt-4">
+                Match with Vedic Purohit
+              </h3>
+              <p className="text-amber-100/80 text-xs leading-relaxed mt-1.5 max-w-xs">
+                Review verified priests in your neighborhood, examine language skills, credentials, and transparent dakshina pricing.
               </p>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Step 3 */}
-          <Card className="border-border bg-card shadow-xs">
-            <CardContent className="p-6 space-y-3.5">
-              <div className="h-9 w-9 rounded-md bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-sm">
+            <div className="hidden md:block flex-1 border-t-2 border-dashed border-[#C59A3F]/50 mx-2" />
+
+            
+            <div className="flex-1 flex flex-col items-center text-center p-4 rounded-2xl group cursor-default">
+              <div className="w-13 h-13 rounded-full bg-amber-100 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-xl flex items-center justify-center shadow-lg shrink-0">
                 3
               </div>
-              <h3 className="font-semibold text-base text-foreground">Puja & Cash Payment</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                The priest arrives at your home with samagri guidance. Pay in cash directly after puja completion.
+              <h3 className="text-white font-bold font-serif text-base mt-3 md:mt-4">
+                Sacred Puja & Cash Dakshina
+              </h3>
+              <p className="text-amber-100/80 text-xs leading-relaxed mt-1.5 max-w-xs">
+                The priest arrives at your home with complete samagri guidance. Experience the sacred rituals and pay cash directly after completion.
               </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+            </div>
+          </div>
+        </section>
 
-      {/* 3. Frequently Asked Questions (FAQ) */}
-      <section className="container max-w-3xl space-y-6">
-        <div className="text-center space-y-1.5 max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold font-serif text-foreground">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Find answers to common questions about booking, priest verification, and pujas.
-          </p>
-        </div>
-
-        <Accordion type="single" collapsible className="w-full space-y-3">
-          <AccordionItem value="item-1" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              How are priests verified on PujaCircle?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Every priest undergoes thorough background verification, including validation of qualifications, experience, identity documents, and ceremony knowledge.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-2" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              How does the payment process work?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Payment is straightforward and transparent. You pay directly in cash to the priest at your home after the puja is completed, with zero hidden fees.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-3" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              Will the Purohit provide the Samagri list?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Yes! Once your booking is confirmed, you receive an itemized, authentic samagri checklist tailored to your ceremony and regional customs, along with guidance on preparations.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-4" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              How early should I book a Purohit for auspicious dates/muhurats?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              For major occasions like Griha Pravesh or Vivah rituals, we recommend booking 3 to 7 days in advance to ensure the availability of verified Purohits during auspicious muhurat windows.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-5" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              Can I choose an auspicious Muhurat with the Purohit?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Absolutely. During the booking request, you can specify your preferred date and time or request Muhurat consultation based on your family's Janma Rashi and Panchang.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-6" className="border border-border rounded-lg px-5 bg-card shadow-xs">
-            <AccordionTrigger className="text-sm sm:text-base font-semibold hover:no-underline text-foreground">
-              What if I need to reschedule or cancel a booking?
-            </AccordionTrigger>
-            <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              You can easily manage, reschedule, or cancel your booking directly from your devotee dashboard prior to the ceremony date.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </section>
-
-      {/* 4. Ready to Schedule Banner */}
-      <section className="container max-w-4xl">
-        <div className="rounded-lg bg-card border border-border p-8 sm:p-10 text-center space-y-4 shadow-xs">
-          <h3 className="text-xl sm:text-2xl font-bold font-serif text-foreground">
-            Ready to Schedule Your Puja?
-          </h3>
-          <p className="text-xs sm:text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Create a devotee account in under 2 minutes to select ritual dates, discover Purohits near you, and manage sacred appointments.
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
-            <Link to="/user/register">
-              <Button size="sm" className="text-xs gap-1.5">
-                Register as Devotee <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
-            <Link to="/priest/register">
-              <Button size="sm" variant="outline" className="text-xs">
-                Apply as a Purohit
-              </Button>
+        
+        <section className="w-full space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2 border-b border-[hsl(var(--border))] pb-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#991B1B] uppercase tracking-wider mb-1">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Sacred Puja Catalog</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
+                Featured Ceremonies & Vidhis
+              </h2>
+            </div>
+            <Link
+              to="/advisor"
+              className="text-xs font-semibold text-[#991B1B] hover:text-[#780016] hover:underline inline-flex items-center gap-1"
+            >
+              <span>Explore all ceremonies in Advisor</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-        </div>
-      </section>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {featuredPujas.map((puja) => (
+              <div
+                key={puja.id}
+                className="rounded-2xl border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-md hover:border-[#C59A3F] transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-[#B45309] border border-amber-200">
+                      {puja.category.replace('-', ' ')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-base font-bold text-stone-900 line-clamp-1">
+                      {puja.name}
+                    </h3>
+                    <p className="text-xs text-[#991B1B] font-medium mt-0.5">
+                      Deity: {puja.deity}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed">
+                    {puja.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-stone-100">
+                  <Link
+                    to={`/advisor/ritual-kit?id=${puja.id}`}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-[#991B1B] hover:text-[#780016] bg-amber-50/60 hover:bg-amber-100/80 rounded-xl transition-colors"
+                  >
+                    <span>View Ritual Kit & Vidhi</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

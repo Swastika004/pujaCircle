@@ -1,55 +1,110 @@
 import React from 'react';
 import { BookingStatus } from '@/types/booking.types';
 import { Badge } from '@/components/ui/badge';
-import { BOOKING_STATUS_CONFIG } from '@/lib/constants';
-import { CheckCircle2, Clock, XCircle, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, Clock, XCircle, AlertTriangle, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface BookingStatusBadgeProps {
   status: BookingStatus;
   className?: string;
+  withPulse?: boolean;
 }
 
-const getStatusIcon = (status: BookingStatus) => {
+export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
+  status,
+  className,
+  withPulse = true,
+}) => {
   switch (status) {
     case 'CONFIRMED':
-    case 'COMPLETED':
-      return <CheckCircle2 className="h-3 w-3" />;
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            'gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-bold shadow-2xs',
+            className
+          )}
+        >
+          {withPulse && (
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
+            </span>
+          )}
+          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
+          <span>Confirmed</span>
+        </Badge>
+      );
+
     case 'PENDING':
-      return <Clock className="h-3 w-3" />;
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            'gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-400 text-xs font-bold shadow-2xs',
+            className
+          )}
+        >
+          {withPulse && (
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-600" />
+            </span>
+          )}
+          <Clock className="h-3.5 w-3.5 text-amber-700 animate-pulse" />
+          <span>Awaiting Priest</span>
+        </Badge>
+      );
+
+    case 'COMPLETED':
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            'gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-900 border border-stone-300 text-xs font-bold shadow-2xs',
+            className
+          )}
+        >
+          <Flame className="h-3.5 w-3.5 text-amber-600" />
+          <span>Puja Completed</span>
+        </Badge>
+      );
+
     case 'CANCELLED':
-      return <XCircle className="h-3 w-3" />;
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            'gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
+            className
+          )}
+        >
+          <XCircle className="h-3.5 w-3.5 text-red-700" />
+          <span>Cancelled</span>
+        </Badge>
+      );
+
     case 'REJECTED':
-      return <AlertTriangle className="h-3 w-3" />;
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            'gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-800 border border-red-200 text-xs font-bold',
+            className
+          )}
+        >
+          <AlertTriangle className="h-3.5 w-3.5 text-red-700" />
+          <span>Declined</span>
+        </Badge>
+      );
+
     default:
-      return null;
+      return (
+        <Badge variant="outline" className={cn('text-stone-600 text-xs font-medium', className)}>
+          {status}
+        </Badge>
+      );
   }
 };
 
-export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({ status, className }) => {
-  const config = BOOKING_STATUS_CONFIG[status];
-  const icon = getStatusIcon(status);
-
-  if (!config) {
-    return (
-      <Badge variant="outline" className={cn("text-muted-foreground text-[11px]", className)}>
-        {status}
-      </Badge>
-    );
-  }
-
-  return (
-    <Badge
-      variant="outline"
-      className={cn(
-        "gap-1 text-[11px] font-medium shadow-2xs",
-        config.badgeClass,
-        className
-      )}
-    >
-      {icon}
-      <span>{config.label}</span>
-    </Badge>
-  );
-};
-
+export default BookingStatusBadge;

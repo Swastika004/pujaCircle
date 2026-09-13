@@ -1,8 +1,9 @@
 import React from 'react';
-import { AuthLoginForm } from '@/components/auth/AuthLoginForm';
+import { AuthPage } from '@/pages/auth/AuthPage';
 
-const UserLoginPage: React.FC = () => {
-  return <AuthLoginForm defaultRole="USER" />;
+// Route alias: /user/login -> renders AuthPage with Devotee tab active by default
+export const UserLoginPage: React.FC = () => {
+  return <AuthPage defaultTab="devotee" />;
 };
 
 export default UserLoginPage;
