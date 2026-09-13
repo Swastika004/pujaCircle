@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 PujaCircle Documentation
+    url: https://github.com/subx6789/pujaCircle#readme
+    about: Read the architecture, PRD, and system design specifications.
+  - name: 💬 Community Discussions
+    url: https://github.com/subx6789/pujaCircle/discussions
+    about: Ask questions, discuss ritual offerings, and share feedback.

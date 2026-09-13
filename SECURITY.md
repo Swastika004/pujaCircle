@@ -1,21 +1,39 @@
 # Security Policy
 
+PujaCircle takes security and data integrity very seriously. We appreciate the responsible disclosure of potential vulnerabilities.
+
+---
+
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Only the current active release line on the `main` branch receives security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| 0.1.x (main) | :white_check_mark: |
+| < 0.1.0      | :x:                |
+
+---
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a security vulnerability within PujaCircle, please **do not open a public GitHub issue**.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Instead, please report the vulnerability privately through one of the following methods:
+
+1. **GitHub Private Vulnerability Reporting**: Go to the **Security** tab of this repository and click **"Report a vulnerability"** to open a private security advisory.
+2. **Direct Email**: Send details of the issue to the maintainers at [subhajits956@gmail.com](mailto:subhajits956@gmail.com).
+
+### What to Include in Your Report
+
+To help us triage and resolve the issue quickly, please provide:
+- A clear description of the vulnerability and its potential impact
+- Step-by-step reproduction instructions or a minimal Proof of Concept (PoC)
+- Affected endpoints, components, or dependencies
+- Any proposed mitigations or remediation steps
+
+### Response Commitment
+
+- **Initial Acknowledgment**: Within 48 hours of receipt.
+- **Triage & Assessment**: Within 5 business days.
+- **Resolution**: A coordinated patch will be released and credit will be given in the security advisory upon publication.
