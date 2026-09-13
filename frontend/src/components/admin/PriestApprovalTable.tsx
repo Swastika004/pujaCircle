@@ -112,7 +112,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                 <TableCell className="text-right py-3.5 pr-4 w-60">
                   <div className="flex items-center justify-end gap-2 min-h-8">
                     {/* Quick Actions Slot — fixed width so Eye & Dots always align */}
-                    <div className="min-w-[152px] flex items-center justify-end">
+                    <div className="min-w-38 flex items-center justify-end">
                       {p.approvalStatus === 'PENDING' && (
                         <div className="flex items-center gap-1.5">
                           <Button

@@ -23,9 +23,9 @@ This SRS covers all devotee-, priest-, and admin-facing functionality implementa
 | Capability | Devotee | Priest | Admin |
 |---|:---:|:---:|:---:|
 | Register / login (mocked OTP) | ✅ | ✅ | ✅ (seeded, no self-registration) |
-| Complete ritual profile (gotra, nakshatra, DOB) | ✅ | ❌ | ❌ |
+| ~~Complete ritual profile (gotra, nakshatra, DOB)~~ *(Devotee name only)* | ✅ | ❌ | ❌ |
 | Run Advisor flow | ✅ | ❌ | ❌ (can preview as QA, see FR-19) |
-| Upload horoscope image for auto-fill | ✅ | ❌ | ❌ |
+| ~~Upload horoscope image for auto-fill~~ *(Superseded: removed)* | ❌ | ❌ | ❌ |
 | Download Ritual Kit PDF | ✅ | ❌ | ❌ |
 | Browse priests / book puja | ✅ | — | — |
 | Accept / reject booking within 5-hour window | — | ✅ | — |
@@ -44,18 +44,21 @@ This SRS covers all devotee-, priest-, and admin-facing functionality implementa
 - **FR-2**: System shall provide a fixed Admin login (seeded credentials, no self-registration path).
 
 ### 4.2 Devotee Ritual Profile
-- **FR-3**: System shall let a Devotee create/edit a ritual profile: full name, gotra, nakshatra, date of birth.
+> [!NOTE]
+> **Superseded in this update (Scope-Reduction Pass):** All astrology-dependent profile fields (gotra, nakshatra, DOB) and client-side horoscope OCR (FR-5) have been removed. Devotee personalization is strictly devotee-name-based.
+
+- **FR-3** *(Superseded)*: ~~System shall let a Devotee create/edit a ritual profile: full name, gotra, nakshatra, date of birth.~~ Devotee profile now retains full name only for sankalp personalization.
 - **FR-4**: System shall persist the ritual profile in mock in-memory/localStorage-equivalent state for the session (no real DB this phase).
-- **FR-5** *(P1)*: System shall allow uploading a horoscope image and attempt client-side OCR extraction of nakshatra/gotra, pre-filling the form fields for user confirmation. Extraction failures shall fall back gracefully to manual entry.
+- **FR-5** *(Superseded)*: ~~System shall allow uploading a horoscope image and attempt client-side OCR extraction of nakshatra/gotra, pre-filling the form fields for user confirmation.~~ *(Removed in scope reduction)*.
 
 ### 4.3 Sankalp Advisor
 - **FR-6**: System shall present a guided intake (free-text situation description plus optional structured filters: occasion, concern type, urgency).
 - **FR-7**: System shall match the devotee's intake against the Puja Catalog using tag-overlap scoring (mocked matching function, deterministic and data-driven — not hardcoded per-scenario).
 - **FR-8**: System shall display the top 3 matches ranked by score, each with a visible reasoning line (e.g., "Matched: house purchase, Vastu concern").
 - **FR-9**: Devotee shall be able to select a match and view its full detail (deity, significance, samagri list, step sequence, ideal timing note).
-- **FR-10**: System shall generate a Ritual Kit: samagri checklist, numbered steps, and a sankalp paragraph templated with the devotee's profile fields (name, gotra, nakshatra).
+- **FR-10**: System shall generate a Ritual Kit: samagri checklist, numbered steps, and a sankalp paragraph templated with the devotee's name (gotra and nakshatra removed in scope reduction).
 - **FR-11**: System shall allow exporting the Ritual Kit as a PDF.
-- **FR-12** *(P1)*: System shall display a static "auspicious timing" note per puja from a mock tithi lookup table, clearly labeled as approximate/reference-only this phase.
+- **FR-12** *(Superseded)*: ~~System shall display a static "auspicious timing" note per puja from a mock tithi lookup table, clearly labeled as approximate/reference-only this phase.~~ System now displays a plain static authored tradition timing note per puja entry without astrological or tithi calculation.
 - **FR-13**: If no catalog entry scores above a minimum threshold, system shall show a graceful "no strong match" state with the closest 1–2 suggestions rather than an empty result.
 
 ### 4.4 Booking Flow (existing, unchanged requirements carried forward)

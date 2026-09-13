@@ -51,7 +51,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
     setIsEditingProfile(false);
   };
 
-  const sankalpParagraph = `मम आत्मनः सकलदुरितोपशमनार्थं ... I, ${profile.fullName || 'Devotee'}, born of the venerated ${profile.gotra || 'Kashyapa'} Gotra and under the birth star of ${profile.nakshatra || 'Rohini'}, do hereby take this sacred Sankalp to perform the holy ${entry.name} dedicated to ${entry.deity}. With sincere devotion, pure heart, and reverence to Vedic traditions, I pray for peace, spiritual illumination, health, and family prosperity.`;
+  const sankalpParagraph = `मम आत्मनः सकलदुरितोपशमनार्थं ... I, ${profile.fullName || 'Devotee'}, do hereby take this sacred Sankalp to perform the holy ${entry.name} dedicated to ${entry.deity}. With sincere devotion, pure heart, and reverence to Vedic traditions, I pray for peace, spiritual illumination, health, and family prosperity.`;
 
   const handleDownloadPdf = () => {
     const success = exportRitualKitPdf(
@@ -60,7 +60,8 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
       profile,
       entry.samagriList,
       entry.steps,
-      sankalpParagraph
+      sankalpParagraph,
+      entry.timingNote
     );
 
     if (success) {
@@ -124,13 +125,13 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
                 }}
                 className="text-xs font-medium text-[hsl(var(--brand-primary))] hover:underline"
               >
-                {isEditingProfile ? 'Cancel' : 'Edit Profile Details'}
+                {isEditingProfile ? 'Cancel' : 'Edit Devotee Name'}
               </button>
             </div>
 
             {isEditingProfile ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div>
+              <div className="flex flex-col sm:flex-row gap-3 pt-2 items-end">
+                <div className="flex-1 w-full">
                   <label className="block text-xs text-[hsl(var(--foreground-muted))] mb-1">
                     Full Name
                   </label>
@@ -143,68 +144,18 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
                     className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))]"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs text-[hsl(var(--foreground-muted))] mb-1">
-                    Gotra
-                  </label>
-                  <input
-                    type="text"
-                    value={tempProfile.gotra}
-                    onChange={(e) =>
-                      setTempProfile((p) => ({ ...p, gotra: e.target.value }))
-                    }
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-[hsl(var(--foreground-muted))] mb-1">
-                    Janma Nakshatra
-                  </label>
-                  <input
-                    type="text"
-                    value={tempProfile.nakshatra}
-                    onChange={(e) =>
-                      setTempProfile((p) => ({ ...p, nakshatra: e.target.value }))
-                    }
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-[hsl(var(--foreground-muted))] mb-1">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    value={tempProfile.dob}
-                    onChange={(e) =>
-                      setTempProfile((p) => ({ ...p, dob: e.target.value }))
-                    }
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs text-[hsl(var(--foreground))]"
-                  />
-                </div>
-                <div className="sm:col-span-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={handleSaveProfile}
-                    className="rounded-md bg-[hsl(var(--brand-primary))] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))] transition-colors"
-                  >
-                    Save Ritual Profile
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={handleSaveProfile}
+                  className="rounded-md bg-[hsl(var(--brand-primary))] px-4 py-2 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))] transition-colors h-8 shrink-0"
+                >
+                  Save Name
+                </button>
               </div>
             ) : (
               <div className="flex flex-wrap gap-2 text-xs">
                 <span className="rounded-md bg-[hsl(var(--surface))] px-2.5 py-1 border border-[hsl(var(--border))] font-medium">
                   Name: <strong>{profile.fullName}</strong>
-                </span>
-                <span className="rounded-md bg-[hsl(var(--surface))] px-2.5 py-1 border border-[hsl(var(--border))] font-medium">
-                  Gotra: <strong>{profile.gotra}</strong>
-                </span>
-                <span className="rounded-md bg-[hsl(var(--surface))] px-2.5 py-1 border border-[hsl(var(--border))] font-medium">
-                  Nakshatra: <strong>{profile.nakshatra}</strong>
-                </span>
-                <span className="rounded-md bg-[hsl(var(--surface))] px-2.5 py-1 border border-[hsl(var(--border))] font-medium">
-                  DOB: <strong>{profile.dob}</strong>
                 </span>
               </div>
             )}
@@ -279,7 +230,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
           <div className="flex items-center gap-2 rounded-lg bg-[hsl(var(--surface-alt))] p-3 text-xs text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]">
             <Calendar className="w-4 h-4 text-[hsl(var(--brand-accent))] shrink-0" />
             <span>
-              <strong>Auspicious Muhurat Note:</strong> {entry.timingNote}
+              <strong>Auspicious Timing & Tradition Note:</strong> {entry.timingNote}
             </span>
           </div>
 

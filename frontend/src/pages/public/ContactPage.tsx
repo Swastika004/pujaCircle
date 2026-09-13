@@ -10,17 +10,12 @@ import {
   MessageSquare,
   Flame,
   Send,
-  HelpCircle,
-  ChevronDown,
   ShieldCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-/**
- * ContactPage
- * Premium Devotee & Purohit Support Desk.
- * 100% Flexbox, pure solid white canvas, zero grids, zero gradients.
- */
+// ContactPage
+// Devotee & Purohit Support Desk: mock inquiry form + operational contact details
 export const ContactPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -28,9 +23,6 @@ export const ContactPage: React.FC = () => {
   const [ritualType, setRitualType] = useState('Griha Pravesh');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Accordion FAQ state
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,30 +41,9 @@ export const ContactPage: React.FC = () => {
     }, 800);
   };
 
-
-
-  const faqs = [
-    {
-      q: 'How are Purohits matched with our family tradition and language?',
-      a: 'During booking, you specify your mother tongue (e.g., Bengali, Hindi, Telugu, Tamil, Marathi, Odia, Gujarati) and Gotra/Sampradaya. We assign verified Purohits fluent in your specific traditions.',
-    },
-    {
-      q: 'How does Dakshina payment work?',
-      a: 'PujaCircle charges zero platform commission on the priest dakshina. You hand over the recommended dakshina directly in cash or UPI to the Purohit upon completion of the ceremony.',
-    },
-    {
-      q: 'Can the Purohit provide the complete Samagri?',
-      a: 'Yes! You can choose between "Devotee Arranges Samagri" (we provide an itemized checklist) or "Purohit Brings Samagri" where the priest brings all sacred herbs, woods, gangajal, and havan items.',
-    },
-    {
-      q: 'What if we need an urgent ceremony within 24 hours?',
-      a: 'Please call our Dedicated Urgent Muhurat Hotline (+91 98765 43210). Our city coordinators immediately dispatch verified Purohits on standby.',
-    },
-  ];
-
   return (
     <div className="w-full text-stone-900">
-      {/* 1. Hero Section */}
+      
       <section className="w-full pt-8 sm:pt-14 pb-10 sm:pb-12 px-4 border-b border-stone-200">
         <div className="container max-w-4xl mx-auto text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-700 text-white text-xs font-semibold tracking-wide uppercase shadow-sm">
@@ -90,7 +61,7 @@ export const ContactPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. Urgent Muhurat Banner */}
+      
       <section className="w-full px-4 pt-6">
         <div className="container max-w-5xl mx-auto">
           <div className="rounded-2xl border-2 border-amber-400 bg-[#780016] text-white p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
@@ -119,10 +90,10 @@ export const ContactPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Interactive Two-Column Support Section (Flexbox Only, Zero Grids) */}
+      
       <section className="w-full py-10 sm:py-14 px-4 border-b border-stone-200">
         <div className="container max-w-5xl mx-auto flex flex-col lg:flex-row items-start gap-8">
-          {/* Left Column: Interactive Ritual Enquiry Form */}
+          
           <div className="w-full lg:w-7/12 rounded-2xl border-2 border-stone-200 bg-white p-6 sm:p-8 shadow-xs space-y-5">
             <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
@@ -195,7 +166,7 @@ export const ContactPage: React.FC = () => {
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Mention preferred muhurat dates, gotra, mother tongue preference, or any specific samagri requirements..."
+                  placeholder="Mention preferred ceremony dates, language preference, or any specific samagri requirements..."
                   className="text-xs border-stone-300 focus:border-amber-500 focus:ring-amber-500"
                 />
               </div>
@@ -211,13 +182,13 @@ export const ContactPage: React.FC = () => {
             </form>
           </div>
 
-          {/* Right Column: Direct Touchpoint Cards */}
+          
           <div className="w-full lg:w-5/12 space-y-4">
             <h3 className="text-lg font-bold font-serif text-stone-900">
               Direct Contact Desks
             </h3>
 
-            {/* Helpline */}
+            
             <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
                 <div className="h-10 w-10 rounded-xl bg-red-700 text-white flex items-center justify-center shrink-0">
@@ -231,7 +202,7 @@ export const ContactPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* WhatsApp */}
+            
             <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
                 <div className="h-10 w-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0">
@@ -245,7 +216,7 @@ export const ContactPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Priest Onboarding */}
+            
             <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs puja-card-lift">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
                 <div className="h-10 w-10 rounded-xl bg-amber-500 text-stone-900 flex items-center justify-center shrink-0">
@@ -259,7 +230,7 @@ export const ContactPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Operating Hours Card */}
+            
             <Card className="border-2 border-stone-200 bg-white rounded-2xl shadow-xs">
               <CardContent className="p-4 sm:p-5 flex items-start gap-3.5">
                 <div className="h-10 w-10 rounded-xl bg-stone-900 text-white flex items-center justify-center shrink-0">
@@ -272,53 +243,6 @@ export const ContactPage: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* 5. Frequently Asked Questions (Accordion) */}
-      <section className="w-full py-12 sm:py-16 px-4">
-        <div className="container max-w-3xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-bold">
-              <HelpCircle className="h-3.5 w-3.5 text-red-700" />
-              <span>Common Inquiries</span>
-            </div>
-            <h3 className="text-2xl font-bold font-serif text-stone-900">
-              Frequently Asked Questions
-            </h3>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((f, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-xl border-2 border-stone-200 bg-white overflow-hidden transition-all shadow-xs"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-stone-900 font-serif hover:bg-stone-50 transition-colors"
-                  >
-                    <span>{f.q}</span>
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 transition-transform ${
-                        isOpen ? 'transform rotate-180 text-red-700' : 'text-stone-400'
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-4 sm:px-5 pb-4 pt-1 text-xs text-stone-600 leading-relaxed border-t border-stone-100">
-                      {f.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

@@ -21,11 +21,9 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-/**
- * AdminLoginPage
- * Ultra-Premium Split-Card Operations Console Sign In for Platform Administrators.
- * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, zero grids, zero gradients.
- */
+// AdminLoginPage
+// Ultra-Premium Split-Card Operations Console Sign In for Platform Administrators.
+// 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, zero grids, zero gradients.
 export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login, isLoading, error, clearError } = useAuthStore();

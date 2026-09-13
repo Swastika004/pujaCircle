@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, Sparkles, Wand2 } from 'lucide-react';
+import { Compass, Wand2 } from 'lucide-react';
 import { IntakeForm } from '@/components/advisor/IntakeForm';
-import { HoroscopeUpload } from '@/components/advisor/HoroscopeUpload';
 import { AdvisorIntakeFormData } from '@/schemas/advisor.schema';
 import { AdvisorQuery } from '@/types/advisor';
 import { matchPuja } from '@/lib/advisorMatching';
@@ -13,7 +12,6 @@ import { pageTransition } from '@/motion/variants';
 export const AdvisorIntakePage: React.FC = () => {
   const navigate = useNavigate();
   const [isThinking, setIsThinking] = useState(false);
-  const [showHoroscopeModal, setShowHoroscopeModal] = useState(false);
 
   const handleSubmit = (formData: AdvisorIntakeFormData) => {
     setIsThinking(true);
@@ -72,22 +70,7 @@ export const AdvisorIntakePage: React.FC = () => {
               Devotee Intent Capture
             </h2>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowHoroscopeModal(!showHoroscopeModal)}
-            className="text-xs font-semibold text-[hsl(var(--advisor-accent))] hover:underline flex items-center gap-1"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{showHoroscopeModal ? 'Hide Horoscope OCR' : 'Upload Horoscope (Kundali)'}</span>
-          </button>
         </div>
-
-        {showHoroscopeModal && (
-          <div className="pb-4">
-            <HoroscopeUpload onSuccess={() => setShowHoroscopeModal(false)} />
-          </div>
-        )}
 
         <IntakeForm onSubmit={handleSubmit} isLoading={isThinking} />
       </div>

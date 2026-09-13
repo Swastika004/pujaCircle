@@ -502,9 +502,9 @@ export const PriestDetailsPage: React.FC = () => {
 
             {/* User Notes with generous spacing & clean padding */}
             <div className="space-y-2 pt-1">
-              <Label className="text-xs font-bold text-stone-900 block">Family Gotra / Special Notes (Optional)</Label>
+              <Label className="text-xs font-bold text-stone-900 block">Special Notes or Requests (Optional)</Label>
               <Textarea
-                placeholder="e.g. Kashyap Gotra, please advise if Havan Kund or special samagri is needed..."
+                placeholder="e.g. Please advise if Havan Kund or special samagri items are needed..."
                 rows={3}
                 value={userNotes}
                 onChange={(e) => setUserNotes(e.target.value)}

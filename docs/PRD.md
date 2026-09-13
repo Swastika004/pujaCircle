@@ -25,10 +25,13 @@ This document does not replace the original PujaCircle booking scope — it adds
 
 Across every existing player in this space (puja booking marketplaces surveyed: PujaServices, VedaMandir, OnlinePathPuja, UtsavApp, PujaDukaan, GharMandir, Yatradham, GoPuja, 99Pandit, OnlinePuja), the product assumes the devotee already knows which puja they need. In practice, most users arrive with a life situation ("bought a new house," "exams coming up," "recurring bad luck") and no clear idea which ritual, deity, date, or materials apply. Existing platforms solve *booking*, not *decision-making*, and none personalize the ritual itself (sankalp, samagri list) to the individual devotee.
 
+> [!NOTE]
+> **Superseded in this update (Scope-Reduction Pass):** All astrology-dependent functionality (gotra, nakshatra, DOB collection, horoscope OCR upload, and computed tithi/panchang timing lookups) has been removed from scope. Ritual personalization is now strictly devotee-name-based, and puja timing notes are static authored tradition strings.
+
 ## 3. Goals
 
 - **G1:** Let a devotee describe a real-life situation in plain language and receive a reasoned, ranked puja recommendation.
-- **G2:** Generate a personalized ritual kit (samagri checklist, step sequence, sankalp text with the devotee's own name/gotra/nakshatra).
+- **G2:** Generate a personalized ritual kit (samagri checklist, step sequence, sankalp text with the devotee's own name; ~~gotra/nakshatra superseded~~).
 - **G3:** Preserve the existing, already-built booking/priest/admin flow without regression.
 - **G4:** Ship a frontend-complete, mock-data-driven demo this phase; defer live backend/AI to Phase 2.
 
@@ -37,12 +40,13 @@ Across every existing player in this space (puja booking marketplaces surveyed: 
 - No real database, no real authentication, no real payments.
 - No live LLM or embedding API calls — advisor logic is rule-based against mock data.
 - No mobile app, no GPS/live tracking, no e-commerce samagri delivery (unchanged from v1.0 constraints).
+- Astrology calculations, gotra/nakshatra profiling, horoscope OCR, and astronomical tithi computations (removed in scope reduction).
 
 ## 5. User Roles
 
 | Role | Summary | New responsibilities in v2.0 |
 |---|---|---|
-| **Devotee** | Books pujas, uses the Advisor | Can run the Advisor flow, upload a horoscope image for auto-fill, download a personalized ritual kit PDF |
+| **Devotee** | Books pujas, uses the Advisor | Can run the Advisor flow, download a personalized ritual kit PDF (horoscope OCR upload superseded) |
 | **Priest (Purohit)** | Offers services, accepts/rejects bookings | Unchanged from v1.0 |
 | **Admin** | Approves priests, manages users | **Expanded:** curates and moderates the Puja Catalog (add/edit/retire entries, edit tag mappings that drive Advisor matching), reviews Advisor recommendation logs for accuracy, manages featured/seasonal pujas |
 
@@ -52,14 +56,14 @@ Admin's expanded scope is the anchor for "must contain role of admin" — the ca
 
 ### P0 — Must ship
 1. **Sankalp Advisor flow**: free-text or guided-question intent capture → ranked puja matches with visible reasoning → detail view.
-2. **Personalized Ritual Kit**: samagri list, step sequence, sankalp paragraph templated with devotee profile fields; exportable as PDF.
-3. **Devotee ritual profile**: name, gotra, nakshatra, DOB — collected once, reused across the app.
+2. **Personalized Ritual Kit**: samagri list, step sequence, sankalp paragraph templated with devotee profile name; exportable as PDF.
+3. ~~**Devotee ritual profile**: name, gotra, nakshatra, DOB~~ *(Superseded: simplified to devotee name only)*.
 4. **Admin Catalog Console**: CRUD on puja catalog entries and their intent tags, from a single mock data source.
 5. **Unmodified booking flow**: existing devotee/priest/admin booking pages continue to function against the (now consolidated) mock data file.
 
 ### P1 — Nice to have this phase
-6. Horoscope image upload with client-side OCR auto-fill of nakshatra/gotra fields (mocked confidence score if OCR library isn't stable in time).
-7. Auspicious date badge on puja detail pages, computed from a simplified tithi lookup table (static mock table this phase, real calculation in Phase 2).
+6. ~~Horoscope image upload with client-side OCR auto-fill of nakshatra/gotra fields~~ *(Superseded: removed in scope reduction)*.
+7. ~~Auspicious date badge computed from tithi lookup~~ *(Superseded: static authored tradition notes used instead)*.
 
 ## 7. Success Metrics (demo/viva framing)
 

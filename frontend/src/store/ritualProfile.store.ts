@@ -8,11 +8,9 @@ interface RitualProfileState {
   resetProfile: () => void;
 }
 
+// Default profile holds name only — astrology fields removed in scope-reduction pass
 const DEFAULT_PROFILE: RitualProfile = {
   fullName: 'Aditi Sharma',
-  gotra: 'Kashyapa',
-  nakshatra: 'Rohini',
-  dob: '1992-05-14',
 };
 
 // Implements FR-3 and FR-4 with localStorage persistence for the devotee session

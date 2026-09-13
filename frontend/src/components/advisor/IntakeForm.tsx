@@ -55,7 +55,7 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
       <div className="space-y-2">
         <label
           htmlFor="rawInput"
-          className="block text-sm font-medium text-[hsl(var(--foreground))] flex items-center justify-between"
+          className="block text-sm font-medium text-[hsl(var(--foreground))] items-center justify-between"
         >
           <span>Describe your situation or spiritual intent</span>
           <span className="text-xs text-[hsl(var(--foreground-muted))]">Plain language</span>

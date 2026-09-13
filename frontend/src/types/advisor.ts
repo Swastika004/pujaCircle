@@ -11,12 +11,9 @@ export interface PujaCatalogEntry {
   category: 'life-event' | 'dosha-nivaran' | 'festival' | 'business' | 'ancestral';
 }
 
+// RitualProfile: name-only after astrology fields were removed in scope-reduction pass
 export interface RitualProfile {
   fullName: string;
-  gotra: string;
-  nakshatra: string;
-  // ISO date format YYYY-MM-DD
-  dob: string;
 }
 
 export interface AdvisorMatch {

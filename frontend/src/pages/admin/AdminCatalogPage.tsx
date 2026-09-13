@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { PujaCatalogEntry } from '@/types/advisor';
 import { mockDb } from '@/mocks/data';
-import { AdvisorPreviewPanel } from '@/components/advisor/AdvisorPreviewPanel';
 import { modalTransition, buttonPress } from '@/motion/variants';
 
 export const AdminCatalogPage: React.FC = () => {
@@ -116,7 +115,7 @@ export const AdminCatalogPage: React.FC = () => {
         intentTags: tags,
         samagriList: samagri,
         steps,
-        timingNote: timingNote || 'Auspicious muhurat determined by purohit.',
+        timingNote: timingNote || 'Auspicious timing determined by tradition.',
       };
       mockDb.pujaCatalog.unshift(newEntry);
     }
@@ -138,7 +137,7 @@ export const AdminCatalogPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl space-y-8">
-      {/* Management Console Header per DESIGN §6 (dense, surface-alt background) */}
+      
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[hsl(var(--border))] pb-5">
         <div>
           <div className="flex items-center gap-2">
@@ -163,7 +162,7 @@ export const AdminCatalogPage: React.FC = () => {
         </motion.button>
       </div>
 
-      {/* Denser Admin Toolbar */}
+      
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-[hsl(var(--surface-alt))] p-3 rounded-lg border border-[hsl(var(--border))]">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-2.5 text-[hsl(var(--foreground-muted))]" />
@@ -195,7 +194,7 @@ export const AdminCatalogPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Denser Admin Table per DESIGN §6 */}
+      
       <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-[hsl(var(--foreground))] divide-y divide-[hsl(var(--border))]">
@@ -275,10 +274,7 @@ export const AdminCatalogPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Admin Advisor QA Preview Panel per FR-19 */}
-      <AdvisorPreviewPanel />
-
-      {/* Add / Edit Entry Modal */}
+      
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
@@ -412,7 +408,7 @@ export const AdminCatalogPage: React.FC = () => {
                     type="text"
                     value={timingNote}
                     onChange={(e) => setTimingNote(e.target.value)}
-                    placeholder="e.g. Shukla Paksha morning muhurat recommended."
+                    placeholder="e.g. Shukla Paksha morning hours recommended."
                     className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
                   />
                 </div>

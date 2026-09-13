@@ -59,7 +59,7 @@ frontend/src/
 │       ├── IntakeForm.tsx
 │       ├── MatchResultCard.tsx
 │       ├── RitualKitView.tsx
-│       ├── HoroscopeUpload.tsx      # P1
+│       ├── HoroscopeUpload.tsx      # Superseded: removed in scope reduction pass
 │       └── AdvisorPreviewPanel.tsx  # admin-only, reuses IntakeForm
 ├── pages/
 │   ├── advisor/                     # NEW
@@ -93,11 +93,9 @@ export interface PujaCatalogEntry {
   category: "life-event" | "dosha-nivaran" | "festival" | "business" | "ancestral";
 }
 
+// Superseded: gotra, nakshatra, dob removed in scope reduction pass; name retained for sankalp
 export interface RitualProfile {
   fullName: string;
-  gotra: string;
-  nakshatra: string;
-  dob: string; // ISO date
 }
 
 export interface AdvisorQuery {
