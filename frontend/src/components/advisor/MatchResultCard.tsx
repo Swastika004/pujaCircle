@@ -7,7 +7,7 @@ import { fadeInUp, cardHover, buttonPress } from '@/motion/variants';
 export interface MatchResultCardProps {
   match: AdvisorMatch;
   rank: number;
-  onSelectPriestListing: (pujaName: string) => void;
+  onSelectPriestListing: (pujaName: string, catalogId?: string) => void;
   onViewRitualKit: (match: AdvisorMatch) => void;
 }
 
@@ -93,7 +93,7 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({
           <motion.button
             type="button"
             whileTap={buttonPress}
-            onClick={() => onSelectPriestListing(entry.name)}
+            onClick={() => onSelectPriestListing(entry.name, entry.id)}
             className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-[hsl(var(--brand-primary))] px-4 py-2 text-xs font-medium text-white hover:bg-[hsl(var(--brand-primary-dark))] transition-colors shadow-sm"
           >
             <span>Book Verified Priest</span>

@@ -5,6 +5,7 @@ import {
   mockAcceptBooking,
   mockRejectBooking,
   mockCompleteBooking,
+  resolvePriestId,
 } from "@/mocks/mock-api";
 import { Booking } from "@/types/booking.types";
 import { PriestBookingRow } from "@/components/priest/PriestBookingRow";
@@ -27,8 +28,7 @@ type TabFilter = "PENDING" | "CONFIRMED" | "COMPLETED" | "HISTORY";
  */
 export const PriestBookingsPage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId =
-    user?.id === "user-priest-1" ? "priest-1" : user?.id || "priest-1";
+  const priestId = resolvePriestId(user);
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeTab, setActiveTab] = useState<TabFilter>("PENDING");

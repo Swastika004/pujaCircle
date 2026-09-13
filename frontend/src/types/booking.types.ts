@@ -18,13 +18,16 @@ export interface Booking {
   userId: string;
   priestId: string;
   priestServiceId?: string;
+  pujaCatalogId?: string;
   ritualId?: string;
   addressId: string;
+  venueAddressSnapshot?: Address;
   slotId: string;
   availabilitySlotId?: string;
   serviceName: string;
   servicePrice: number; // Authoritative price snapshot locked at request submission
   dakshinaAmount?: number; // Backwards-compatibility alias for servicePrice
+  samagriList?: string[];
   bookingDate: string; // YYYY-MM-DD
   startTime: string;
   endTime: string;
@@ -59,6 +62,7 @@ export interface Booking {
 export interface CreateBookingRequest {
   priestId: string;
   priestServiceId?: string;
+  pujaCatalogId?: string;
   ritualId?: string;
   addressId: string;
   slotId: string;

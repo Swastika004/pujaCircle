@@ -21,7 +21,7 @@ export interface RitualKitViewProps {
   entry: PujaCatalogEntry;
   isOpen: boolean;
   onClose: () => void;
-  onSelectPriest: (pujaName: string) => void;
+  onSelectPriest: (pujaName: string, catalogId?: string) => void;
 }
 
 export const RitualKitView: React.FC<RitualKitViewProps> = ({
@@ -258,7 +258,7 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
               whileTap={buttonPress}
               onClick={() => {
                 onClose();
-                onSelectPriest(entry.name);
+                onSelectPriest(entry.name, entry.id);
               }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-md bg-[hsl(var(--brand-primary))] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))] transition-all shadow-sm"
             >

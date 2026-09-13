@@ -4,6 +4,7 @@ export const createBookingSchema = z
   .object({
     priestId: z.string().trim().min(1, 'Priest must be selected').max(100),
     priestServiceId: z.string().trim().max(100).optional(),
+    pujaCatalogId: z.string().trim().max(100).optional(),
     ritualId: z.string().trim().max(100).optional(),
     addressId: z.string().trim().min(1, 'Address must be selected').max(100),
     slotId: z.string().trim().min(1, 'Time slot must be selected').max(150),

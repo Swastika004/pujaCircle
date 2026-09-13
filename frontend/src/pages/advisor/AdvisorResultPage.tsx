@@ -31,9 +31,12 @@ export const AdvisorResultPage: React.FC = () => {
   const matches: AdvisorMatch[] = matchResult.matches || [];
   const isFallback = matchResult.scores[0] !== undefined && matchResult.scores[0] < 0.35;
 
-  // Implements FR-15: pass puja type as query param into priest listing without altering listing logic
-  const handleSelectPriestListing = (pujaName: string) => {
-    navigate(`/priests?service=${encodeURIComponent(pujaName)}`);
+  // Implements FR-15: pass puja type and catalogId into priest listing
+  const handleSelectPriestListing = (pujaName: string, catalogId?: string) => {
+    const params = new URLSearchParams();
+    if (catalogId) params.set('catalogId', catalogId);
+    params.set('service', pujaName);
+    navigate(`/priests?${params.toString()}`);
   };
 
   return (

@@ -113,6 +113,18 @@ export const SEED_USERS: MockUserRecord[] = [
     createdAt: '2026-01-01T00:00:00.000Z',
   },
   {
+    id: 'user-priest-2',
+    name: 'Acharya Sougata Bhattacharya',
+    phoneNumber: '+919845098765',
+    email: 'sougata@example.com',
+    password: 'Priest@123',
+    role: 'PRIEST',
+    accountStatus: 'ACTIVE',
+    status: 'ACTIVE',
+    hasAddress: true,
+    createdAt: '2026-01-01T00:00:00.000Z',
+  },
+  {
     id: 'user-priest-pending',
     name: 'Pt. Tarapada Goswami',
     phoneNumber: '+919876543213',
@@ -142,7 +154,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-1',
     priestId: 'priest-1',
-    serviceName: 'Griha Pravesh & Vastu Puja',
+    pujaCatalogId: 'catalog-griha-pravesh',
+    serviceName: 'Griha Pravesh & Vastu Shanti Puja',
+    category: 'life-event',
+    isCustom: false,
     price: 3100,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -150,7 +165,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-2',
     priestId: 'priest-1',
-    serviceName: 'Shri Satyanarayan Vrat Katha',
+    pujaCatalogId: 'catalog-satyanarayan',
+    serviceName: 'Shri Satyanarayan Maha Vrat Katha',
+    category: 'life-event',
+    isCustom: false,
     price: 2100,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -158,7 +176,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-3',
     priestId: 'priest-1',
-    serviceName: 'Maha Rudrabhishek',
+    pujaCatalogId: 'catalog-rudrabhishek',
+    serviceName: 'Maha Rudrabhishek & Shiva Archana',
+    category: 'festival',
+    isCustom: false,
     price: 3500,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -166,7 +187,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-4',
     priestId: 'priest-2',
-    serviceName: 'Maha Rudrabhishek',
+    pujaCatalogId: 'catalog-rudrabhishek',
+    serviceName: 'Maha Rudrabhishek & Shiva Archana',
+    category: 'festival',
+    isCustom: false,
     price: 4100,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -174,7 +198,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-5',
     priestId: 'priest-2',
-    serviceName: 'Ganapati Havan',
+    pujaCatalogId: 'catalog-ganapati-havan',
+    serviceName: 'Vighnaharta Ganapati Atharvashirsha Havan',
+    category: 'life-event',
+    isCustom: false,
     price: 2800,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -182,7 +209,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-6',
     priestId: 'priest-3',
-    serviceName: 'Griha Pravesh & Vastu Puja',
+    pujaCatalogId: 'catalog-griha-pravesh',
+    serviceName: 'Griha Pravesh & Vastu Shanti Puja',
+    category: 'life-event',
+    isCustom: false,
     price: 2700,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -190,7 +220,10 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
   {
     id: 'service-7',
     priestId: 'priest-4',
-    serviceName: 'Navagraha Shanti Havan',
+    pujaCatalogId: 'catalog-navagraha',
+    serviceName: 'Navagraha Shanti & Dosh Nivaran Havan',
+    category: 'dosha-nivaran',
+    isCustom: false,
     price: 3800,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -199,6 +232,8 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
     id: 'service-8',
     priestId: 'priest-5',
     serviceName: 'Durga & Kali Puja',
+    category: 'festival',
+    isCustom: true,
     price: 3200,
     isActive: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -208,6 +243,7 @@ export const SEED_PRIEST_SERVICES: PriestService[] = [
 export const SEED_PRIESTS: Priest[] = [
   {
     id: 'priest-1',
+    userId: 'user-priest-1',
     fullName: 'Pandit Debashis Shastri',
     displayName: 'Pt. Debashis Shastri',
     phoneNumber: '+919876543211',
@@ -230,6 +266,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-2',
+    userId: 'user-priest-2',
     fullName: 'Acharya Sougata Bhattacharya',
     displayName: 'Acharya Sougata Bhattacharya',
     phoneNumber: '+919845098765',
@@ -252,6 +289,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-3',
+    userId: 'user-priest-pending',
     fullName: 'Pandit Tarapada Goswami',
     displayName: 'Pt. Tarapada Goswami',
     phoneNumber: '+919876543213',
@@ -274,6 +312,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-4',
+    userId: 'user-priest-4',
     fullName: 'Pandit Ananda Tirtha',
     displayName: 'Pt. Ananda Tirtha',
     phoneNumber: '+919822334499',
@@ -296,6 +335,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-5',
+    userId: 'user-priest-5',
     fullName: 'Pandit Somnath Mukherjee',
     displayName: 'Pt. Somnath Mukherjee',
     phoneNumber: '+919833441122',
@@ -319,6 +359,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-6',
+    userId: 'user-priest-6',
     fullName: 'Pandit Harishankar Ray',
     displayName: 'Pt. Harishankar Ray',
     phoneNumber: '+919899001122',
@@ -342,6 +383,7 @@ export const SEED_PRIESTS: Priest[] = [
   },
   {
     id: 'priest-7',
+    userId: 'user-priest-7',
     fullName: 'Pandit Dinanath Sengupta',
     displayName: 'Pt. Dinanath Sengupta',
     phoneNumber: '+919877665544',

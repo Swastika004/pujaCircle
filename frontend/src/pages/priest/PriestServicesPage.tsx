@@ -5,6 +5,7 @@ import {
   mockCreatePriestService,
   mockUpdatePriestService,
   mockTogglePriestService,
+  resolvePriestId,
 } from '@/mocks/mock-api';
 import { PriestService } from '@/types/priest.types';
 import { PriestServiceInput } from '@/schemas/priest.schema';
@@ -21,7 +22,7 @@ import { toast } from 'sonner';
  */
 export const PriestServicesPage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId = user?.id === 'user-priest-1' ? 'priest-1' : user?.id || 'priest-1';
+  const priestId = resolvePriestId(user);
 
   const [services, setServices] = useState<PriestService[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);

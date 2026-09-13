@@ -6,6 +6,7 @@ import {
   mockGetPriestServices,
   mockGetPriestSlots,
   mockGetPriestById,
+  resolvePriestId,
 } from '@/mocks/mock-api';
 import { Booking } from '@/types/booking.types';
 import { Priest } from '@/types/priest.types';
@@ -26,7 +27,7 @@ import {
 // Action queues and decline dialog removed (managed under /priest/bookings).
 export const PriestDashboardPage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId = user?.id === 'user-priest-1' ? 'priest-1' : user?.id || 'priest-1';
+  const priestId = resolvePriestId(user);
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeServicesCount, setActiveServicesCount] = useState(0);

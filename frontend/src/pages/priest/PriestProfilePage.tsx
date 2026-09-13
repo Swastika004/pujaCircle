@@ -6,6 +6,7 @@ import {
   mockUpdatePriestProfile,
   mockGetPriestServices,
   mockLookupPincode,
+  resolvePriestId,
 } from "@/mocks/mock-api";
 import { Priest, PriestService } from "@/types/priest.types";
 import { updatePriestProfileSchema } from "@/schemas/priest.schema";
@@ -63,8 +64,7 @@ const POPULAR_LANGUAGES = [
  */
 export const PriestProfilePage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId =
-    user?.id === "user-priest-1" ? "priest-1" : user?.id || "priest-1";
+  const priestId = resolvePriestId(user);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(true);

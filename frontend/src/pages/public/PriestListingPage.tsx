@@ -51,20 +51,24 @@ const QUICK_CEREMONY_TAGS = [
 
 export const PriestListingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialQuery = searchParams.get('searchQuery') || '';
+  const catalogIdParam = searchParams.get('catalogId') || '';
+  const serviceParam = searchParams.get('service') || '';
+  const initialQuery = searchParams.get('searchQuery') || serviceParam || '';
 
   const [priests, setPriests] = useState<Priest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Search & Filter States
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [activeCatalogId, setActiveCatalogId] = useState<string>(catalogIdParam);
+  const [activeServiceName, setActiveServiceName] = useState<string>(serviceParam);
   const [activeLanguage, setActiveLanguage] = useState<string>('All');
   const [activeMinExp, setActiveMinExp] = useState<number>(0);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const appliedFiltersCount =
-    (activeLanguage !== 'All' ? 1 : 0) + (activeMinExp > 0 ? 1 : 0);
-  const hasActiveFilters = searchQuery !== '' || appliedFiltersCount > 0;
+    (activeLanguage !== 'All' ? 1 : 0) + (activeMinExp > 0 ? 1 : 0) + (activeCatalogId ? 1 : 0);
+  const hasActiveFilters = searchQuery !== '' || appliedFiltersCount > 0 || activeCatalogId !== '';
 
   const fetchPriests = async (query = searchQuery) => {
     setIsLoading(true);
@@ -72,6 +76,8 @@ export const PriestListingPage: React.FC = () => {
       // Devotee discovery: Only approved and active priests appear (status 'ALL' omitted)
       const res = await mockGetPriests({
         searchQuery: query || undefined,
+        catalogId: activeCatalogId || undefined,
+        serviceName: activeServiceName || undefined,
         language: activeLanguage !== 'All' ? activeLanguage : undefined,
         minExperience: activeMinExp > 0 ? activeMinExp : undefined,
       });
@@ -87,18 +93,20 @@ export const PriestListingPage: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchPriests(searchQuery);
-      if (searchQuery) {
-        setSearchParams({ searchQuery });
-      } else {
-        setSearchParams({});
-      }
+      const newParams: Record<string, string> = {};
+      if (searchQuery) newParams.searchQuery = searchQuery;
+      if (activeCatalogId) newParams.catalogId = activeCatalogId;
+      if (activeServiceName) newParams.service = activeServiceName;
+      setSearchParams(newParams);
     }, 250);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, activeLanguage, activeMinExp]);
+  }, [searchQuery, activeCatalogId, activeServiceName, activeLanguage, activeMinExp]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
+    setActiveCatalogId('');
+    setActiveServiceName('');
     setActiveLanguage('All');
     setActiveMinExp(0);
     setSearchParams({});
@@ -182,6 +190,29 @@ export const PriestListingPage: React.FC = () => {
             )}
           </Button>
         </div>
+
+        {/* Active Advisor Filter Badge */}
+        {activeServiceName && (
+          <div className="flex items-center gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-950">
+            <Sparkles className="h-4 w-4 text-amber-600 shrink-0" />
+            <span className="flex-1">
+              Filtering priests offering Advisor recommendation: <strong>{activeServiceName}</strong>
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveCatalogId('');
+                setActiveServiceName('');
+                setSearchQuery('');
+              }}
+              className="text-stone-500 hover:text-stone-800 p-1 rounded-sm cursor-pointer flex items-center gap-1 font-semibold"
+              title="Remove filter"
+            >
+              <span>Clear</span>
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Quick Ceremony Suggestion Chips */}
         <div className="flex items-center gap-1.5 flex-wrap">

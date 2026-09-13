@@ -659,6 +659,30 @@ export async function mockTogglePriestService(
   };
 }
 
+export function resolvePriestId(userOrId?: { id: string } | string | null): string {
+  if (!userOrId) return 'priest-1';
+  const id = typeof userOrId === 'string' ? userOrId : userOrId.id;
+  const match = mockDb.priests.find((p) => p.userId === id || p.id === id);
+  return match?.id || id;
+}
+
+export async function mockGetPriestByUserId(
+  userId: string
+): Promise<{ success: boolean; data?: Priest; message?: string }> {
+  await delay(200);
+  const priest = mockDb.priests.find((p) => p.userId === userId || p.id === userId);
+  if (!priest) {
+    return { success: false, message: 'Priest profile not found for user.' };
+  }
+
+  const populatedPriest: Priest = {
+    ...priest,
+    services: mockDb.priestServices.filter((s) => s.priestId === priest.id && s.isActive),
+  };
+
+  return { success: true, data: deepClone(populatedPriest) };
+}
+
 export async function mockGetPriests(params?: PriestFilterParams): Promise<{ success: boolean; data: Priest[] }> {
   await delay(300);
 
@@ -677,6 +701,12 @@ export async function mockGetPriests(params?: PriestFilterParams): Promise<{ suc
     list = list.filter((p) => p.city.toLowerCase().includes(cityQuery));
   }
 
+  if (params?.catalogId) {
+    list = list.filter(
+      (p) => p.services && p.services.some((srv) => srv.pujaCatalogId === params.catalogId)
+    );
+  }
+
   if (params?.searchQuery) {
     const q = params.searchQuery.toLowerCase();
     list = list.filter(
@@ -690,7 +720,15 @@ export async function mockGetPriests(params?: PriestFilterParams): Promise<{ suc
 
   if (params?.serviceName) {
     const sQuery = params.serviceName.toLowerCase();
-    list = list.filter((p) => p.services && p.services.some((srv) => srv.serviceName.toLowerCase().includes(sQuery)));
+    list = list.filter(
+      (p) =>
+        p.services &&
+        p.services.some(
+          (srv) =>
+            (params.catalogId && srv.pujaCatalogId === params.catalogId) ||
+            srv.serviceName.toLowerCase().includes(sQuery)
+        )
+    );
   }
 
   if (params?.language) {
@@ -1067,7 +1105,7 @@ export async function mockGetBookings(
       priest: mockDb.priests.find((p) => p.id === b.priestId),
       priestService: mockDb.priestServices.find((s) => s.id === b.priestServiceId),
       ritual: mockDb.rituals.find((r) => r.id === b.ritualId),
-      address: mockDb.addresses.find((a) => a.id === b.addressId),
+      address: b.venueAddressSnapshot || mockDb.addresses.find((a) => a.id === b.addressId),
       slot: mockDb.availabilitySlots.find((s) => s.id === b.slotId),
     };
   });
@@ -1096,7 +1134,7 @@ export async function mockGetBookingById(
       priest: mockDb.priests.find((p) => p.id === booking.priestId),
       priestService: mockDb.priestServices.find((s) => s.id === booking.priestServiceId),
       ritual: mockDb.rituals.find((r) => r.id === booking.ritualId),
-      address: mockDb.addresses.find((a) => a.id === booking.addressId),
+      address: booking.venueAddressSnapshot || mockDb.addresses.find((a) => a.id === booking.addressId),
       slot: mockDb.availabilitySlots.find((s) => s.id === booking.slotId),
     }),
   };
@@ -1139,9 +1177,11 @@ export async function mockCreateBooking(
     return { success: false, message: 'Please select a valid saved address.' };
   }
 
-  // 4. Retrieve authoritative price from PriestService snapshot
+  // 4. Retrieve authoritative price from PriestService snapshot or Catalog
   let serviceName = 'Vedic Ceremony';
   let authoritativePrice = 2100;
+  let resolvedPujaCatalogId: string | undefined = validated.pujaCatalogId;
+  let samagriList: string[] | undefined = undefined;
 
   if (validated.priestServiceId) {
     const srv = mockDb.priestServices.find(
@@ -1152,12 +1192,25 @@ export async function mockCreateBooking(
     }
     serviceName = srv.serviceName;
     authoritativePrice = srv.price;
+    resolvedPujaCatalogId = srv.pujaCatalogId || validated.pujaCatalogId;
+    samagriList = srv.samagriList;
+  } else if (validated.pujaCatalogId) {
+    const cat = mockDb.pujaCatalog.find((c) => c.id === validated.pujaCatalogId);
+    if (cat) {
+      serviceName = cat.name;
+      samagriList = cat.samagriList;
+    }
   } else if (validated.ritualId) {
     const rit = mockDb.rituals.find((r) => r.id === validated.ritualId);
     if (rit) {
       serviceName = rit.name;
       authoritativePrice = rit.suggestedDakshina || 2500;
     }
+  }
+
+  if (resolvedPujaCatalogId && !samagriList) {
+    const cat = mockDb.pujaCatalog.find((c) => c.id === resolvedPujaCatalogId);
+    if (cat) samagriList = cat.samagriList;
   }
 
   // 5. Determine slot timing and check double booking
@@ -1188,9 +1241,16 @@ export async function mockCreateBooking(
     return { success: false, message: 'This priest already has a booking scheduled during this time.' };
   }
 
-  // 6. Set 5-hour response deadline
+  // 6. Set dynamic response deadline: min(5 hours, 1 hour before slot start)
   const now = new Date();
-  const deadline = new Date(now.getTime() + 5 * 60 * 60 * 1000).toISOString();
+  const slotDateObj = new Date(`${validated.bookingDate}T${startTime}:00`);
+  const fiveHoursLater = new Date(now.getTime() + 5 * 60 * 60 * 1000);
+  const oneHourBeforeSlot = new Date(slotDateObj.getTime() - 60 * 60 * 1000);
+  const effectiveDeadline =
+    !isNaN(slotDateObj.getTime()) && oneHourBeforeSlot < fiveHoursLater && oneHourBeforeSlot > now
+      ? oneHourBeforeSlot
+      : fiveHoursLater;
+  const deadline = effectiveDeadline.toISOString();
 
   const newBooking: Booking = {
     id: `booking-${Date.now()}`,
@@ -1198,13 +1258,16 @@ export async function mockCreateBooking(
     userId,
     priestId: validated.priestId,
     priestServiceId: validated.priestServiceId,
+    pujaCatalogId: resolvedPujaCatalogId,
     ritualId: validated.ritualId,
     addressId: validated.addressId,
+    venueAddressSnapshot: deepClone(address),
     slotId: targetSlotId,
     availabilitySlotId: targetSlotId,
     serviceName,
     servicePrice: authoritativePrice,
     dakshinaAmount: authoritativePrice,
+    samagriList: samagriList ? deepClone(samagriList) : undefined,
     bookingDate: validated.bookingDate,
     startTime,
     endTime,

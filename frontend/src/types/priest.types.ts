@@ -7,6 +7,10 @@ export interface PriestService {
   id: string;
   priestId: string;
   serviceName: string;
+  pujaCatalogId?: string;
+  isCustom?: boolean;
+  category?: string;
+  samagriList?: string[];
   price: number; // Single authoritative service price in INR (₹)
   isActive: boolean;
   createdAt: string;
@@ -15,6 +19,7 @@ export interface PriestService {
 
 export interface Priest {
   id: string;
+  userId?: string;
   fullName: string;
   displayName: string;
   phoneNumber: string;
@@ -114,6 +119,7 @@ export interface PriestRegistrationRequest {
 
 export interface PriestFilterParams {
   city?: string;
+  catalogId?: string;
   serviceName?: string;
   ritualSlug?: string;
   language?: string;

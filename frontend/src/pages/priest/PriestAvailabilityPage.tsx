@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import { priestApi } from '@/api/priest.api';
 import { bookingApi } from '@/api/booking.api';
+import { resolvePriestId } from '@/mocks/mock-api';
 import { PriestSlot } from '@/types/priest.types';
 import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
@@ -28,7 +29,7 @@ import { toast } from 'sonner';
  */
 export const PriestAvailabilityPage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId = user?.id === 'user-priest-1' ? 'priest-1' : user?.id || 'priest-1';
+  const priestId = resolvePriestId(user);
 
   const todayStr = new Date().toISOString().split('T')[0];
 
