@@ -143,7 +143,9 @@ export const PriestProfilePage: React.FC = () => {
           const loc = res.locations[0];
           setCity(loc.city || loc.district);
           setState(loc.state);
-          toast.success(`Detected location: ${loc.city || loc.district}, ${loc.state}`);
+          toast.success(
+            `Detected location: ${loc.city || loc.district}, ${loc.state}`,
+          );
         } else {
           toast.error("Could not resolve location for this PIN code.");
         }
@@ -280,7 +282,9 @@ export const PriestProfilePage: React.FC = () => {
         <div className="h-12 w-12 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-sm animate-pulse">
           ॐ
         </div>
-        <p className="text-xs text-stone-600 font-medium">Loading your Vedic credentials...</p>
+        <p className="text-xs text-stone-600 font-medium">
+          Loading your Vedic credentials...
+        </p>
       </div>
     );
   }
@@ -300,11 +304,14 @@ export const PriestProfilePage: React.FC = () => {
         <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
-              <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+              <span className="text-amber-600 font-serif font-black text-xl">
+                ॐ
+              </span>
               <span>Purohit Profile Picture</span>
             </DialogTitle>
             <DialogDescription className="text-xs text-stone-600">
-              Upload a clear photo for your Purohit roster listing or reset to default initials.
+              Upload a clear photo for your Purohit roster listing or reset to
+              default initials.
             </DialogDescription>
           </DialogHeader>
 
@@ -389,7 +396,8 @@ export const PriestProfilePage: React.FC = () => {
             Vedic Profile & Credentials
           </h1>
           <p className="text-xs text-stone-600">
-            Manage your credentials, Gurukul lineage, languages, service localities, and puja offerings.
+            Manage your credentials, Gurukul lineage, languages, service
+            localities, and puja offerings.
           </p>
         </div>
 
@@ -438,7 +446,9 @@ export const PriestProfilePage: React.FC = () => {
 
               <div className="absolute inset-1 rounded-full bg-stone-950/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <Camera className="w-5 h-5 mb-0.5" />
-                <span className="text-[9px] font-bold tracking-wide uppercase">Edit</span>
+                <span className="text-[9px] font-bold tracking-wide uppercase">
+                  Edit
+                </span>
               </div>
             </button>
           </div>
@@ -493,7 +503,7 @@ export const PriestProfilePage: React.FC = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="e.g. Pandit Ramesh Shastri"
-                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
+                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
@@ -509,7 +519,7 @@ export const PriestProfilePage: React.FC = () => {
                 value={experienceYears}
                 onChange={(e) => setExperienceYears(Number(e.target.value))}
                 placeholder="18"
-                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
+                className="h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
@@ -531,7 +541,7 @@ export const PriestProfilePage: React.FC = () => {
                   maxLength={6}
                   onChange={(e) => handlePincodeLookup(e.target.value)}
                   placeholder="e.g. 400050"
-                  className="h-10 text-xs font-mono tracking-wider rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+                  className="h-10 text-xs font-mono tracking-wider rounded-md border-stone-300 focus:ring-amber-500 bg-white"
                 />
                 <Button
                   type="button"
@@ -581,7 +591,8 @@ export const PriestProfilePage: React.FC = () => {
             <div className="p-4 rounded-md bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-stone-700 flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-red-700" /> Registered Mobile
+                  <Phone className="w-3.5 h-3.5 text-red-700" /> Registered
+                  Mobile
                 </span>
                 <Badge
                   variant="outline"
@@ -594,14 +605,16 @@ export const PriestProfilePage: React.FC = () => {
                 {priest?.phoneNumber || "+919876543211"}
               </p>
               <p className="text-[11px] text-stone-600">
-                Devotees contact you on this verified number for ritual coordination.
+                Devotees contact you on this verified number for ritual
+                coordination.
               </p>
             </div>
 
             <div className="p-4 rounded-md bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-stone-700 flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-amber-600" /> Registered Email
+                  <Mail className="w-3.5 h-3.5 text-amber-600" /> Registered
+                  Email
                 </span>
                 <Badge
                   variant="outline"
@@ -630,17 +643,21 @@ export const PriestProfilePage: React.FC = () => {
           </h3>
         </div>
         <p className="text-xs text-stone-600">
-          Describe your Gurukul education, Veda shakha, training, and spiritual background.
+          Describe your Gurukul education, Veda shakha, training, and spiritual
+          background.
         </p>
         <Textarea
           rows={4}
           value={bio}
           onChange={(e) => setBio(e.target.value)}
           placeholder="Vedic scholar trained in Varanasi Gurukul. Specializes in Griha Pravesh, Vastu Shanti, and Satyanarayan Katha with over 18 years of ritual expertise..."
-          className="text-xs leading-relaxed resize-y rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+          className="text-xs leading-relaxed resize-y rounded-md border-stone-300 focus:ring-amber-500 bg-white"
         />
         <div className="flex justify-between items-center text-[11px] text-stone-500 pt-1 font-medium">
-          <span>Minimum 20 characters. Authentic background helps devotees build trust.</span>
+          <span>
+            Minimum 20 characters. Authentic background helps devotees build
+            trust.
+          </span>
           <span>{bio.length} characters</span>
         </div>
       </div>
@@ -656,7 +673,8 @@ export const PriestProfilePage: React.FC = () => {
             </h3>
           </div>
           <p className="text-xs text-stone-600">
-            Select all Vedic and regional languages you can perform mantras and katha in.
+            Select all Vedic and regional languages you can perform mantras and
+            katha in.
           </p>
 
           <div className="flex flex-wrap gap-2">
@@ -688,7 +706,7 @@ export const PriestProfilePage: React.FC = () => {
               placeholder="Add other language (e.g. Odia)..."
               value={customLanguage}
               onChange={(e) => setCustomLanguage(e.target.value)}
-              className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+              className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
             />
             <Button
               type="submit"
@@ -742,7 +760,9 @@ export const PriestProfilePage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-stone-500 text-xs">No active ceremony offerings.</p>
+              <p className="text-stone-500 text-xs">
+                No active ceremony offerings.
+              </p>
             )}
           </div>
         </div>
@@ -757,7 +777,8 @@ export const PriestProfilePage: React.FC = () => {
           </h3>
         </div>
         <p className="text-xs text-stone-600">
-          Localities and sectors where you are available to travel for in-home pujas.
+          Localities and sectors where you are available to travel for in-home
+          pujas.
         </p>
 
         <div className="flex flex-wrap gap-2">
@@ -787,7 +808,7 @@ export const PriestProfilePage: React.FC = () => {
             placeholder="Add locality (e.g. Bandra, Juhu, Powai)..."
             value={newAreaInput}
             onChange={(e) => setNewAreaInput(e.target.value)}
-            className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+            className="h-10 text-xs flex-1 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
           />
           <Button
             type="submit"

@@ -222,7 +222,7 @@ export const AdminPriestsPage: React.FC = () => {
             placeholder="Search by name, city, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>

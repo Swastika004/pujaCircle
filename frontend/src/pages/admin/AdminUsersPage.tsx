@@ -122,7 +122,8 @@ export const AdminUsersPage: React.FC = () => {
               Devotee Accounts Directory
             </h1>
             <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-              Platform registered user accounts, ceremony booking history, and account moderation.
+              Platform registered user accounts, ceremony booking history, and
+              account moderation.
             </p>
           </div>
         </div>
@@ -190,13 +191,22 @@ export const AdminUsersPage: React.FC = () => {
           onValueChange={(val) => setActiveTab(val as DevoteeFilter)}
         >
           <TabsList className="inline-flex h-11 items-center justify-start rounded-md bg-white p-1 border-2 border-amber-300 min-w-max gap-1 shadow-xs">
-            <TabsTrigger value="ALL" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
+            <TabsTrigger
+              value="ALL"
+              className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
+            >
               All ({users.length})
             </TabsTrigger>
-            <TabsTrigger value="ACTIVE" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
+            <TabsTrigger
+              value="ACTIVE"
+              className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
+            >
               Active ({activeCount})
             </TabsTrigger>
-            <TabsTrigger value="SUSPENDED" className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all">
+            <TabsTrigger
+              value="SUSPENDED"
+              className="text-xs px-4 py-2 rounded-sm font-bold data-[state=active]:bg-[#780016] data-[state=active]:text-white transition-all"
+            >
               Suspended ({suspendedCount})
             </TabsTrigger>
           </TabsList>
@@ -208,7 +218,7 @@ export const AdminUsersPage: React.FC = () => {
             placeholder="Search by devotee name, email, or mobile..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+            className="pl-10 text-xs h-11 rounded-md border-2 border-stone-200 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>

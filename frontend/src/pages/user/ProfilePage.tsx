@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuthStore } from '@/store/auth.store';
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
 import {
   mockGetAddresses,
   mockGetBookings,
   mockUpdateUserProfile,
   mockResetPassword,
-} from '@/mocks/mock-api';
-import { mockDb } from '@/mocks/data';
-import { updateUserProfileSchema, changePasswordSchema } from '@/schemas/user.schema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from "@/mocks/mock-api";
+import { mockDb } from "@/mocks/data";
+import {
+  updateUserProfileSchema,
+  changePasswordSchema,
+} from "@/schemas/user.schema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +25,7 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   User,
   Phone,
@@ -41,8 +44,8 @@ import {
   Camera,
   Trash2,
   Upload,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 /**
  * ProfilePage
@@ -52,8 +55,9 @@ import { toast } from 'sonner';
 export const ProfilePage: React.FC = () => {
   const { user, setUser } = useAuthStore();
 
-  const devoteeId = user?.id || 'user-devotee-1';
-  const dbUser = mockDb.users.find((u) => u.id === devoteeId) || mockDb.users[0];
+  const devoteeId = user?.id || "user-devotee-1";
+  const dbUser =
+    mockDb.users.find((u) => u.id === devoteeId) || mockDb.users[0];
 
   const [addressCount, setAddressCount] = useState<number>(0);
   const [bookingCount, setBookingCount] = useState<number>(0);
@@ -65,15 +69,18 @@ export const ProfilePage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [fullName, setFullName] = useState<string>(user?.name || dbUser?.name || 'Devotee');
+  const [fullName, setFullName] = useState<string>(
+    user?.name || dbUser?.name || "Devotee",
+  );
   const [isSavingProfile, setIsSavingProfile] = useState<boolean>(false);
 
-  const email = user?.email || dbUser?.email || 'devotee@pujacircle.com';
-  const phoneNumber = user?.phoneNumber || dbUser?.phoneNumber || '+91 9876543210';
+  const email = user?.email || dbUser?.email || "devotee@pujacircle.com";
+  const phoneNumber =
+    user?.phoneNumber || dbUser?.phoneNumber || "+91 9876543210";
 
-  const [currentPassword, setCurrentPassword] = useState<string>('');
-  const [newPassword, setNewPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isUpdatingPassword, setIsUpdatingPassword] = useState<boolean>(false);
 
   useEffect(() => {
@@ -100,24 +107,28 @@ export const ProfilePage: React.FC = () => {
     loadDevoteeStats();
   }, [devoteeId, dbUser]);
 
-  const initials = fullName
-    .split(' ')
-    .filter(Boolean)
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) || 'DV';
+  const initials =
+    fullName
+      .split(" ")
+      .filter(Boolean)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "DV";
 
   const memberSince = dbUser?.createdAt
-    ? new Date(dbUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    : 'January 2026';
+    ? new Date(dbUser.createdAt).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    : "January 2026";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image size must be less than 5MB');
+      toast.error("Image size must be less than 5MB");
       return;
     }
 
@@ -130,7 +141,7 @@ export const ProfilePage: React.FC = () => {
         setUser({ ...user, avatarUrl: dataUrl });
       }
       setIsAvatarModalOpen(false);
-      toast.success('Sacred profile photo updated successfully!');
+      toast.success("Sacred profile photo updated successfully!");
     };
     reader.readAsDataURL(file);
   };
@@ -142,7 +153,7 @@ export const ProfilePage: React.FC = () => {
       setUser({ ...user, avatarUrl: undefined });
     }
     setIsAvatarModalOpen(false);
-    toast.success('Profile picture removed successfully.');
+    toast.success("Profile picture removed successfully.");
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -154,7 +165,9 @@ export const ProfilePage: React.FC = () => {
     });
 
     if (!parseResult.success) {
-      toast.error(parseResult.error.errors[0]?.message || 'Invalid profile information.');
+      toast.error(
+        parseResult.error.errors[0]?.message || "Invalid profile information.",
+      );
       return;
     }
 
@@ -165,19 +178,19 @@ export const ProfilePage: React.FC = () => {
       if (res.success && res.data) {
         setUser(res.data);
         setIsEditing(false);
-        toast.success('Your profile name has been updated successfully!');
+        toast.success("Your profile name has been updated successfully!");
       } else {
-        toast.error(res.message || 'Failed to update profile.');
+        toast.error(res.message || "Failed to update profile.");
       }
     } catch {
-      toast.error('An error occurred while updating profile.');
+      toast.error("An error occurred while updating profile.");
     } finally {
       setIsSavingProfile(false);
     }
   };
 
   const handleCancelEdit = () => {
-    setFullName(user?.name || dbUser?.name || '');
+    setFullName(user?.name || dbUser?.name || "");
     setIsEditing(false);
   };
 
@@ -191,14 +204,16 @@ export const ProfilePage: React.FC = () => {
     });
 
     if (!parseResult.success) {
-      toast.error(parseResult.error.errors[0]?.message || 'Invalid password format.');
+      toast.error(
+        parseResult.error.errors[0]?.message || "Invalid password format.",
+      );
       return;
     }
 
     setIsUpdatingPassword(true);
     try {
       const res = await mockResetPassword({
-        otp: '123456',
+        otp: "123456",
         newPassword: parseResult.data.newPassword,
         confirmPassword: parseResult.data.confirmPassword,
       });
@@ -207,15 +222,15 @@ export const ProfilePage: React.FC = () => {
         if (dbUser) {
           dbUser.password = newPassword;
         }
-        toast.success('Password changed successfully. Your account is secure.');
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
+        toast.success("Password changed successfully. Your account is secure.");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
       } else {
-        toast.error(res.message || 'Failed to update password.');
+        toast.error(res.message || "Failed to update password.");
       }
     } catch {
-      toast.error('Error updating password. Please try again.');
+      toast.error("Error updating password. Please try again.");
     } finally {
       setIsUpdatingPassword(false);
     }
@@ -238,11 +253,14 @@ export const ProfilePage: React.FC = () => {
           <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
             <DialogHeader>
               <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
-                <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+                <span className="text-amber-600 font-serif font-black text-xl">
+                  ॐ
+                </span>
                 <span>Devotee Profile Picture</span>
               </DialogTitle>
               <DialogDescription className="text-xs text-stone-600">
-                Upload a clear photo for your profile or reset to default initials.
+                Upload a clear photo for your profile or reset to default
+                initials.
               </DialogDescription>
             </DialogHeader>
 
@@ -250,14 +268,20 @@ export const ProfilePage: React.FC = () => {
               <div className="p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm">
                 <Avatar className="w-28 h-28 border-2 border-white">
                   {avatarUrl ? (
-                    <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />
+                    <AvatarImage
+                      src={avatarUrl}
+                      alt={fullName}
+                      className="object-cover"
+                    />
                   ) : null}
                   <AvatarFallback className="bg-[#780016] text-white font-serif text-3xl font-bold">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <p className="text-xs text-stone-500 font-medium">Supported formats: JPG, PNG, WEBP (Max 5MB)</p>
+              <p className="text-xs text-stone-500 font-medium">
+                Supported formats: JPG, PNG, WEBP (Max 5MB)
+              </p>
             </div>
 
             <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
@@ -271,7 +295,9 @@ export const ProfilePage: React.FC = () => {
                   <Trash2 className="w-4 h-4 mr-2" />
                   Remove Photo
                 </Button>
-              ) : <div />}
+              ) : (
+                <div />
+              )}
 
               <div className="flex gap-2 w-full sm:w-auto">
                 <Button
@@ -299,14 +325,17 @@ export const ProfilePage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-5 sm:p-7 rounded-xl border-2 border-amber-300 bg-white shadow-sm">
           <div className="space-y-1.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">
-              <span className="text-sm font-serif font-black leading-none">ॐ</span>
+              <span className="text-sm font-serif font-black leading-none">
+                ॐ
+              </span>
               <span>Devotee Sanctuary Profile</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
               Devotee Settings
             </h1>
             <p className="text-xs sm:text-sm text-stone-600">
-              Manage your personal information, verified communication channels, and security credentials.
+              Manage your personal information, verified communication channels,
+              and security credentials.
             </p>
           </div>
 
@@ -322,9 +351,7 @@ export const ProfilePage: React.FC = () => {
               </Button>
             </Link>
             <Link to="/user/bookings" className="w-full sm:w-auto">
-              <Button
-                className="w-full sm:w-auto bg-[#780016] hover:bg-red-800 text-white border border-amber-400 h-11 px-4 text-xs font-bold rounded-md shadow-xs transition-all flex items-center justify-center cursor-pointer"
-              >
+              <Button className="w-full sm:w-auto bg-[#780016] hover:bg-red-800 text-white border border-amber-400 h-11 px-4 text-xs font-bold rounded-md shadow-xs transition-all flex items-center justify-center cursor-pointer">
                 <BookOpen className="w-4 h-4 mr-1.5 text-amber-300" />
                 <span>Puja Bookings</span>
               </Button>
@@ -346,7 +373,11 @@ export const ProfilePage: React.FC = () => {
                 >
                   <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-white">
                     {avatarUrl ? (
-                      <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />
+                      <AvatarImage
+                        src={avatarUrl}
+                        alt={fullName}
+                        className="object-cover"
+                      />
                     ) : null}
                     <AvatarFallback className="bg-[#780016] text-white font-serif text-2xl font-bold">
                       {initials}
@@ -356,11 +387,16 @@ export const ProfilePage: React.FC = () => {
                   {/* Camera Overlay on Hover */}
                   <div className="absolute inset-1 rounded-full bg-stone-950/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <Camera className="w-5 h-5 mb-0.5" />
-                    <span className="text-[9px] font-bold tracking-wide uppercase">Edit</span>
+                    <span className="text-[9px] font-bold tracking-wide uppercase">
+                      Edit
+                    </span>
                   </div>
                 </button>
 
-                <div className="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full p-1 border-2 border-white shadow-xs pointer-events-none" title="Active Devotee">
+                <div
+                  className="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full p-1 border-2 border-white shadow-xs pointer-events-none"
+                  title="Active Devotee"
+                >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -368,24 +404,37 @@ export const ProfilePage: React.FC = () => {
               {/* Devotee Info */}
               <div className="space-y-1.5 flex-1">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-950">{fullName}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-950">
+                    {fullName}
+                  </h2>
                   <Badge className="bg-[#780016] text-white border border-amber-400 text-xs font-bold">
                     Devotee
                   </Badge>
-                  <Badge variant="outline" className="border-emerald-500 text-emerald-800 bg-emerald-50 text-xs font-bold">
+                  <Badge
+                    variant="outline"
+                    className="border-emerald-500 text-emerald-800 bg-emerald-50 text-xs font-bold"
+                  >
                     Active
                   </Badge>
                 </div>
 
                 {/* Verified Contact Badges */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs text-stone-600 pt-1">
-                  <div className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200" title="Verified Mobile">
+                  <div
+                    className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200"
+                    title="Verified Mobile"
+                  >
                     <Phone className="w-3.5 h-3.5 text-amber-600" />
-                    <span className="font-mono font-bold text-stone-900">{phoneNumber}</span>
+                    <span className="font-mono font-bold text-stone-900">
+                      {phoneNumber}
+                    </span>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
                   </div>
 
-                  <div className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200" title="Verified Email">
+                  <div
+                    className="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-sm border border-stone-200"
+                    title="Verified Email"
+                  >
                     <Mail className="w-3.5 h-3.5 text-amber-600" />
                     <span className="font-medium text-stone-900">{email}</span>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
@@ -454,7 +503,8 @@ export const ProfilePage: React.FC = () => {
                 Devotee Trust Status
               </span>
               <span className="text-base font-bold text-emerald-700 mt-1 flex items-center gap-1">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Verified Member
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Verified
+                Member
               </span>
             </div>
           </div>
@@ -480,12 +530,18 @@ export const ProfilePage: React.FC = () => {
           </TabsList>
 
           {/* TAB 1: Personal Details */}
-          <TabsContent value="personal" className="space-y-6 focus-visible:outline-none">
+          <TabsContent
+            value="personal"
+            className="space-y-6 focus-visible:outline-none"
+          >
             <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
               <div className="space-y-1">
-                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Personal Information</h3>
+                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">
+                  Personal Information
+                </h3>
                 <p className="text-xs text-stone-600">
-                  Your primary profile details used during ritual bookings and Purohit coordination.
+                  Your primary profile details used during ritual bookings and
+                  Purohit coordination.
                 </p>
               </div>
 
@@ -493,8 +549,12 @@ export const ProfilePage: React.FC = () => {
                 <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
                   {/* Full Name */}
                   <div className="flex-1 space-y-2">
-                    <Label htmlFor="fullName" className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                      Full Name {isEditing && <span className="text-red-700">*</span>}
+                    <Label
+                      htmlFor="fullName"
+                      className="text-xs font-bold uppercase tracking-wider text-stone-700"
+                    >
+                      Full Name{" "}
+                      {isEditing && <span className="text-red-700">*</span>}
                     </Label>
                     {isEditing ? (
                       <Input
@@ -502,7 +562,7 @@ export const ProfilePage: React.FC = () => {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Aditi Sharma"
-                        className="h-11 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs font-medium"
+                        className="h-11 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs font-medium"
                         required
                       />
                     ) : (
@@ -520,7 +580,8 @@ export const ProfilePage: React.FC = () => {
                         Email Address
                       </Label>
                       <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-0.5">
-                        <ShieldCheck className="w-3 h-3 text-emerald-600" /> Verified
+                        <ShieldCheck className="w-3 h-3 text-emerald-600" />{" "}
+                        Verified
                       </span>
                     </div>
                     <div className="p-3.5 bg-stone-100 rounded-md border border-stone-200 text-sm text-stone-700 font-medium flex items-center justify-between cursor-not-allowed">
@@ -537,7 +598,8 @@ export const ProfilePage: React.FC = () => {
                       Primary Mobile Number
                     </Label>
                     <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-0.5">
-                      <ShieldCheck className="w-3 h-3 text-emerald-600" /> OTP Verified
+                      <ShieldCheck className="w-3 h-3 text-emerald-600" /> OTP
+                      Verified
                     </span>
                   </div>
                   <div className="p-3.5 bg-stone-100 rounded-md border border-stone-200 text-sm font-mono font-bold text-stone-900 flex items-center justify-between cursor-not-allowed">
@@ -548,7 +610,12 @@ export const ProfilePage: React.FC = () => {
 
                 {isEditing && (
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t border-stone-200">
-                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto h-10 px-5 text-xs rounded-md">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCancelEdit}
+                      className="w-full sm:w-auto h-10 px-5 text-xs rounded-md"
+                    >
                       Cancel
                     </Button>
                     <Button
@@ -557,7 +624,9 @@ export const ProfilePage: React.FC = () => {
                       className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-6 text-xs rounded-md shadow-xs cursor-pointer puja-btn-tap"
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      {isSavingProfile ? 'Saving Changes...' : 'Save Profile Changes'}
+                      {isSavingProfile
+                        ? "Saving Changes..."
+                        : "Save Profile Changes"}
                     </Button>
                   </div>
                 )}
@@ -566,19 +635,33 @@ export const ProfilePage: React.FC = () => {
           </TabsContent>
 
           {/* TAB 2: Security & Passwords */}
-          <TabsContent value="security" className="space-y-6 focus-visible:outline-none">
+          <TabsContent
+            value="security"
+            className="space-y-6 focus-visible:outline-none"
+          >
             <div className="rounded-xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-6">
               <div className="space-y-1">
-                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">Security & Credentials</h3>
+                <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900">
+                  Security & Credentials
+                </h3>
                 <p className="text-xs text-stone-600">
-                  Update your account password and review device authentication protection.
+                  Update your account password and review device authentication
+                  protection.
                 </p>
               </div>
 
-              <form onSubmit={handleUpdatePassword} className="space-y-5 max-w-xl">
+              <form
+                onSubmit={handleUpdatePassword}
+                className="space-y-5 max-w-xl"
+              >
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="currentPassword" className="text-xs font-bold text-stone-800">Current Password</Label>
+                    <Label
+                      htmlFor="currentPassword"
+                      className="text-xs font-bold text-stone-800"
+                    >
+                      Current Password
+                    </Label>
                     <div className="relative">
                       <Input
                         id="currentPassword"
@@ -586,7 +669,7 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
@@ -594,7 +677,12 @@ export const ProfilePage: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="newPassword" className="text-xs font-bold text-stone-800">New Password</Label>
+                    <Label
+                      htmlFor="newPassword"
+                      className="text-xs font-bold text-stone-800"
+                    >
+                      New Password
+                    </Label>
                     <div className="relative">
                       <Input
                         id="newPassword"
@@ -602,18 +690,24 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <KeyRound className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
                     </div>
                     <p className="text-[11px] text-stone-500">
-                      Must be at least 8 characters long with uppercase, lowercase, and special characters.
+                      Must be at least 8 characters long with uppercase,
+                      lowercase, and special characters.
                     </p>
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="confirmPassword" className="text-xs font-bold text-stone-800">Confirm New Password</Label>
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-xs font-bold text-stone-800"
+                    >
+                      Confirm New Password
+                    </Label>
                     <div className="relative">
                       <Input
                         id="confirmPassword"
@@ -621,7 +715,7 @@ export const ProfilePage: React.FC = () => {
                         placeholder="••••••••"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white text-xs"
+                        className="pr-10 h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white text-xs"
                         required
                       />
                       <Lock className="w-4 h-4 absolute right-3 top-3 text-stone-400" />
@@ -635,7 +729,9 @@ export const ProfilePage: React.FC = () => {
                     Account Credential Protection
                   </div>
                   <p className="text-[11px] leading-relaxed">
-                    All credentials are encrypted with bank-grade security protocols. You will remain logged in on this device after updating.
+                    All credentials are encrypted with bank-grade security
+                    protocols. You will remain logged in on this device after
+                    updating.
                   </p>
                 </div>
 
@@ -645,7 +741,9 @@ export const ProfilePage: React.FC = () => {
                   className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-11 px-6 text-xs rounded-md shadow-xs cursor-pointer puja-btn-tap"
                 >
                   <Lock className="w-4 h-4 mr-2" />
-                  {isUpdatingPassword ? 'Updating Password...' : 'Update Password'}
+                  {isUpdatingPassword
+                    ? "Updating Password..."
+                    : "Update Password"}
                 </Button>
               </form>
             </div>
@@ -665,7 +763,8 @@ export const ProfilePage: React.FC = () => {
                     Manage Puja Locations
                   </h3>
                   <p className="text-xs text-stone-600">
-                    {addressCount} saved location{addressCount !== 1 ? 's' : ''} for home ceremonies
+                    {addressCount} saved location{addressCount !== 1 ? "s" : ""}{" "}
+                    for home ceremonies
                   </p>
                 </div>
               </div>
@@ -684,7 +783,8 @@ export const ProfilePage: React.FC = () => {
                     Ceremony Bookings & History
                   </h3>
                   <p className="text-xs text-stone-600">
-                    {bookingCount} past & upcoming Vedic ritual{bookingCount !== 1 ? 's' : ''}
+                    {bookingCount} past & upcoming Vedic ritual
+                    {bookingCount !== 1 ? "s" : ""}
                   </p>
                 </div>
               </div>

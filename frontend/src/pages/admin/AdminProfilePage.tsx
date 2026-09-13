@@ -200,11 +200,14 @@ export const AdminProfilePage: React.FC = () => {
         <DialogContent className="sm:max-w-md p-6 rounded-lg bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
-              <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+              <span className="text-amber-600 font-serif font-black text-xl">
+                ॐ
+              </span>
               <span>Administrator Profile Picture</span>
             </DialogTitle>
             <DialogDescription className="text-xs text-stone-600">
-              Upload a photo for your admin operations profile or reset to default initials.
+              Upload a photo for your admin operations profile or reset to
+              default initials.
             </DialogDescription>
           </DialogHeader>
 
@@ -279,7 +282,8 @@ export const AdminProfilePage: React.FC = () => {
               Admin Profile & Platform Credentials
             </h1>
             <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-              Manage your administrator authority account details, security credentials, and profile picture.
+              Manage your administrator authority account details, security
+              credentials, and profile picture.
             </p>
           </div>
         </div>
@@ -319,13 +323,13 @@ export const AdminProfilePage: React.FC = () => {
               <h2 className="text-xl font-bold font-serif text-stone-950">
                 {fullName}
               </h2>
-              <Badge
-                className="bg-[#450A0A] text-amber-300 border border-amber-400/40 text-[10px] font-bold tracking-wider uppercase"
-              >
+              <Badge className="bg-[#450A0A] text-amber-300 border border-amber-400/40 text-[10px] font-bold tracking-wider uppercase">
                 PLATFORM AUTHORITY
               </Badge>
             </div>
-            <p className="text-xs font-mono text-stone-600 font-medium">{adminEmail}</p>
+            <p className="text-xs font-mono text-stone-600 font-medium">
+              {adminEmail}
+            </p>
             <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-stone-500 pt-1 font-medium">
               <Calendar className="w-3.5 h-3.5 text-stone-400" />
               <span>Console Account Created: {joinedDate}</span>
@@ -345,12 +349,16 @@ export const AdminProfilePage: React.FC = () => {
             </h3>
           </div>
           <p className="text-xs text-stone-600">
-            Update your full name. Email address and phone number are locked for administrative security.
+            Update your full name. Email address and phone number are locked for
+            administrative security.
           </p>
 
           <form onSubmit={handleSaveProfile} className="space-y-4 pt-1">
             <div className="space-y-1">
-              <Label htmlFor="admin-fullname" className="text-xs font-bold text-stone-800 block">
+              <Label
+                htmlFor="admin-fullname"
+                className="text-xs font-bold text-stone-800 block"
+              >
                 Full Name *
               </Label>
               <div className="relative">
@@ -360,7 +368,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
                   placeholder="Enter full name"
                   required
                 />
@@ -369,7 +377,10 @@ export const AdminProfilePage: React.FC = () => {
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <Label htmlFor="admin-email" className="text-xs font-bold text-stone-800">
+                <Label
+                  htmlFor="admin-email"
+                  className="text-xs font-bold text-stone-800"
+                >
                   Email Address
                 </Label>
                 <span className="text-[10px] text-stone-500 flex items-center gap-1 font-bold">
@@ -390,7 +401,10 @@ export const AdminProfilePage: React.FC = () => {
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <Label htmlFor="admin-phone" className="text-xs font-bold text-stone-800">
+                <Label
+                  htmlFor="admin-phone"
+                  className="text-xs font-bold text-stone-800"
+                >
                   Phone Number
                 </Label>
                 <span className="text-[10px] text-stone-500 flex items-center gap-1 font-bold">
@@ -430,12 +444,16 @@ export const AdminProfilePage: React.FC = () => {
             </h3>
           </div>
           <p className="text-xs text-stone-600">
-            Update your administrator console login password regularly to protect system records.
+            Update your administrator console login password regularly to
+            protect system records.
           </p>
 
           <form onSubmit={handleUpdatePassword} className="space-y-4 pt-1">
             <div className="space-y-1">
-              <Label htmlFor="current-pass" className="text-xs font-bold text-stone-800 block">
+              <Label
+                htmlFor="current-pass"
+                className="text-xs font-bold text-stone-800 block"
+              >
                 Current Password *
               </Label>
               <div className="relative">
@@ -445,7 +463,7 @@ export const AdminProfilePage: React.FC = () => {
                   type={showCurrentPassword ? "text" : "password"}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
                   placeholder="Enter current password"
                 />
                 <button
@@ -463,7 +481,10 @@ export const AdminProfilePage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="new-pass" className="text-xs font-bold text-stone-800 block">
+              <Label
+                htmlFor="new-pass"
+                className="text-xs font-bold text-stone-800 block"
+              >
                 New Password *
               </Label>
               <div className="relative">
@@ -473,7 +494,7 @@ export const AdminProfilePage: React.FC = () => {
                   type={showNewPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 pr-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
                   placeholder="Enter at least 6 characters"
                 />
                 <button
@@ -491,7 +512,10 @@ export const AdminProfilePage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="confirm-pass" className="text-xs font-bold text-stone-800 block">
+              <Label
+                htmlFor="confirm-pass"
+                className="text-xs font-bold text-stone-800 block"
+              >
                 Confirm New Password *
               </Label>
               <div className="relative">
@@ -501,7 +525,7 @@ export const AdminProfilePage: React.FC = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 focus:ring-amber-500 bg-white"
+                  className="pl-10 text-xs h-10 rounded-md border-stone-300 focus:ring-amber-500 bg-white"
                   placeholder="Re-enter new password"
                 />
               </div>
