@@ -40,15 +40,15 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
   isProcessing = false,
 }) => {
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <div className="rounded-2xl border border-amber-300/80 bg-white overflow-hidden shadow-xs">
       <Table>
         <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead className="text-xs">Purohit / Identity</TableHead>
-            <TableHead className="text-xs">Location</TableHead>
-            <TableHead className="text-xs">Experience</TableHead>
-            <TableHead className="text-xs">Verification & Status</TableHead>
-            <TableHead className="text-xs text-right">Actions</TableHead>
+          <TableRow className="bg-amber-50/70 border-b border-amber-200/80 hover:bg-amber-50/70">
+            <TableHead className="text-xs font-bold text-stone-900 py-3.5 pl-5">Purohit / Identity</TableHead>
+            <TableHead className="text-xs font-bold text-stone-900 py-3.5">Location</TableHead>
+            <TableHead className="text-xs font-bold text-stone-900 py-3.5">Experience</TableHead>
+            <TableHead className="text-xs font-bold text-stone-900 py-3.5">Verification & Status</TableHead>
+            <TableHead className="text-xs font-bold text-stone-900 py-3.5 pr-4 text-right w-60">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -56,30 +56,30 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
             const isBanned = p.accountStatus === 'BANNED';
 
             return (
-              <TableRow key={p.id} className="text-xs">
-                <TableCell className="font-medium">
+              <TableRow key={p.id} className="text-xs border-b border-stone-100 hover:bg-amber-50/30 transition-colors">
+                <TableCell className="font-medium py-3.5 pl-5">
                   <div>
-                    <p className="font-bold text-foreground">{p.fullName}</p>
-                    <p className="text-[11px] text-muted-foreground font-mono">{p.phoneNumber}</p>
+                    <p className="font-bold text-stone-950 font-serif text-sm">{p.fullName}</p>
+                    <p className="text-[11px] text-stone-500 font-mono mt-0.5">{p.phoneNumber}</p>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
+                <TableCell className="py-3.5">
+                  <div className="flex items-center gap-1.5 text-stone-700">
+                    <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                     <span>
                       {p.city}, {p.state}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <span>{p.experienceYears || 5}+ yrs</span>
+                <TableCell className="py-3.5">
+                  <span className="font-semibold text-stone-800">{p.experienceYears || 5}+ yrs</span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="py-3.5">
                   <div className="flex flex-wrap items-center gap-1.5">
                     {p.approvalStatus === 'APPROVED' && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] bg-emerald-500/10 text-emerald-700 border-emerald-300"
+                        className="text-[10px] font-bold bg-emerald-50 text-emerald-800 border-emerald-300"
                       >
                         Approved
                       </Badge>
@@ -87,7 +87,7 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                     {p.approvalStatus === 'PENDING' && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] bg-amber-500/10 text-amber-700 border-amber-300"
+                        className="text-[10px] font-bold bg-amber-50 text-amber-800 border-amber-300"
                       >
                         Pending Review
                       </Badge>
@@ -95,73 +95,86 @@ export const PriestApprovalTable: React.FC<PriestApprovalTableProps> = ({
                     {p.approvalStatus === 'REJECTED' && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] bg-destructive/10 text-destructive border-destructive/30"
+                        className="text-[10px] font-bold bg-red-50 text-red-800 border-red-300"
                       >
                         Rejected
                       </Badge>
                     )}
                     {isBanned && (
                       <Badge
-                        variant="destructive"
-                        className="text-[10px] uppercase font-bold"
+                        className="text-[10px] uppercase font-bold bg-red-800 text-white hover:bg-red-800"
                       >
                         Banned
                       </Badge>
                     )}
                   </div>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1.5">
-                    <Link to={`/admin/priests/${p.id}`}>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" title="View Dossier">
-                        <Eye className="w-4 h-4 text-muted-foreground" />
+                <TableCell className="text-right py-3.5 pr-4 w-60">
+                  <div className="flex items-center justify-end gap-2 min-h-8">
+                    {/* Quick Actions Slot — fixed width so Eye & Dots always align */}
+                    <div className="min-w-[152px] flex items-center justify-end">
+                      {p.approvalStatus === 'PENDING' && (
+                        <div className="flex items-center gap-1.5">
+                          <Button
+                            size="sm"
+                            onClick={() => onApprove(p.id)}
+                            disabled={isProcessing}
+                            className="h-8 text-xs px-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-1 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                            Approve
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onOpenReject(p)}
+                            disabled={isProcessing}
+                            className="h-8 text-xs px-2.5 text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300 font-bold gap-1 rounded-xl cursor-pointer puja-btn-tap"
+                          >
+                            <XCircle className="w-3.5 h-3.5" />
+                            Reject
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* View Dossier (Eye) - Stays in the exact same vertical line for every row */}
+                    <Link to={`/admin/priests/${p.id}`} className="shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 rounded-lg hover:bg-amber-100/70 hover:text-stone-900 cursor-pointer"
+                        title="View Dossier"
+                      >
+                        <Eye className="w-4 h-4 text-stone-500 hover:text-stone-800" />
                       </Button>
                     </Link>
 
-                    {p.approvalStatus === 'PENDING' && (
-                      <>
-                        <Button
-                          size="sm"
-                          onClick={() => onApprove(p.id)}
-                          disabled={isProcessing}
-                          className="h-7 text-xs px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
-                        >
-                          <Check className="w-3.5 h-3.5" />
-                          Approve
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onOpenReject(p)}
-                          disabled={isProcessing}
-                          className="h-7 text-xs px-2.5 text-destructive hover:text-destructive border-destructive/30 gap-1"
-                        >
-                          <XCircle className="w-3.5 h-3.5" />
-                          Reject
-                        </Button>
-                      </>
-                    )}
-
+                    {/* More Actions (Vertical Dots) - Stays in the exact same vertical line for every row */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 rounded-lg hover:bg-amber-100/70 text-stone-500 hover:text-stone-800 cursor-pointer shrink-0"
+                        >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44 text-xs">
+                      <DropdownMenuContent align="end" className="w-44 text-xs rounded-xl border-amber-200 shadow-md">
                         {isBanned ? (
-                          <DropdownMenuItem onClick={() => onUnban(p.id)} className="gap-2 text-emerald-700">
+                          <DropdownMenuItem onClick={() => onUnban(p.id)} className="gap-2 text-emerald-700 font-medium cursor-pointer">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             Unban Priest
                           </DropdownMenuItem>
                         ) : (
-                          <DropdownMenuItem onClick={() => onOpenBan(p)} className="gap-2 text-destructive">
+                          <DropdownMenuItem onClick={() => onOpenBan(p)} className="gap-2 text-red-700 font-medium cursor-pointer">
                             <Ban className="w-3.5 h-3.5" />
                             Ban Priest
                           </DropdownMenuItem>
                         )}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => onOpenDelete(p)} className="gap-2 text-destructive">
+                        <DropdownMenuSeparator className="bg-stone-100" />
+                        <DropdownMenuItem onClick={() => onOpenDelete(p)} className="gap-2 text-red-700 font-medium cursor-pointer">
                           <Trash2 className="w-3.5 h-3.5" />
                           Delete Record
                         </DropdownMenuItem>

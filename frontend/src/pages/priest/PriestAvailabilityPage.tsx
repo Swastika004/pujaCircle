@@ -5,7 +5,6 @@ import { bookingApi } from '@/api/booking.api';
 import { PriestSlot } from '@/types/priest.types';
 import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AddSlotModal } from '@/components/priest/AddSlotModal';
 import { PriestBookingDetailsDialog } from '@/components/priest/PriestBookingDetailsDialog';
@@ -18,11 +17,15 @@ import {
   Calendar as CalendarIcon,
   CheckCircle2,
   ExternalLink,
-
   CalendarDays,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+/**
+ * PriestAvailabilityPage
+ * Purohit Muhurat and date slot manager.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
 export const PriestAvailabilityPage: React.FC = () => {
   const { user } = useAuthStore();
   const priestId = user?.id === 'user-priest-1' ? 'priest-1' : user?.id || 'priest-1';
@@ -38,8 +41,6 @@ export const PriestAvailabilityPage: React.FC = () => {
   const [editingSlot, setEditingSlot] = useState<PriestSlot | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-
-
 
   const fetchSlotsAndBookings = async () => {
     try {
@@ -142,7 +143,6 @@ export const PriestAvailabilityPage: React.FC = () => {
 
   // Separate upcoming and past slots
   const upcomingSlots = slots.filter((s) => (s.slotDate || s.date || '') >= todayStr);
-  const pastSlots = slots.filter((s) => (s.slotDate || s.date || '') < todayStr);
 
   // Group upcoming slots by date
   const groupedUpcoming: Record<string, PriestSlot[]> = {};
@@ -154,18 +154,7 @@ export const PriestAvailabilityPage: React.FC = () => {
     groupedUpcoming[d].push(slot);
   });
 
-  // Group past slots by date
-  const groupedPast: Record<string, PriestSlot[]> = {};
-  pastSlots.forEach((slot) => {
-    const d = slot.slotDate || slot.date || '';
-    if (!groupedPast[d]) {
-      groupedPast[d] = [];
-    }
-    groupedPast[d].push(slot);
-  });
-
   const upcomingDates = Object.keys(groupedUpcoming).sort();
-
 
   // Metrics
   const totalUpcomingCount = upcomingSlots.length;
@@ -173,17 +162,21 @@ export const PriestAvailabilityPage: React.FC = () => {
   const bookedUpcomingCount = upcomingSlots.filter((s) => s.status === 'BOOKED').length;
 
   return (
-    <div className="space-y-8 max-w-5xl">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-foreground flex items-center gap-2.5">
-            <Clock className="h-7 w-7 text-primary shrink-0" />
-            <span>Availability Management</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Set your specific date & time availability for devotees to book auspicious ceremonies.
-          </p>
+    <div className="space-y-8 w-full max-w-7xl text-stone-900 pb-12">
+      {/* Page Header (100% Flexbox) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+            ॐ
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Availability & Muhurat Slots
+            </h1>
+            <p className="text-xs text-stone-600 mt-1 leading-relaxed">
+              Set your specific auspicious date and time windows for devotees to book home ceremonies.
+            </p>
+          </div>
         </div>
 
         <Button
@@ -191,78 +184,78 @@ export const PriestAvailabilityPage: React.FC = () => {
             setEditingSlot(null);
             setIsAddModalOpen(true);
           }}
-          className="gap-2 text-xs sm:text-sm h-10 px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shrink-0"
+          className="gap-2 text-xs sm:text-sm h-11 px-5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl shadow-xs cursor-pointer shrink-0 puja-btn-tap"
         >
           <Plus className="h-4 w-4" />
-          <span>Add Availability</span>
+          <span>Add Availability Slot</span>
         </Button>
       </div>
 
-      {/* Metrics Summary Banner */}
-      <div className="grid grid-cols-3 gap-3">
-        <Card className="border-border/80 bg-card p-4 shadow-2xs">
+      {/* Metrics Summary Deck (100% Flexbox, Zero CSS Grids) */}
+      <div className="flex flex-wrap gap-4 w-full">
+        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 bg-white shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-              Total Upcoming
+            <span className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">
+              Total Upcoming Slots
             </span>
-            <CalendarDays className="h-4 w-4 text-muted-foreground/60" />
+            <CalendarDays className="h-4 w-4 text-stone-400" />
           </div>
-          <div className="text-2xl font-bold font-serif text-foreground mt-1">
+          <div className="text-3xl font-extrabold font-serif text-stone-900 mt-2">
             {totalUpcomingCount}
           </div>
-        </Card>
+        </div>
 
-        <Card className="border-border/80 bg-card p-4 shadow-2xs">
+        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 border-t-4 border-t-emerald-600 bg-white shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              Available Slots
+            <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
+              Open For Booking
             </span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
           </div>
-          <div className="text-2xl font-bold font-serif text-emerald-600 dark:text-emerald-400 mt-1">
+          <div className="text-3xl font-extrabold font-serif text-emerald-700 mt-2">
             {availableUpcomingCount}
           </div>
-        </Card>
+        </div>
 
-        <Card className="border-border/80 bg-card p-4 shadow-2xs">
+        <div className="flex-1 min-w-55 p-5 rounded-2xl border-2 border-amber-300 border-t-4 border-t-red-700 bg-white shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-primary uppercase tracking-wider">
-              Booked Ceremonies
+            <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">
+              Confirmed Booked
             </span>
-            <Clock className="h-4 w-4 text-primary" />
+            <Clock className="h-4 w-4 text-red-700" />
           </div>
-          <div className="text-2xl font-bold font-serif text-primary mt-1">
+          <div className="text-3xl font-extrabold font-serif text-red-700 mt-2">
             {bookedUpcomingCount}
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* SECTION 1: UPCOMING AVAILABILITY */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between pb-1 border-b border-border/60">
+      <div className="space-y-5">
+        <div className="flex items-center justify-between pb-2 border-b-2 border-amber-200">
           <div>
-            <h2 className="text-lg font-bold font-serif text-foreground flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4 text-primary" />
-              <span>Upcoming Availability</span>
+            <h2 className="text-lg font-extrabold font-serif text-stone-950 flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-red-700" />
+              <span>Upcoming Muhurat Availability</span>
             </h2>
-            <p className="text-xs text-muted-foreground">
-              Dates and time windows currently open or reserved on your schedule.
+            <p className="text-xs text-stone-600">
+              Dates and time windows currently open or reserved on your sacred schedule.
             </p>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="py-16 text-center text-xs text-muted-foreground">
+          <div className="py-16 text-center text-xs text-stone-500 font-medium">
             Loading your availability calendar...
           </div>
         ) : upcomingDates.length === 0 ? (
-          <Card className="border-dashed border-border/80 p-10 text-center bg-card">
+          <div className="border-2 border-dashed border-amber-300 rounded-3xl p-10 text-center bg-white">
             <div className="max-w-md mx-auto space-y-3">
-              <div className="h-12 w-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
-                <CalendarIcon className="h-6 w-6" />
+              <div className="h-12 w-12 rounded-2xl bg-amber-100 text-amber-800 border border-amber-300 mx-auto flex items-center justify-center">
+                <CalendarIcon className="h-6 w-6 text-amber-700" />
               </div>
-              <h3 className="font-serif font-bold text-base text-foreground">No Upcoming Availability Set</h3>
-              <p className="text-xs text-muted-foreground">
+              <h3 className="font-serif font-bold text-base text-stone-900">No Upcoming Availability Set</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
                 You haven't listed any availability slots yet. Add your available dates and hours so devotees can request bookings.
               </p>
               <Button
@@ -270,12 +263,12 @@ export const PriestAvailabilityPage: React.FC = () => {
                   setEditingSlot(null);
                   setIsAddModalOpen(true);
                 }}
-                className="gap-2 text-xs h-9 mt-2 bg-primary text-primary-foreground"
+                className="gap-2 text-xs h-10 px-5 mt-2 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 rounded-xl cursor-pointer puja-btn-tap"
               >
                 <Plus className="h-4 w-4" /> Add Your First Slot
               </Button>
             </div>
-          </Card>
+          </div>
         ) : (
           <div className="space-y-6">
             {upcomingDates.map((dateStr) => {
@@ -286,103 +279,93 @@ export const PriestAvailabilityPage: React.FC = () => {
                 <div key={dateStr} className="space-y-3">
                   {/* Date Heading */}
                   <div className="flex items-center gap-2.5">
-                    <span className="h-2 w-2 rounded-full bg-primary" />
-                    <h3 className="text-sm font-bold font-serif text-foreground">
+                    <span className="h-2 w-2 rounded-full bg-red-700" />
+                    <h3 className="text-sm font-bold font-serif text-stone-900">
                       {formatFullDate(dateStr)}
                     </h3>
                     {isToday && (
-                      <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30">
+                      <Badge variant="outline" className="text-[10px] bg-red-50 text-red-800 border-red-300 font-bold">
                         Today
                       </Badge>
                     )}
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-stone-500">
                       ({daySlots.length} {daySlots.length === 1 ? 'slot' : 'slots'})
                     </span>
                   </div>
 
-                  {/* Slots Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {/* Slots Flexbox (100% Flexbox, Zero CSS Grids) */}
+                  <div className="flex flex-wrap gap-3.5 w-full">
                     {daySlots.map((slot) => {
                       const isAvailable = slot.status === 'AVAILABLE';
 
                       return (
-                        <Card
+                        <div
                           key={slot.id}
-                          className={`border transition-all shadow-2xs ${isAvailable
-                            ? 'bg-card border-border hover:border-emerald-500/40'
-                            : 'bg-primary/5 border-primary/30'
-                            }`}
+                          className={`w-full sm:w-[calc(50%-7px)] lg:w-[calc(33.333%-10px)] p-4 rounded-2xl border-2 transition-all shadow-xs bg-white space-y-3 ${
+                            isAvailable
+                              ? 'border-amber-200 hover:border-emerald-500/60'
+                              : 'border-amber-300 bg-amber-50/20'
+                          }`}
                         >
-                          <CardContent className="p-4 space-y-3">
-                            {/* Time & Status Row */}
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <div className="font-mono text-sm font-bold text-foreground">
-                                  {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
-                                </div>
-                                <span className="text-[11px] text-muted-foreground block mt-0.5">
-                                  Puja Window
-                                </span>
+                          {/* Time & Status Row */}
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="font-mono text-sm font-bold text-stone-950">
+                                {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
                               </div>
-
-                              <Badge
-                                variant="outline"
-                                className={`text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 ${isAvailable
-                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
-                                  : 'bg-primary/15 text-primary border-primary/40'
-                                  }`}
-                              >
-                                {isAvailable ? (
-                                  <span className="flex items-center gap-1.5">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                    AVAILABLE
-                                  </span>
-                                ) : (
-                                  <span className="flex items-center gap-1.5">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                                    BOOKED
-                                  </span>
-                                )}
-                              </Badge>
+                              <span className="text-[11px] text-stone-500 block mt-0.5 font-medium">
+                                Shubh Muhurat Window
+                              </span>
                             </div>
 
-                            {/* Card Footer Actions */}
-                            <div className="pt-2 border-t border-border/50 flex items-center justify-end gap-2">
-                              {isAvailable ? (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => {
-                                      setEditingSlot(slot);
-                                      setIsAddModalOpen(true);
-                                    }}
-                                    className="h-7 px-2.5 text-xs text-muted-foreground hover:text-primary gap-1"
-                                  >
-                                    <Edit2 className="h-3 w-3" /> Edit
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleDeleteSlot(slot)}
-                                    className="h-7 px-2.5 text-xs text-muted-foreground hover:text-destructive gap-1"
-                                  >
-                                    <Trash2 className="h-3 w-3" /> Delete
-                                  </Button>
-                                </>
-                              ) : (
+                            <Badge
+                              variant="outline"
+                              className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                                isAvailable
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                  : 'bg-red-50 text-red-700 border-red-300'
+                              }`}
+                            >
+                              {isAvailable ? 'AVAILABLE' : 'BOOKED'}
+                            </Badge>
+                          </div>
+
+                          {/* Card Footer Actions */}
+                          <div className="pt-2 border-t border-stone-200 flex items-center justify-end gap-2">
+                            {isAvailable ? (
+                              <>
                                 <Button
                                   size="sm"
-                                  variant="outline"
-                                  onClick={() => handleViewBooking(slot)}
-                                  className="h-7 px-3 text-xs gap-1.5 bg-background border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    setEditingSlot(slot);
+                                    setIsAddModalOpen(true);
+                                  }}
+                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-stone-900 gap-1 rounded-lg"
                                 >
-                                  <ExternalLink className="h-3 w-3" /> View Booking
+                                  <Edit2 className="h-3 w-3" /> Edit
                                 </Button>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => handleDeleteSlot(slot)}
+                                  className="h-8 px-2.5 text-xs text-stone-600 hover:text-red-700 gap-1 rounded-lg"
+                                >
+                                  <Trash2 className="h-3 w-3" /> Delete
+                                </Button>
+                              </>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleViewBooking(slot)}
+                                className="h-8 px-3 text-xs gap-1.5 border-amber-300 text-stone-900 hover:bg-amber-50 font-bold rounded-xl"
+                              >
+                                <ExternalLink className="h-3 w-3 text-amber-700" /> View Booking
+                              </Button>
+                            )}
+                          </div>
+                        </div>
                       );
                     })}
                   </div>

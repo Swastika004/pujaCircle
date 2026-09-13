@@ -2,22 +2,22 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { SacredBackground } from '@/components/common/SacredBackground';
 import { Toaster } from '@/components/ui/sonner';
-import { GridBackground } from '@/components/common/GridBackground';
 
 /**
  * PublicLayout
  * Used for the consumer-facing website and standard USER experience.
- * Consists of standard top Header, Main content with shimmering GridBackground, and Footer.
+ * Solid Chandan Silk (#F4ECE1) canvas with animated sacred mandalas and golden sparks.
+ * Zero grid, zero gradient.
  */
 export const PublicLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-background font-sans">
+    <div className="flex min-h-screen flex-col font-sans text-stone-900 relative">
+      <SacredBackground />
       <Header />
-      <main className="flex-1 relative">
-        <GridBackground>
-          <Outlet />
-        </GridBackground>
+      <main className="flex-1 relative z-10">
+        <Outlet />
       </main>
       <Footer />
       <Toaster position="top-right" />

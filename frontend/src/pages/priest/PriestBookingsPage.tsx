@@ -13,7 +13,6 @@ import { CancelBookingDialog } from "@/components/booking/CancelBookingDialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BOOKING_STATUS_CONFIG } from "@/lib/constants";
-import { EmptyState } from "@/components/common/EmptyState";
 import { Search, Calendar, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -21,6 +20,11 @@ import { cn } from "@/lib/utils";
 
 type TabFilter = "PENDING" | "CONFIRMED" | "COMPLETED" | "HISTORY";
 
+/**
+ * PriestBookingsPage
+ * Purohit appointment roster with filterable tabs and direct booking actions.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
 export const PriestBookingsPage: React.FC = () => {
   const { user } = useAuthStore();
   const priestId =
@@ -123,7 +127,6 @@ export const PriestBookingsPage: React.FC = () => {
 
   // Calculate status counts for tab badges
   const counts = {
-
     pending: bookings.filter((b) => b.status === "PENDING").length,
     confirmed: bookings.filter((b) => b.status === "CONFIRMED").length,
     completed: bookings.filter((b) => b.status === "COMPLETED").length,
@@ -133,24 +136,29 @@ export const PriestBookingsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12 max-w-5xl">
+    <div className="space-y-6 pb-12 w-full max-w-7xl text-stone-900">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-foreground">
-            Puja Appointments
-          </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Manage incoming requests, schedules, and ritual completions.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+            ॐ
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Ceremony Appointments
+            </h1>
+            <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
+              Manage incoming requests, confirmed Shubh Muhurat schedules, and log ritual completions.
+            </p>
+          </div>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={fetchBookings}
-          className="gap-1.5 text-xs w-fit"
+          className="gap-1.5 text-xs w-fit h-10 px-4 rounded-xl border-stone-300 hover:border-amber-400 font-bold"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
           Refresh
         </Button>
       </div>
@@ -162,16 +170,16 @@ export const PriestBookingsPage: React.FC = () => {
             value={activeTab}
             onValueChange={(val) => setActiveTab(val as TabFilter)}
           >
-            <TabsList className="inline-flex h-10 items-center justify-start rounded-xl bg-muted/60 p-1 text-muted-foreground border border-border/80 min-w-max gap-1">
+            <TabsList className="inline-flex h-11 items-center justify-start rounded-2xl bg-white p-1 border-2 border-amber-300 min-w-max gap-1.5 shadow-xs">
               <TabsTrigger
                 value="PENDING"
-                className="text-xs px-3 py-1.5 h-8 gap-1.5 rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs font-medium"
+                className="text-xs px-4 py-2 h-9 gap-1.5 rounded-xl data-[state=active]:bg-[#780016] data-[state=active]:text-white font-bold transition-all"
               >
                 <span>Pending</span>
                 {counts.pending > 0 ? (
                   <span
                     className={cn(
-                      "px-1.5 py-0.5 rounded-full text-[10px] font-semibold",
+                      "px-2 py-0.5 rounded-full text-[10px] font-bold",
                       BOOKING_STATUS_CONFIG.PENDING.pillClass,
                     )}
                   >
@@ -182,13 +190,13 @@ export const PriestBookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="CONFIRMED"
-                className="text-xs px-3 py-1.5 h-8 gap-1.5 rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs font-medium"
+                className="text-xs px-4 py-2 h-9 gap-1.5 rounded-xl data-[state=active]:bg-[#780016] data-[state=active]:text-white font-bold transition-all"
               >
                 <span>Confirmed</span>
                 {counts.confirmed > 0 ? (
                   <span
                     className={cn(
-                      "px-1.5 py-0.5 rounded-full text-[10px] font-semibold",
+                      "px-2 py-0.5 rounded-full text-[10px] font-bold",
                       BOOKING_STATUS_CONFIG.CONFIRMED.pillClass,
                     )}
                   >
@@ -199,13 +207,13 @@ export const PriestBookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="COMPLETED"
-                className="text-xs px-3 py-1.5 h-8 gap-1.5 rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs font-medium"
+                className="text-xs px-4 py-2 h-9 gap-1.5 rounded-xl data-[state=active]:bg-[#780016] data-[state=active]:text-white font-bold transition-all"
               >
                 <span>Completed</span>
                 {counts.completed > 0 ? (
                   <span
                     className={cn(
-                      "px-1.5 py-0.5 rounded-full text-[10px] font-semibold",
+                      "px-2 py-0.5 rounded-full text-[10px] font-bold",
                       BOOKING_STATUS_CONFIG.COMPLETED.pillClass,
                     )}
                   >
@@ -216,13 +224,13 @@ export const PriestBookingsPage: React.FC = () => {
 
               <TabsTrigger
                 value="HISTORY"
-                className="text-xs px-3 py-1.5 h-8 gap-1.5 rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs font-medium"
+                className="text-xs px-4 py-2 h-9 gap-1.5 rounded-xl data-[state=active]:bg-[#780016] data-[state=active]:text-white font-bold transition-all"
               >
-                <span>Cancelled</span>
+                <span>Cancelled / Expired</span>
                 {counts.history > 0 ? (
                   <span
                     className={cn(
-                      "px-1.5 py-0.5 rounded-full text-[10px] font-semibold",
+                      "px-2 py-0.5 rounded-full text-[10px] font-bold",
                       BOOKING_STATUS_CONFIG.CANCELLED.pillClass,
                     )}
                   >
@@ -235,19 +243,19 @@ export const PriestBookingsPage: React.FC = () => {
         </div>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <Input
-            placeholder="Search by puja name, user name, or reference ID..."
+            placeholder="Search by puja name, devotee name, or reference ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 text-xs h-9"
+            className="pl-10 text-xs h-11 rounded-2xl border-2 border-stone-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
           />
         </div>
       </div>
 
       {/* Appointment List */}
       {filteredBookings.length > 0 ? (
-        <div className="space-y-3">
+        <div className="space-y-3.5">
           {filteredBookings.map((b) => (
             <PriestBookingRow
               key={b.id}
@@ -264,15 +272,15 @@ export const PriestBookingsPage: React.FC = () => {
           ))}
         </div>
       ) : (
-        <EmptyState
-          icon={Calendar}
-          title="No appointments found"
-          description={
-            searchQuery
+        <div className="p-12 text-center rounded-3xl border-2 border-amber-300 bg-white space-y-3">
+          <Calendar className="h-12 w-12 mx-auto text-amber-500/50" />
+          <h3 className="text-base font-bold font-serif text-stone-900">No Appointments Found</h3>
+          <p className="text-xs text-stone-600">
+            {searchQuery
               ? "No appointments match your search criteria."
-              : "No appointments in this category."
-          }
-        />
+              : "No appointments in this category right now."}
+          </p>
+        </div>
       )}
 
       {/* Modals */}

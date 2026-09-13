@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface LoadingSpinnerProps {
@@ -24,7 +24,6 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   sublabel,
   fullscreen = false,
 }) => {
-  const gradientId = useId();
 
   // Dimension mappings (in pixels)
   const sizeMap = {
@@ -103,24 +102,17 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
             className="text-primary/15"
           />
 
-          {/* Active Saffron Auspicious Arc */}
+          {/* Active Auspicious Sindoor Arc */}
           <circle
             cx="18"
             cy="18"
             r="14.5"
-            stroke={`url(#${gradientId})`}
+            stroke="#B91C1C"
             strokeWidth={sizeMap.stroke}
             strokeLinecap="round"
             strokeDasharray="60 32"
             strokeDashoffset="12"
           />
-
-          <defs>
-            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#E45314" />
-              <stop offset="100%" stopColor="#FAAD07" />
-            </linearGradient>
-          </defs>
         </svg>
 
         {/* Central Sacred Diya & Flame Lamp (Static & Upright with Golden Spark) */}

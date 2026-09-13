@@ -2,13 +2,15 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { SacredBackground } from '@/components/common/SacredBackground';
 import { Toaster } from '@/components/ui/sonner';
 
 export const RootLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-background font-sans">
+    <div className="flex min-h-screen flex-col font-sans text-stone-900 relative">
+      <SacredBackground />
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <Outlet />
       </main>
       <Footer />
@@ -16,3 +18,5 @@ export const RootLayout: React.FC = () => {
     </div>
   );
 };
+
+export default RootLayout;

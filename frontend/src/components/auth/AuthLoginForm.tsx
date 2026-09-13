@@ -7,16 +7,7 @@ import { useAuthStore } from "@/store/auth.store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
 import { AuthRoleTabs } from "@/components/auth/AuthRoleTabs";
-import { PujaCircleLogo } from "@/components/common/PujaCircleLogo";
 import {
   Phone,
   Lock,
@@ -26,6 +17,7 @@ import {
   EyeOff,
   Sparkles,
   Shield,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -53,30 +45,34 @@ export const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
 
   const roleConfig = {
     USER: {
-      title: "User Sign In",
+      title: "Devotee Sign In",
       subtitle:
-        "Sign in with your mobile number to browse priests and book pujas.",
-      badge: "User Portal",
+        "Access your bookings, sacred muhurat reminders, and Purohit consultations.",
+      badge: "Devotee Portal",
       demoPhone: "+919876543210",
       demoPass: "User@123",
       redirect: "/user/home",
       forgot: "/user/forgot-password",
       register: "/user/register",
-      registerPrompt: "Don't have an account?",
-      registerCta: "Sign up",
+      registerPrompt: "New to PujaCircle?",
+      registerCta: "Create Devotee Account",
+      quote: "यज्ञो वै श्रेष्ठतमं कर्म — Yajna is the highest auspicious deed.",
+      source: "Satapatha Brahmana",
     },
     PRIEST: {
-      title: "Priest Sign In",
+      title: "Vedic Purohit Sign In",
       subtitle:
-        "Welcome! Access your puja bookings and schedule.",
-      badge: "Priest Portal",
+        "Manage your ceremony schedule, devotee invitations, and puja earnings.",
+      badge: "Purohit Portal",
       demoPhone: "+919876543211",
       demoPass: "Priest@123",
       redirect: "/priest/dashboard",
       forgot: "/priest/forgot-password",
       register: "/priest/register",
-      registerPrompt: "Are you a priest?",
-      registerCta: "Apply to join",
+      registerPrompt: "Are you a Vedic Scholar?",
+      registerCta: "Apply to Join Roster",
+      quote: "विद्वत्वं च नृपत्वं च नैव तुल्यं कदाचन — Wisdom and sacred knowledge surpass all royalty.",
+      source: "Chanakya Niti",
     },
   }[activeRole];
 
@@ -129,145 +125,208 @@ export const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
     setValue("phoneNumber", roleConfig.demoPhone, { shouldValidate: true });
     setValue("password", roleConfig.demoPass, { shouldValidate: true });
     clearError();
+    toast.info(`Filled demo credentials for ${activeRole}.`);
   };
 
   return (
-    <div className="container max-w-md py-8 sm:py-12 px-4">
-      {/* 1. Top Segmented Control (Devotee vs Purohit Tabs) */}
-      <AuthRoleTabs activeRole={activeRole} onChange={handleRoleChange} />
-
-      {/* 2. Unified Auth Card */}
-      <Card className="relative shadow-md border border-border/90 rounded-lg overflow-hidden">
-        {/* Hidden Admin Access Corner Trigger */}
-        <Link
-          to="/admin/login"
-          tabIndex={-1}
-          aria-label="Staff access"
-          title="Staff access"
-          className="absolute top-3.5 right-3.5 text-muted-foreground/20 hover:text-muted-foreground/70 transition-colors p-1 rounded-md"
-        >
-          <Shield className="h-3.5 w-3.5" />
-        </Link>
-
-        <CardHeader className="text-center space-y-2.5 pb-4 pt-6">
-          <div className="mx-auto flex items-center justify-center mb-0.5">
-            <PujaCircleLogo size={46} className="shadow-xs" />
-          </div>
-
-          <div className="space-y-1">
-            <CardTitle className="text-2xl font-bold font-serif text-foreground">
-              {roleConfig.title}
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-              {roleConfig.subtitle}
-            </CardDescription>
-          </div>
-        </CardHeader>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4 pt-1">
-            {error && (
-              <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{error}</span>
+    <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+        {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Vermilion `#780016`) */}
+        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
+          <div className="space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+                ॐ
               </div>
-            )}
-
-            {/* Mobile Number Input */}
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium">Mobile Number (+91)</Label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="tel"
-                  placeholder={roleConfig.demoPhone}
-                  {...register("phoneNumber")}
-                  className="pl-9 text-xs"
-                />
+              <div>
+                <div className="font-serif font-black text-lg tracking-wider text-amber-300">
+                  PUJACIRCLE
+                </div>
+                <div className="text-[10px] text-amber-100 uppercase tracking-widest font-semibold">
+                  Sacred Vedic Sanctum
+                </div>
               </div>
-              {errors.phoneNumber && (
-                <p className="text-[11px] text-destructive">
-                  {errors.phoneNumber.message}
-                </p>
-              )}
             </div>
 
-            {/* Password Input */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Password</Label>
-                <Link
-                  to={roleConfig.forgot}
-                  className="text-[11px] text-primary hover:underline font-medium"
-                >
-                  Forgot password?
-                </Link>
+            <div className="space-y-3 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>{roleConfig.badge}</span>
               </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  {...register("password")}
-                  className="pl-9 pr-9 text-xs"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-[11px] text-destructive">
-                  {errors.password.message}
-                </p>
-              )}
+              <h2 className="text-2xl font-bold font-serif text-white leading-snug">
+                {isPriest
+                  ? "Serve Devotees with Sacred Lineage"
+                  : "Authentic Vedic Rituals for Your Family"}
+              </h2>
+              <p className="text-xs text-amber-100/90 leading-relaxed">
+                {isPriest
+                  ? "Accept verified puja requests in your locality and receive 100% direct dakshina with zero deductions."
+                  : "Connect with vetted Gurukul-trained Purohits with complete transparency and verified muhurats."}
+              </p>
             </div>
 
-            {/* Quick Demo Fill Button */}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleFillDemo}
-              className="w-full text-xs text-muted-foreground hover:text-foreground border-dashed h-8 gap-1.5"
-            >
-              <Sparkles className="h-3 w-3 text-primary" />
-              Fill Demo Credentials ({roleConfig.demoPhone})
-            </Button>
-          </CardContent>
+            {/* Sacred Commitments (Flex Column) */}
+            <div className="space-y-2.5 pt-2">
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>1,200+ Verified Gurukul Scholars</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>100% Direct Cash Dakshina to Priest</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Zero Cancellation Stress</span>
+              </div>
+            </div>
+          </div>
 
-          <CardFooter className="flex flex-col gap-3.5 pb-6 pt-1">
-            <Button
-              type="submit"
-              className="w-full gap-2 text-xs font-semibold h-10 shadow-xs"
-              disabled={isLoading}
-            >
-              {isLoading
-                ? "Signing In..."
-                : `Sign In as ${isPriest ? "Priest" : "User"}`}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+          {/* Bottom Quote Pill */}
+          <div className="pt-6 border-t border-amber-400/30 space-y-1">
+            <div className="text-xs font-serif text-amber-200 italic">
+              “{roleConfig.quote}”
+            </div>
+            <div className="text-[10px] text-amber-400 font-medium">
+              — {roleConfig.source}
+            </div>
+          </div>
+        </div>
 
-            <p className="text-center text-xs text-muted-foreground">
-              {roleConfig.registerPrompt}{" "}
+        {/* Right Form Panel (Flexbox) */}
+        <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
+          {/* Top Row: Role Switch + Hidden Staff Shield */}
+          <div>
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <AuthRoleTabs activeRole={activeRole} onRoleChange={handleRoleChange} />
+
               <Link
-                to={roleConfig.register}
-                className="text-primary font-semibold hover:underline"
+                to="/admin/login"
+                tabIndex={-1}
+                aria-label="Staff access"
+                title="Staff access"
+                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100"
               >
-                {roleConfig.registerCta}
+                <Shield className="h-4 w-4" />
               </Link>
-            </p>
-          </CardFooter>
-        </form>
-      </Card>
+            </div>
+
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold font-serif text-stone-900">
+                {roleConfig.title}
+              </h1>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                {roleConfig.subtitle}
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {error && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* Mobile Number Input */}
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold text-stone-700">
+                  Mobile Number (+91)
+                </Label>
+                <div className="relative">
+                  <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                  <Input
+                    type="tel"
+                    placeholder={roleConfig.demoPhone}
+                    {...register("phoneNumber")}
+                    className="pl-10 text-xs h-10 border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                  />
+                </div>
+                {errors.phoneNumber && (
+                  <p className="text-[11px] text-red-600 font-medium">
+                    {errors.phoneNumber.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Password Input */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-semibold text-stone-700">
+                    Password
+                  </Label>
+                  <Link
+                    to={roleConfig.forgot}
+                    className="text-[11px] text-red-700 hover:underline font-medium"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    {...register("password")}
+                    className="pl-10 pr-10 text-xs h-10 border-stone-300 focus:border-amber-500 focus:ring-amber-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 transition-colors"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-[11px] text-red-600 font-medium">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Quick Demo Fill Button */}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleFillDemo}
+                className="w-full text-xs text-stone-900 bg-white hover:bg-amber-50 border-2 border-amber-300 h-10 gap-1.5 font-bold cursor-pointer transition-colors"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                Fill Demo Credentials ({roleConfig.demoPhone})
+              </Button>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#780016] hover:bg-[#600012] text-white font-bold text-xs h-11 shadow-md gap-2 mt-2 puja-btn-tap cursor-pointer"
+              >
+                {isLoading
+                  ? "Verifying Credentials..."
+                  : `Sign In as ${isPriest ? "Purohit" : "Devotee"}`}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
+
+          {/* Bottom Register Prompt */}
+          <div className="pt-6 mt-4 border-t border-stone-200 text-center text-xs text-stone-600">
+            {roleConfig.registerPrompt}{" "}
+            <Link
+              to={roleConfig.register}
+              className="text-red-700 font-bold hover:underline ml-1"
+            >
+              {roleConfig.registerCta} →
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

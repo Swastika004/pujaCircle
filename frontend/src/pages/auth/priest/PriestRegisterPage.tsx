@@ -6,49 +6,47 @@ import {
   registerPriestPersonalSchema,
   RegisterPriestPersonalInput,
 } from "@/schemas/auth.schema";
-import { addressApi } from "@/api/address.api";
-import { PincodeLocation } from "@/types/address.types";
+import { addressApi, PincodeLocation } from "@/api/address.api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
 import { AuthRoleTabs } from "@/components/auth/AuthRoleTabs";
 import {
-  Flame,
+  User,
   Phone,
   Mail,
   Lock,
-  User,
   ArrowRight,
   ArrowLeft,
   AlertCircle,
-  Clock,
-  Award,
-  MapPin,
   Eye,
   EyeOff,
+  Sparkles,
+  Shield,
+  Award,
+  Clock,
+  MapPin,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 
 /**
  * PriestRegisterPage
- * Multi-Step Purohit Onboarding Application
- * Built with React Hook Form, Zod validation, and automated PIN-code city extraction.
+ * Premium Split-Card Multi-Step Vedic Purohit Registration Form
+ * Matches the rich aesthetic of AuthLoginForm & UserRegisterPage:
+ * - Left Showcase Panel (Deep Sanctum Maroon `#450A0A`) with sacred priest commitments & Sanskrit shloka
+ * - Right Form Panel with integrated AuthRoleTabs, step indicators, and form flow
+ * - 100% Flexbox, zero CSS Grids, pure solid colors, Haldi gold trims
  */
-const PriestRegisterPage: React.FC = () => {
+export const PriestRegisterPage: React.FC = () => {
   const navigate = useNavigate();
+
+  // Multi-step progress (1: Credentials, 2: OTPs, 3: Vedic Samhita/City, 4: Submitted)
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Step 1: Personal info form with React Hook Form + Zod
+  // Step 1: Personal credentials
   const {
     register,
     handleSubmit,
@@ -65,57 +63,62 @@ const PriestRegisterPage: React.FC = () => {
     },
   });
 
-  // Step 2: Verification OTPs
+  // Step 2: Verification state
   const [phoneOtp, setPhoneOtp] = useState("");
   const [emailOtp, setEmailOtp] = useState("");
 
-  // Step 3: Vedic Background & Location extraction via PIN Code
+  // Step 3: Vedic qualifications & Service city extraction
   const [experienceYears, setExperienceYears] = useState("12");
-  const [pincode, setPincode] = useState("400050");
+  const [pincode, setPincode] = useState("700019");
+  const [city, setCity] = useState("Kolkata");
+  const [state, setState] = useState("West Bengal");
   const [locations, setLocations] = useState<PincodeLocation[]>([]);
   const [selectedLocation, setSelectedLocation] =
     useState<PincodeLocation | null>(null);
-  const [city, setCity] = useState("Mumbai");
-  const [state, setState] = useState("Maharashtra");
   const [isSearchingPin, setIsSearchingPin] = useState(false);
 
-  const [bio, setBio] = useState(
-    "Trained in Shukla Yajurveda. Experienced in Griha Pravesh and Satyanarayan Katha.",
-  );
-  const [languages, setLanguages] = useState<string[]>(["Hindi", "Sanskrit"]);
-  const [specializations, setSpecializations] = useState<string[]>([
-    "Grah Pravesh",
-    "Satyanarayan Katha",
+  const [languages, setLanguages] = useState<string[]>([
+    "Sanskrit",
+    "Hindi",
+    "Bengali",
   ]);
+  const [specializations, setSpecializations] = useState<string[]>([
+    "Griha Pravesh",
+    "Satyanarayan Katha",
+    "Rudrabhishek",
+  ]);
+  const [bio, setBio] = useState(
+    "Shastri degree in Shukla Yajurveda from Varanasi Gurukul with 12+ years of Vedic rituals experience.",
+  );
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Step 1 Submit after Zod validation
+  // Step 1: Submit Personal Details
   const onPersonalSubmit = () => {
     setErrorMessage(null);
     setStep(2);
     toast.info("Verification codes sent. Development Mock OTP is 123456");
   };
 
-  // Step 2 Submit
+  // Step 2: Submit OTP Verification
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
     if (phoneOtp.trim() !== "123456") {
-      setErrorMessage("Invalid Phone OTP. Enter mock code: 123456");
+      setErrorMessage("Invalid Phone OTP. Please enter mock OTP: 123456");
       return;
     }
     if (emailOtp.trim() !== "123456") {
-      setErrorMessage("Invalid Email OTP. Enter mock code: 123456");
+      setErrorMessage("Invalid Email OTP. Please enter mock OTP: 123456");
       return;
     }
 
     setStep(3);
-    handleLookupPin("400050");
+    handleLookupPin("700019");
   };
 
-  // Step 3: PIN Code Lookup & City Extraction
+  // Step 3: Auto-detect City from PIN Code
   const handleLookupPin = async (pinToSearch: string) => {
     const cleanPin = pinToSearch.trim().replace(/\D/g, "");
     if (cleanPin.length !== 6) return;
@@ -125,19 +128,18 @@ const PriestRegisterPage: React.FC = () => {
       const res = await addressApi.lookupPincode(cleanPin);
       setLocations(res.locations);
       if (res.locations.length > 0) {
-        const primary = res.locations[0];
-        setSelectedLocation(primary);
-        setCity(primary.city);
-        setState(primary.state);
+        setSelectedLocation(res.locations[0]);
+        setCity(res.locations[0].city);
+        setState(res.locations[0].state);
       }
     } catch {
-      toast.error("Could not resolve PIN code");
+      toast.error("Could not fetch PIN details. Enter service base manually.");
     } finally {
       setIsSearchingPin(false);
     }
   };
 
-  // Step 3 Submit Application
+  // Step 3: Submit Application
   const handleSubmitApplication = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -159,487 +161,611 @@ const PriestRegisterPage: React.FC = () => {
     setValue("email", "giridhar.b@example.demo", { shouldValidate: true });
     setValue("password", "Priest@123", { shouldValidate: true });
     setErrorMessage(null);
+    toast.info("Filled Purohit demo credentials.");
   };
 
   return (
-    <div className="container max-w-lg py-8 sm:py-10 px-4">
-      {/* Role Switcher Tabs */}
-      <AuthRoleTabs
-        activeRole="PRIEST"
-        onChange={(role) => {
-          if (role === 'USER') navigate('/user/register');
-        }}
-      />
-
-      <Card className="shadow-md border-primary/20">
-        <CardHeader className="text-center space-y-1 pb-4">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground mb-1 shadow-sm">
-            <Flame className="h-5 w-5" />
-          </div>
-          <CardTitle className="text-2xl font-bold font-serif text-foreground">
-            {step === 4 ? "Application Received" : "Apply as a Vedic Purohit"}
-          </CardTitle>
-          <CardDescription className="text-xs">
-            {step === 4
-              ? "Status: Pending Administrator Approval"
-              : `Step ${step} of 3 • ${
-                  step === 1
-                    ? "Personal Details"
-                    : step === 2
-                      ? "Contact Verification"
-                      : "Vedic Qualifications"
-                }`}
-          </CardDescription>
-
-          {step < 4 && (
-            <div className="flex items-center justify-center gap-2 pt-2">
-              <div
-                className={`h-1.5 w-12 rounded-full ${step >= 1 ? "bg-primary" : "bg-muted"}`}
-              />
-              <div
-                className={`h-1.5 w-12 rounded-full ${step >= 2 ? "bg-primary" : "bg-muted"}`}
-              />
-              <div
-                className={`h-1.5 w-12 rounded-full ${step >= 3 ? "bg-primary" : "bg-muted"}`}
-              />
+    <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+        {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Sanctum Maroon `#450A0A`) */}
+        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#450A0A] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
+          <div className="space-y-6">
+            {/* Top Brand Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+                ॐ
+              </div>
+              <div>
+                <div className="font-serif font-black text-lg tracking-wider text-amber-300">
+                  PUJACIRCLE
+                </div>
+                <div className="text-[10px] text-amber-100 uppercase tracking-widest font-semibold">
+                  Vedic Purohit Sanctum
+                </div>
+              </div>
             </div>
-          )}
-        </CardHeader>
 
-        {errorMessage && (
-          <div className="mx-6 mb-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{errorMessage}</span>
+            {/* Headline & Value Propositions */}
+            <div className="space-y-3 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Purohit Application</span>
+              </div>
+              <h2 className="text-2xl font-bold font-serif text-white leading-snug">
+                Serve Devotees with Sacred Dignity & Honor
+              </h2>
+              <p className="text-xs text-amber-100/90 leading-relaxed">
+                Join India's premier network of Gurukul-trained Vedic scholars. Conduct home ceremonies with utmost reverence, choose your preferred locality, and receive 100% direct cash dakshina.
+              </p>
+            </div>
+
+            {/* Sacred Commitments */}
+            <div className="space-y-2.5 pt-2">
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>100% Direct Cash Dakshina Kept by Priest (0% Fee)</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Full Schedule Freedom & Local Area Radius</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Verified Devotees with Direct Phone Coordination</span>
+              </div>
+            </div>
+
+            {/* Stepper Progress Indicator on Left Panel */}
+            <div className="p-3.5 rounded-2xl bg-black/25 border border-amber-400/30 space-y-2 pt-3">
+              <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                Application Progress
+              </div>
+              <div className="space-y-1.5 text-xs">
+                <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? 'bg-amber-400 text-stone-950 font-bold' : step === 1 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step > 1 ? '✓' : '1'}
+                  </span>
+                  <span>Acharya Identity & Contacts</span>
+                </div>
+                <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? 'bg-amber-400 text-stone-950 font-bold' : step === 2 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step > 2 ? '✓' : '2'}
+                  </span>
+                  <span>Contact Verification (OTP)</span>
+                </div>
+                <div className={`flex items-center gap-2 ${step >= 3 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 3 ? 'bg-amber-400 text-stone-950 font-bold' : step === 3 ? 'border border-amber-400 text-amber-300 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step > 3 ? '✓' : '3'}
+                  </span>
+                  <span>Vedic Samhita & Qualifications</span>
+                </div>
+                <div className={`flex items-center gap-2 ${step === 4 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 4 ? 'bg-amber-400 text-stone-950 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                    {step === 4 ? '✓' : '4'}
+                  </span>
+                  <span>Submitted for Review</span>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
 
-        {/* ================= STEP 1: Personal Info (React Hook Form + Zod) ================= */}
-        {step === 1 && (
-          <form onSubmit={handleSubmit(onPersonalSubmit)}>
-            <CardContent className="space-y-3.5">
-              <div className="space-y-1">
-                <Label className="text-xs">Full Name & Title</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="e.g. Pandit Radhe Shyam Shastri"
-                    {...register("fullName")}
-                    className="pl-9 text-xs"
-                  />
+          {/* Bottom Sanskrit Quote */}
+          <div className="pt-6 border-t border-amber-400/30 space-y-1">
+            <div className="text-xs font-serif text-amber-200 italic">
+              “विद्वत्वं च नृपत्वं च नैव तुल्यं कदाचन — Wisdom and sacred knowledge surpass all royalty.”
+            </div>
+            <div className="text-[10px] text-amber-400 font-medium">
+              — Chanakya Niti
+            </div>
+          </div>
+        </div>
+
+        {/* Right Form Panel (Flexbox) */}
+        <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
+          <div>
+            {/* Top Row: Role Switch Tabs + Hidden Staff Shield */}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <AuthRoleTabs
+                activeRole="PRIEST"
+                onRoleChange={(role) => {
+                  if (role === "USER") navigate("/user/register");
+                }}
+                className="mb-0 flex-1"
+              />
+
+              <Link
+                to="/admin/login"
+                tabIndex={-1}
+                aria-label="Staff access"
+                title="Staff access"
+                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              >
+                <Shield className="h-4 w-4" />
+              </Link>
+            </div>
+
+            {/* Header Block with Step Tracker */}
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold font-serif text-stone-900">
+                {step === 4 ? "Application Received" : "Apply as a Vedic Purohit"}
+              </h1>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                {step === 4
+                  ? "Status: Pending Administrator Approval"
+                  : `Step ${step} of 3 • ${
+                      step === 1
+                        ? "Personal Details"
+                        : step === 2
+                          ? "Contact Verification"
+                          : "Vedic Qualifications & City"
+                    }`}
+              </p>
+
+              {/* Progress Stepper Bar */}
+              {step < 4 && (
+                <div className="flex items-center gap-2 pt-2">
+                  <div className="flex items-center gap-1.5">
+                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 1 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                    }`}>
+                      {step > 1 ? '✓' : '1'}
+                    </div>
+                    <span className="text-xs font-semibold text-stone-700">Identity</span>
+                  </div>
+
+                  <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+
+                  <div className="flex items-center gap-1.5">
+                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 2 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                    }`}>
+                      {step > 2 ? '✓' : '2'}
+                    </div>
+                    <span className="text-xs font-semibold text-stone-700">Verify</span>
+                  </div>
+
+                  <div className={`h-1 flex-1 rounded-full ${step >= 3 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+
+                  <div className="flex items-center gap-1.5">
+                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 3 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
+                    }`}>
+                      3
+                    </div>
+                    <span className="text-xs font-semibold text-stone-700">Vidhi</span>
+                  </div>
                 </div>
-                {errors.fullName && (
-                  <p className="text-[11px] text-destructive">
-                    {errors.fullName.message}
-                  </p>
-                )}
-              </div>
+              )}
+            </div>
 
-              <div className="space-y-1">
-                <Label className="text-xs">Mobile Number (+91)</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="tel"
-                    placeholder="+91 98765 43211"
-                    {...register("phoneNumber")}
-                    className="pl-9 text-xs"
-                  />
-                </div>
-                {errors.phoneNumber && (
-                  <p className="text-[11px] text-destructive">
-                    {errors.phoneNumber.message}
-                  </p>
-                )}
+            {/* Error Notification */}
+            {errorMessage && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                <span>{errorMessage}</span>
               </div>
+            )}
 
-              <div className="space-y-1">
-                <Label className="text-xs">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="email"
-                    placeholder="purohit@example.demo"
-                    {...register("email")}
-                    className="pl-9 text-xs"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-[11px] text-destructive">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
+            {/* ================= STEP 1: Personal Info ================= */}
+            {step === 1 && (
+              <form onSubmit={handleSubmit(onPersonalSubmit)} className="space-y-4">
+                <div className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Full Name & Vedic Title</Label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        placeholder="e.g. Pandit Radhe Shyam Shastri"
+                        {...register("fullName")}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.fullName && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.fullName.message}</p>
+                    )}
+                  </div>
 
-              <div className="space-y-1">
-                <Label className="text-xs">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create your portal password"
-                    {...register("password")}
-                    className="pl-9 pr-9 text-xs"
-                  />
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Mobile Number (+91)</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type="tel"
+                        placeholder="+91 98765 43211"
+                        {...register("phoneNumber")}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.phoneNumber && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.phoneNumber.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type="email"
+                        placeholder="purohit@example.demo"
+                        {...register("email")}
+                        className="pl-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-stone-800">Portal Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a secure password"
+                        {...register("password")}
+                        className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="text-[11px] text-red-700 font-semibold">{errors.password.message}</p>
+                    )}
+                  </div>
+
+                  {/* Demo Pre-fill Button */}
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
+                    onClick={handleFillDemo}
+                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    ✨ Fill demo application
                   </button>
                 </div>
-                {errors.password && (
-                  <p className="text-[11px] text-destructive">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
 
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="text-[11px] text-primary hover:underline font-medium block text-right w-full"
-              >
-                Fill demo application
-              </button>
-            </CardContent>
-
-            <CardFooter className="flex flex-col space-y-3 pt-2">
-              <Button type="submit" className="w-full text-xs gap-1.5">
-                Continue to Verification <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-              <div className="text-center text-xs text-muted-foreground">
-                Already registered?{" "}
-                <Link
-                  to="/priest/login"
-                  className="text-primary font-medium hover:underline"
-                >
-                  Sign In
-                </Link>
-              </div>
-            </CardFooter>
-          </form>
-        )}
-
-        {/* ================= STEP 2: Phone & Email OTP ================= */}
-        {step === 2 && (
-          <form onSubmit={handleVerifyOtp}>
-            <CardContent className="space-y-4">
-              <div className="p-3 bg-muted/40 rounded-lg border text-xs text-muted-foreground space-y-1">
-                <p className="font-semibold text-foreground">
-                  Development Mock OTP:
-                </p>
-                <p>
-                  Use code:{" "}
-                  <strong className="text-primary font-mono text-sm">
-                    123456
-                  </strong>
-                </p>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs">Mobile Verification Code</Label>
-                <Input
-                  maxLength={6}
-                  placeholder="123456"
-                  value={phoneOtp}
-                  onChange={(e) => setPhoneOtp(e.target.value)}
-                  className="font-mono text-center tracking-widest text-sm"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs">Email Verification Code</Label>
-                <Input
-                  maxLength={6}
-                  placeholder="123456"
-                  value={emailOtp}
-                  onChange={(e) => setEmailOtp(e.target.value)}
-                  className="font-mono text-center tracking-widest text-sm"
-                  required
-                />
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setPhoneOtp("123456");
-                  setEmailOtp("123456");
-                  setErrorMessage(null);
-                }}
-                className="text-[11px] text-primary hover:underline font-medium block text-right w-full"
-              >
-                Auto-fill mock OTP (123456)
-              </button>
-            </CardContent>
-
-            <CardFooter className="flex items-center justify-between gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setStep(1)}
-              >
-                <ArrowLeft className="h-3.5 w-3.5" /> Back
-              </Button>
-              <Button type="submit" size="sm" className="text-xs gap-1">
-                Verify & Continue <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </CardFooter>
-          </form>
-        )}
-
-        {/* ================= STEP 3: Vedic Qualifications & PIN-Code City Extraction ================= */}
-        {step === 3 && (
-          <form onSubmit={handleSubmitApplication}>
-            <CardContent className="space-y-3.5">
-              <div className="space-y-1">
-                <Label className="text-xs">Vedic Experience (Years)</Label>
-                <Input
-                  type="number"
-                  value={experienceYears}
-                  onChange={(e) => setExperienceYears(e.target.value)}
-                  className="text-xs"
-                  required
-                />
-              </div>
-
-              {/* Service Base PIN Code & City Auto-Extraction */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <Label className="text-xs">
-                    Service Base PIN Code (Extracts City)
-                  </Label>
-                  {isSearchingPin && (
-                    <span className="text-[10px] text-primary animate-pulse">
-                      Detecting city from Postal API...
-                    </span>
-                  )}
+                <div className="space-y-3 pt-2">
+                  <Button
+                    type="submit"
+                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-xl shadow-md cursor-pointer gap-2"
+                  >
+                    <span>Continue to Verification</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
                 </div>
-                <div className="flex gap-2">
-                  <Input
-                    maxLength={6}
-                    value={pincode}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, "");
-                      setPincode(val);
-                      if (val.length === 6) {
-                        handleLookupPin(val);
-                      }
+              </form>
+            )}
+
+            {/* ================= STEP 2: Phone & Email OTP ================= */}
+            {step === 2 && (
+              <form onSubmit={handleVerifyOtp} className="space-y-4">
+                <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 text-xs text-stone-700 space-y-1">
+                  <p className="font-bold text-stone-900">Development Testing OTP:</p>
+                  <p>Enter mock verification code: <strong className="text-red-800 font-mono text-sm">123456</strong></p>
+                </div>
+
+                <div className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <Label className="text-xs font-bold text-stone-800">Mobile Verification Code</Label>
+                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues("phoneNumber")}</span>
+                    </div>
+                    <Input
+                      maxLength={6}
+                      placeholder="123456"
+                      value={phoneOtp}
+                      onChange={(e) => setPhoneOtp(e.target.value)}
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <Label className="text-xs font-bold text-stone-800">Email Verification Code</Label>
+                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues("email")}</span>
+                    </div>
+                    <Input
+                      maxLength={6}
+                      placeholder="123456"
+                      value={emailOtp}
+                      onChange={(e) => setEmailOtp(e.target.value)}
+                      className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPhoneOtp("123456");
+                      setEmailOtp("123456");
+                      setErrorMessage(null);
                     }}
-                    placeholder="e.g. 400050, 560038, 700019"
-                    className="text-xs font-mono"
-                    required
-                  />
+                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
+                  >
+                    ✨ Auto-fill mock OTP (123456)
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs shrink-0"
-                    onClick={() => handleLookupPin(pincode)}
-                    disabled={isSearchingPin || pincode.length < 6}
+                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    onClick={() => setStep(1)}
                   >
-                    {isSearchingPin ? "Detecting..." : "Find City"}
+                    <ArrowLeft className="h-3.5 w-3.5" /> Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                  >
+                    <span>Verify & Continue</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
-              </div>
+              </form>
+            )}
 
-              {/* Multiple Localities Dropdown */}
-              {locations.length > 0 && (
-                <div className="space-y-1.5 p-2.5 rounded-lg bg-muted/40 border">
-                  <Label className="text-xs font-medium text-foreground">
-                    Primary Service Locality ({locations.length} areas found)
-                  </Label>
-                  <select
-                    className="w-full text-xs p-2 rounded-md border bg-background text-foreground"
-                    value={selectedLocation?.postOffice}
-                    onChange={(e) => {
-                      const match = locations.find(
-                        (l) => l.postOffice === e.target.value,
-                      );
-                      if (match) {
-                        setSelectedLocation(match);
-                        setCity(match.city);
-                        setState(match.state);
-                      }
-                    }}
-                  >
-                    {locations.map((loc, idx) => (
-                      <option key={idx} value={loc.postOffice}>
-                        {loc.postOffice} • {loc.city}, {loc.state}
-                      </option>
-                    ))}
-                  </select>
+            {/* ================= STEP 3: Qualifications & Service Locality ================= */}
+            {step === 3 && (
+              <form onSubmit={handleSubmitApplication} className="space-y-3.5">
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Vedic Experience (Years)</Label>
+                  <Input
+                    type="number"
+                    value={experienceYears}
+                    onChange={(e) => setExperienceYears(e.target.value)}
+                    className="text-xs h-10 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    required
+                  />
+                </div>
 
-                  {/* Extracted City & State Display */}
-                  <div className="pt-1 flex flex-wrap gap-2 text-xs">
-                    <span className="bg-background px-2.5 py-1 rounded border flex items-center gap-1 font-medium">
-                      <MapPin className="h-3 w-3 text-primary" /> City:{" "}
-                      <strong className="text-primary">{city}</strong>
-                    </span>
-                    <span className="bg-background px-2.5 py-1 rounded border">
-                      State:{" "}
-                      <strong className="text-foreground">{state}</strong>
-                    </span>
+                {/* Service Base PIN Code */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-stone-800">Service Base PIN Code (Extracts City)</Label>
+                    {isSearchingPin && (
+                      <span className="text-[10px] text-red-700 animate-pulse font-bold">
+                        Detecting city...
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      maxLength={6}
+                      value={pincode}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "");
+                        setPincode(val);
+                        if (val.length === 6) {
+                          handleLookupPin(val);
+                        }
+                      }}
+                      placeholder="e.g. 700019, 560038, 400050"
+                      className="text-xs font-mono h-10 rounded-xl border-amber-300 focus-visible:ring-red-700 flex-1"
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-xs shrink-0 h-10 px-3.5 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer font-bold"
+                      onClick={() => handleLookupPin(pincode)}
+                      disabled={isSearchingPin || pincode.length < 6}
+                    >
+                      {isSearchingPin ? "Detecting..." : "Find City"}
+                    </Button>
                   </div>
                 </div>
-              )}
 
-              <div className="space-y-1">
-                <Label className="text-xs">Languages Spoken</Label>
-                <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                  {[
-                    "Sanskrit",
-                    "Hindi",
-                    "Marathi",
-                    "Bengali",
-                    "Kannada",
-                    "Tamil",
-                    "Telugu",
-                    "Gujarati",
-                  ].map((lang) => {
-                    const checked = languages.includes(lang);
-                    return (
-                      <button
-                        key={lang}
-                        type="button"
-                        onClick={() => {
-                          setLanguages(
+                {/* Localities Dropdown */}
+                {locations.length > 0 && (
+                  <div className="space-y-1.5 p-2.5 rounded-xl bg-amber-50 border border-amber-300">
+                    <Label className="text-xs font-bold text-stone-900">
+                      Primary Service Locality ({locations.length} areas found)
+                    </Label>
+                    <select
+                      className="w-full text-xs p-2 rounded-xl border border-amber-300 bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-700 font-medium"
+                      value={selectedLocation?.postOffice}
+                      onChange={(e) => {
+                        const match = locations.find(
+                          (l) => l.postOffice === e.target.value,
+                        );
+                        if (match) {
+                          setSelectedLocation(match);
+                          setCity(match.city);
+                          setState(match.state);
+                        }
+                      }}
+                    >
+                      {locations.map((loc, idx) => (
+                        <option key={idx} value={loc.postOffice}>
+                          {loc.postOffice} • {loc.city}, {loc.state}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="pt-0.5 flex flex-wrap gap-1.5 text-[10px] text-stone-700 font-medium">
+                      <span className="bg-white px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
+                        <MapPin className="h-2.5 w-2.5 text-red-700" /> City: <strong className="text-stone-900">{city}</strong>
+                      </span>
+                      <span className="bg-white px-2 py-0.5 rounded border border-amber-200">
+                        State: <strong className="text-stone-900">{state}</strong>
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Languages Spoken Tags */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Languages Spoken</Label>
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {[
+                      "Sanskrit",
+                      "Hindi",
+                      "Marathi",
+                      "Bengali",
+                      "Kannada",
+                      "Tamil",
+                      "Telugu",
+                      "Gujarati",
+                    ].map((lang) => {
+                      const checked = languages.includes(lang);
+                      return (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => {
+                            setLanguages(
+                              checked
+                                ? languages.filter((l) => l !== lang)
+                                : [...languages, lang],
+                            );
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
                             checked
-                              ? languages.filter((l) => l !== lang)
-                              : [...languages, lang],
-                          );
-                        }}
-                        className={`px-2.5 py-1 rounded-full border text-[11px] transition-colors ${
-                          checked
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background text-muted-foreground border-border"
-                        }`}
-                      >
-                        {lang}
-                      </button>
-                    );
-                  })}
+                              ? "bg-[#780016] text-white border border-amber-400"
+                              : "bg-white text-stone-700 border border-stone-300 hover:border-amber-400"
+                          }`}
+                        >
+                          {lang}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Specializations Tags */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Vedic Specializations</Label>
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {[
+                      "Griha Pravesh",
+                      "Satyanarayan Katha",
+                      "Rudrabhishek",
+                      "Vivah Sanskar",
+                      "Navagraha Havan",
+                      "Vastu Shanti",
+                    ].map((spec) => {
+                      const checked = specializations.includes(spec);
+                      return (
+                        <button
+                          key={spec}
+                          type="button"
+                          onClick={() => {
+                            setSpecializations(
+                              checked
+                                ? specializations.filter((s) => s !== spec)
+                                : [...specializations, spec],
+                            );
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                            checked
+                              ? "bg-[#780016] text-white border border-amber-400"
+                              : "bg-white text-stone-700 border border-stone-300 hover:border-amber-400"
+                          }`}
+                        >
+                          {spec}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Bio / Gurukul Lineage */}
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-stone-800">Gurukul Lineage & Bio</Label>
+                  <Textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    rows={2}
+                    className="text-xs rounded-xl border-amber-300 focus-visible:ring-red-700"
+                    placeholder="Describe your Vedic study and samhita lineage..."
+                    required
+                  />
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs gap-1 h-10 px-4 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    onClick={() => setStep(2)}
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" /> Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-xl shadow-md cursor-pointer gap-1"
+                  >
+                    <Award className="h-3.5 w-3.5" /> Submit Application
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            {/* ================= STEP 4: PENDING APPROVAL CONFIRMATION ================= */}
+            {step === 4 && (
+              <div className="py-4 space-y-6 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 border-2 border-amber-300 shadow-md">
+                  <Clock className="h-8 w-8 animate-pulse" />
+                </div>
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold">
+                    <span>Status: PENDING ADMIN APPROVAL</span>
+                  </div>
+                  <h3 className="text-xl font-bold font-serif text-stone-900">
+                    Application Successfully Received!
+                  </h3>
+                  <p className="text-xs text-stone-600 max-w-md mx-auto leading-relaxed">
+                    Thank you, Pandit {getValues("fullName")}. Your Vedic qualifications and service location in{" "}
+                    <strong className="text-stone-900">
+                      {city}, {state}
+                    </strong>{" "}
+                    have been received. Once verified by our sanctum team, your Purohit Workspace and ceremony calendar will be unlocked.
+                  </p>
+                </div>
+
+                <div className="space-y-2.5 pt-2 max-w-xs mx-auto">
+                  <Link to="/priest/login" className="block w-full">
+                    <Button className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 rounded-xl shadow-md cursor-pointer">
+                      Return to Priest Sign In
+                    </Button>
+                  </Link>
+                  <Link to="/" className="block w-full">
+                    <Button variant="outline" className="w-full text-xs h-10 rounded-xl border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer">
+                      Go to PujaCircle Home
+                    </Button>
+                  </Link>
                 </div>
               </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs">Vedic Specializations</Label>
-                <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                  {[
-                    "Grah Pravesh",
-                    "Satyanarayan Katha",
-                    "Rudrabhishek",
-                    "Vivah Sanskar",
-                    "Navagraha Havan",
-                    "Vastu Shanti",
-                  ].map((spec) => {
-                    const checked = specializations.includes(spec);
-                    return (
-                      <button
-                        key={spec}
-                        type="button"
-                        onClick={() => {
-                          setSpecializations(
-                            checked
-                              ? specializations.filter((s) => s !== spec)
-                              : [...specializations, spec],
-                          );
-                        }}
-                        className={`px-2.5 py-1 rounded-full border text-[11px] transition-colors ${
-                          checked
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background text-muted-foreground border-border"
-                        }`}
-                      >
-                        {spec}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs">Gurukul Lineage & Bio</Label>
-                <Textarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  rows={3}
-                  className="text-xs"
-                  placeholder="Describe your Vedic study and samhita lineage..."
-                  required
-                />
-              </div>
-            </CardContent>
-
-            <CardFooter className="flex items-center justify-between gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setStep(2)}
-              >
-                <ArrowLeft className="h-3.5 w-3.5" /> Back
-              </Button>
-              <Button type="submit" size="sm" className="text-xs gap-1">
-                <Award className="h-3.5 w-3.5" /> Submit Application
-              </Button>
-            </CardFooter>
-          </form>
-        )}
-
-        {/* ================= STEP 4: PENDING APPROVAL CONFIRMATION ================= */}
-        {step === 4 && (
-          <div>
-            <CardContent className="text-center space-y-4 py-6">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 border border-amber-500/20">
-                <Clock className="h-8 w-8 animate-pulse" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-bold text-foreground">
-                  Application Submitted
-                </h3>
-                <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                  Thank you, Pandit {getValues("fullName")}. Your Vedic
-                  credentials in{" "}
-                  <strong className="text-foreground">
-                    {city}, {state}
-                  </strong>{" "}
-                  have been received with status{" "}
-                  <strong className="dark:text-amber-300 font-semibold">
-                    PENDING ADMIN APPROVAL
-                  </strong>
-                  . Once verified by the platform team, your Purohit Workspace
-                  will be unlocked.
-                </p>
-              </div>
-            </CardContent>
-
-            <CardFooter className="flex flex-col space-y-2 pt-2">
-              <Link to="/auth/priest/login" className="w-full">
-                <Button variant="default" size="sm" className="w-full text-xs">
-                  Return to Priest Sign In
-                </Button>
-              </Link>
-              <Link to="/" className="w-full">
-                <Button variant="outline" size="sm" className="w-full text-xs">
-                  Go to PujaCircle Home
-                </Button>
-              </Link>
-            </CardFooter>
+            )}
           </div>
-        )}
-      </Card>
+
+          {/* Bottom Switch to Sign In */}
+          {step < 4 && (
+            <div className="pt-6 text-center text-xs text-stone-600">
+              Already registered as a Purohit?{" "}
+              <Link to="/priest/login" className="text-[#780016] font-bold hover:underline">
+                Sign In to Purohit Portal →
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

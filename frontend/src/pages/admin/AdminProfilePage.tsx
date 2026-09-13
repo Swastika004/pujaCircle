@@ -30,18 +30,16 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   adminUpdateProfileSchema,
   adminUpdatePasswordSchema,
 } from "@/schemas/admin.schema";
 
-const AdminProfilePage: React.FC = () => {
+/**
+ * AdminProfilePage
+ * Platform Administrator account settings, security credentials, and profile image.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
+export const AdminProfilePage: React.FC = () => {
   const { user, setUser } = useAuthStore();
   const adminId = user?.id || "admin-root-1";
 
@@ -71,7 +69,6 @@ const AdminProfilePage: React.FC = () => {
   const adminPhone = user?.phoneNumber || "+919900011223";
   const joinedDate = "January 2026";
 
-  // Helper for 2-letter initials
   const initials =
     fullName
       .split(" ")
@@ -81,7 +78,6 @@ const AdminProfilePage: React.FC = () => {
       .toUpperCase()
       .slice(0, 2) || "AD";
 
-  // Handler: Upload new profile photo
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -103,12 +99,11 @@ const AdminProfilePage: React.FC = () => {
         });
       }
       setIsAvatarModalOpen(false);
-      toast.success("Profile picture updated successfully!");
+      toast.success("Administrator avatar updated!");
     };
     reader.readAsDataURL(file);
   };
 
-  // Handler: Remove profile photo
   const handleRemoveAvatar = () => {
     setAvatarUrl(null);
     localStorage.removeItem(`admin_avatar_${adminId}`);
@@ -118,72 +113,80 @@ const AdminProfilePage: React.FC = () => {
         avatarUrl: undefined,
       });
     }
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     setIsAvatarModalOpen(false);
-    toast.success("Profile picture removed");
+    toast.success("Administrator photo removed.");
   };
 
-  // Handle Save Name
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = adminUpdateProfileSchema.safeParse({
+
+    const parseResult = adminUpdateProfileSchema.safeParse({
       fullName: fullName.trim(),
     });
-    if (!result.success) {
+
+    if (!parseResult.success) {
       toast.error(
-        result.error.errors[0]?.message || "Invalid administrator name format.",
+        parseResult.error.errors[0]?.message || "Invalid name format.",
       );
       return;
     }
 
     setIsSavingName(true);
+    try {
+      await new Promise((r) => setTimeout(r, 400));
 
-    setTimeout(() => {
       if (user) {
         setUser({
           ...user,
-          name: result.data.fullName,
-          avatarUrl: avatarUrl || undefined,
+          name: parseResult.data.fullName,
         });
       }
-      toast.success("Admin profile name updated successfully!");
+      toast.success("Administrator name updated successfully!");
+    } catch {
+      toast.error("Failed to update profile name.");
+    } finally {
       setIsSavingName(false);
-    }, 400);
+    }
   };
 
-  // Handle Update Password
-  const handleUpdatePassword = (e: React.FormEvent) => {
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = adminUpdatePasswordSchema.safeParse({
+    const parseResult = adminUpdatePasswordSchema.safeParse({
       currentPassword,
       newPassword,
       confirmPassword,
     });
 
-    if (!result.success) {
+    if (!parseResult.success) {
       toast.error(
-        result.error.errors[0]?.message || "Invalid password format.",
+        parseResult.error.errors[0]?.message || "Invalid password parameters.",
       );
       return;
     }
 
-    setIsUpdatingPassword(true);
+    if (currentPassword !== "Admin@123") {
+      toast.error("Current password incorrect. (Demo: Admin@123)");
+      return;
+    }
 
-    setTimeout(() => {
-      toast.success("Admin password updated successfully!");
+    setIsUpdatingPassword(true);
+    try {
+      await new Promise((r) => setTimeout(r, 600));
+
+      toast.success("Administrator password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+    } catch {
+      toast.error("Failed to update password.");
+    } finally {
       setIsUpdatingPassword(false);
-    }, 500);
+    }
   };
 
   return (
-    <div className="space-y-6 pb-12 max-w-5xl">
-      {/* Hidden File Input for Image Upload */}
+    <div className="space-y-6 pb-16 w-full max-w-7xl text-stone-900">
       <input
         type="file"
         ref={fileInputRef}
@@ -192,32 +195,35 @@ const AdminProfilePage: React.FC = () => {
         className="hidden"
       />
 
-      {/* Avatar Management Modal */}
+      {/* Avatar Dialog */}
       <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
-            <DialogTitle className="font-serif text-lg">
-              Profile Picture
+            <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
+              <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+              <span>Administrator Profile Picture</span>
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Upload a photo for your admin profile or reset to default initials.
+            <DialogDescription className="text-xs text-stone-600">
+              Upload a photo for your admin operations profile or reset to default initials.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col items-center justify-center py-5 gap-3">
-            <Avatar className="w-24 h-24 border border-border shadow-xs">
-              {avatarUrl ? (
-                <AvatarImage
-                  src={avatarUrl}
-                  alt={fullName}
-                  className="object-cover"
-                />
-              ) : null}
-              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold font-serif">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <p className="text-[11px] text-muted-foreground">
+            <div className="p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm">
+              <Avatar className="w-24 h-24 border-2 border-white">
+                {avatarUrl ? (
+                  <AvatarImage
+                    src={avatarUrl}
+                    alt={fullName}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="bg-[#450A0A] text-white font-serif text-2xl font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <p className="text-[11px] text-stone-500 font-medium">
               Supported formats: JPG, PNG, WEBP (Max 5MB)
             </p>
           </div>
@@ -229,7 +235,7 @@ const AdminProfilePage: React.FC = () => {
                 variant="destructive"
                 size="sm"
                 onClick={handleRemoveAvatar}
-                className="w-full sm:w-auto text-xs"
+                className="w-full sm:w-auto text-xs rounded-xl"
               >
                 <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                 Remove Photo
@@ -244,7 +250,7 @@ const AdminProfilePage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAvatarModalOpen(false)}
-                className="flex-1 sm:flex-none text-xs"
+                className="flex-1 sm:flex-none text-xs rounded-xl"
               >
                 Cancel
               </Button>
@@ -252,7 +258,7 @@ const AdminProfilePage: React.FC = () => {
                 type="button"
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground flex-1 sm:flex-none text-xs gap-1.5 cursor-pointer"
+                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
               >
                 <Upload className="w-3.5 h-3.5" />
                 Upload Photo
@@ -262,279 +268,256 @@ const AdminProfilePage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Page Header */}
-      <div className="border-b pb-5">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-serif">
-          Admin Profile & Settings
-        </h1>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-          Manage your administrator account details, security credentials, and profile picture.
-        </p>
+      {/* Page Header (100% Flexbox) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md shrink-0 select-none">
+            ॐ
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950">
+              Admin Profile & Platform Credentials
+            </h1>
+            <p className="text-xs text-stone-600 mt-1 leading-relaxed">
+              Manage your administrator authority account details, security credentials, and profile picture.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Admin Profile Overview Card */}
-      <Card className="shadow-xs border border-border/80 overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
-            {/* Clickable Avatar with Camera Badge */}
-            <div className="relative group shrink-0">
-              <button
-                type="button"
-                onClick={() => setIsAvatarModalOpen(true)}
-                className="relative block rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-transform hover:scale-105 cursor-pointer"
-                title="Click to change profile picture"
+      <div className="border-2 border-amber-300 bg-white rounded-3xl p-6 sm:p-7 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-5">
+          <div className="relative group shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsAvatarModalOpen(true)}
+              className="relative block rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
+              title="Click to change profile picture"
+            >
+              <Avatar className="w-20 h-20 border-2 border-white">
+                {avatarUrl ? (
+                  <AvatarImage
+                    src={avatarUrl}
+                    alt={fullName}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="bg-[#450A0A] text-white font-serif text-xl font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="absolute inset-1 rounded-full bg-stone-950/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="w-4 h-4" />
+              </div>
+            </button>
+          </div>
+
+          <div className="space-y-1.5 flex-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <h2 className="text-xl font-bold font-serif text-stone-950">
+                {fullName}
+              </h2>
+              <Badge
+                className="bg-[#450A0A] text-amber-300 border border-amber-400/40 text-[10px] font-bold tracking-wider uppercase"
               >
-                <Avatar className="w-20 h-20 sm:w-18 sm:h-18 border border-border shadow-xs">
-                  {avatarUrl ? (
-                    <AvatarImage
-                      src={avatarUrl}
-                      alt={fullName}
-                      className="object-cover"
-                    />
-                  ) : null}
-                  <AvatarFallback className="bg-muted text-foreground font-serif text-xl font-bold">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-
-                {/* Camera Badge */}
-                <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground p-1.5 rounded-full shadow-xs border-2 border-background group-hover:bg-primary/90 transition-colors">
-                  <Camera className="w-3.5 h-3.5" />
-                </div>
-              </button>
+                PLATFORM AUTHORITY
+              </Badge>
             </div>
-
-            <div className="space-y-1 flex-1">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h2 className="text-xl font-bold text-foreground">
-                  {fullName}
-                </h2>
-                <Badge
-                  variant="secondary"
-                  className="text-[10px] uppercase font-bold tracking-wide"
-                >
-                  ADMIN
-                </Badge>
-              </div>
-              <p className="text-xs text-muted-foreground">{adminEmail}</p>
-              <div className="flex items-center justify-center sm:justify-start gap-2 text-[11px] text-muted-foreground pt-1">
-                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                <span>Account Created: {joinedDate}</span>
-              </div>
+            <p className="text-xs font-mono text-stone-600 font-medium">{adminEmail}</p>
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-stone-500 pt-1 font-medium">
+              <Calendar className="w-3.5 h-3.5 text-stone-400" />
+              <span>Console Account Created: {joinedDate}</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Profile Details Deck (100% Flexbox, Zero CSS Grids) */}
+      <div className="flex flex-col md:flex-row gap-6 w-full">
         {/* Edit Personal Profile Information Card */}
-        <Card className="shadow-xs border border-border/80">
-          <CardHeader className="py-4 px-6 border-b bg-muted/20">
-            <CardTitle className="text-base font-bold flex items-center gap-2">
-              <User className="w-4 h-4 text-primary" />
+        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-3xl p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+            <User className="w-4 h-4 text-red-700" />
+            <h3 className="text-base font-bold font-serif text-stone-950">
               Account Details
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Update your full name. Email address and phone number are locked
-              for administrative security.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-6 space-y-4">
-            <form onSubmit={handleSaveProfile} className="space-y-4">
-              {/* Full Name Field (Editable) */}
-              <div className="space-y-1.5">
-                <Label
-                  htmlFor="admin-fullname"
-                  className="text-xs font-semibold"
-                >
-                  Full Name *
+            </h3>
+          </div>
+          <p className="text-xs text-stone-600">
+            Update your full name. Email address and phone number are locked for administrative security.
+          </p>
+
+          <form onSubmit={handleSaveProfile} className="space-y-4 pt-1">
+            <div className="space-y-1">
+              <Label htmlFor="admin-fullname" className="text-xs font-bold text-stone-800 block">
+                Full Name *
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="admin-fullname"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="pl-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  placeholder="Enter full name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="admin-email" className="text-xs font-bold text-stone-800">
+                  Email Address
                 </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="admin-fullname"
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="pl-9 text-xs h-9 bg-card"
-                    placeholder="Enter full name"
-                    required
-                  />
-                </div>
+                <span className="text-[10px] text-stone-500 flex items-center gap-1 font-bold">
+                  <Lock className="w-3 h-3 text-stone-400" /> Locked Authority
+                </span>
               </div>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="admin-email"
+                  type="email"
+                  value={adminEmail}
+                  disabled
+                  className="pl-10 text-xs h-10 rounded-xl bg-stone-100 text-stone-600 font-medium cursor-not-allowed border-dashed border-stone-300"
+                />
+              </div>
+            </div>
 
-              {/* Email Address (Read-only / Disabled) */}
-              <div className="space-y-1.5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0.5">
-                  <Label
-                    htmlFor="admin-email"
-                    className="text-xs font-semibold"
-                  >
-                    Email Address
-                  </Label>
-                  <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-medium">
-                    <Lock className="w-3 h-3 text-muted-foreground" />
-                    Locked for Admin Account
-                  </span>
-                </div>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/60" />
-                  <Input
-                    id="admin-email"
-                    type="email"
-                    value={adminEmail}
-                    disabled
-                    className="pl-9 text-xs h-9 bg-muted/50 text-muted-foreground cursor-not-allowed border-dashed"
-                  />
-                </div>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="admin-phone" className="text-xs font-bold text-stone-800">
+                  Phone Number
+                </Label>
+                <span className="text-[10px] text-stone-500 flex items-center gap-1 font-bold">
+                  <Lock className="w-3 h-3 text-stone-400" /> Locked Security
+                </span>
               </div>
+              <div className="relative">
+                <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="admin-phone"
+                  type="text"
+                  value={adminPhone}
+                  disabled
+                  className="pl-10 text-xs h-10 rounded-xl bg-stone-100 text-stone-600 font-mono font-bold cursor-not-allowed border-dashed border-stone-300"
+                />
+              </div>
+            </div>
 
-              {/* Phone Number (Read-only / Disabled) */}
-              <div className="space-y-1.5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0.5">
-                  <Label
-                    htmlFor="admin-phone"
-                    className="text-xs font-semibold"
-                  >
-                    Phone Number
-                  </Label>
-                  <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-medium">
-                    <Lock className="w-3 h-3 text-muted-foreground" />
-                    Locked for Security
-                  </span>
-                </div>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/60" />
-                  <Input
-                    id="admin-phone"
-                    type="text"
-                    value={adminPhone}
-                    disabled
-                    className="pl-9 text-xs h-9 bg-muted/50 text-muted-foreground cursor-not-allowed border-dashed"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={isSavingName}
-                  className="text-xs gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto h-9 font-medium justify-center"
-                >
-                  <Save className="w-3.5 h-3.5" />
-                  {isSavingName ? "Saving..." : "Save Name Changes"}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={isSavingName}
+              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+            >
+              <Save className="w-3.5 h-3.5" />
+              {isSavingName ? "Saving..." : "Save Name Changes"}
+            </Button>
+          </form>
+        </div>
 
         {/* Change Security Password Card */}
-        <Card className="shadow-xs border border-border/80">
-          <CardHeader className="py-4 px-6 border-b bg-muted/20">
-            <CardTitle className="text-base font-bold flex items-center gap-2">
-              <KeyRound className="w-4 h-4 text-primary" />
-              Security & Password
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Update your administrator login password regularly to protect
-              system data.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-6 space-y-4">
-            <form onSubmit={handleUpdatePassword} className="space-y-4">
-              {/* Current Password */}
-              <div className="space-y-1.5">
-                <Label htmlFor="current-pass" className="text-xs font-semibold">
-                  Current Password *
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="current-pass"
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="pl-9 pr-9 text-xs h-9 bg-card"
-                    placeholder="Enter current password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
-                  >
-                    {showCurrentPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
+        <div className="w-full md:w-1/2 border-2 border-amber-300 bg-white rounded-3xl p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+            <KeyRound className="w-4 h-4 text-amber-600" />
+            <h3 className="text-base font-bold font-serif text-stone-950">
+              Security & Credentials
+            </h3>
+          </div>
+          <p className="text-xs text-stone-600">
+            Update your administrator console login password regularly to protect system records.
+          </p>
 
-              {/* New Password */}
-              <div className="space-y-1.5">
-                <Label htmlFor="new-pass" className="text-xs font-semibold">
-                  New Password *
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="new-pass"
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="pl-9 pr-9 text-xs h-9 bg-card"
-                    placeholder="Enter at least 6 characters"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
-                  >
-                    {showNewPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div className="space-y-1.5">
-                <Label htmlFor="confirm-pass" className="text-xs font-semibold">
-                  Confirm New Password *
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="confirm-pass"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-9 text-xs h-9 bg-card"
-                    placeholder="Re-enter new password"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  size="sm"
-                  variant="outline"
-                  disabled={isUpdatingPassword}
-                  className="text-xs gap-1.5 shadow-xs w-full sm:w-auto h-9 font-medium justify-center cursor-pointer"
+          <form onSubmit={handleUpdatePassword} className="space-y-4 pt-1">
+            <div className="space-y-1">
+              <Label htmlFor="current-pass" className="text-xs font-bold text-stone-800 block">
+                Current Password *
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="current-pass"
+                  type={showCurrentPassword ? "text" : "password"}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="pl-10 pr-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  placeholder="Enter current password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
                 >
-                  <KeyRound className="w-3.5 h-3.5" />
-                  {isUpdatingPassword ? "Updating..." : "Update Password"}
-                </Button>
+                  {showCurrentPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
               </div>
-            </form>
-          </CardContent>
-        </Card>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="new-pass" className="text-xs font-bold text-stone-800 block">
+                New Password *
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="new-pass"
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="pl-10 pr-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  placeholder="Enter at least 6 characters"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
+                >
+                  {showNewPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="confirm-pass" className="text-xs font-bold text-stone-800 block">
+                Confirm New Password *
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                <Input
+                  id="confirm-pass"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="pl-10 text-xs h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                  placeholder="Re-enter new password"
+                />
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              size="sm"
+              disabled={isUpdatingPassword}
+              className="text-xs gap-1.5 bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 w-full sm:w-auto h-10 px-5 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
+            >
+              <KeyRound className="w-3.5 h-3.5" />
+              {isUpdatingPassword ? "Updating..." : "Update Password"}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );

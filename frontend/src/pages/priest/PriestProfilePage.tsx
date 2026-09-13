@@ -13,13 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -30,7 +23,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import {
-  Sparkles,
   ShieldCheck,
   Check,
   Plus,
@@ -48,6 +40,7 @@ import {
   Upload,
   Search,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatINR } from "@/lib/utils";
@@ -63,6 +56,11 @@ const POPULAR_LANGUAGES = [
   "Tamil",
 ];
 
+/**
+ * PriestProfilePage
+ * Vedic Scholar profile, qualifications, languages, localities, and offerings editor.
+ * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
+ */
 export const PriestProfilePage: React.FC = () => {
   const { user } = useAuthStore();
   const priestId =
@@ -91,7 +89,6 @@ export const PriestProfilePage: React.FC = () => {
   const [customLanguage, setCustomLanguage] = useState("");
   const [newAreaInput, setNewAreaInput] = useState("");
 
-  // 1. Fetch priest profile & active services on mount
   const loadProfile = async () => {
     setIsLoading(true);
     try {
@@ -112,7 +109,6 @@ export const PriestProfilePage: React.FC = () => {
         setLanguages(p.languages || []);
         setServiceAreas(p.serviceAreas || []);
 
-        // Derive initial pincode based on city
         if (p.city === "Mumbai") setPincode("400050");
         else if (p.city === "Bengaluru") setPincode("560038");
         else if (p.city === "Kolkata") setPincode("700019");
@@ -135,7 +131,6 @@ export const PriestProfilePage: React.FC = () => {
     loadProfile();
   }, [priestId]);
 
-  // 2. PIN Code Lookup for City & State Auto-Detection using https://api.postalpincode.in/pincode/${pincode}
   const handlePincodeLookup = async (pinValue: string) => {
     const clean = pinValue.trim().replace(/\D/g, "");
     setPincode(clean);
@@ -143,95 +138,52 @@ export const PriestProfilePage: React.FC = () => {
     if (clean.length === 6) {
       setIsSearchingPin(true);
       try {
-        let detectedCity = "";
-        let detectedState = "";
-
-        // 1. Primary: Live Postal PIN Code API
-        try {
-          const response = await fetch(
-            `https://api.postalpincode.in/pincode/${clean}`,
-          );
-          if (response.ok) {
-            const data = await response.json();
-            if (
-              Array.isArray(data) &&
-              data[0]?.Status === "Success" &&
-              Array.isArray(data[0]?.PostOffice) &&
-              data[0].PostOffice.length > 0
-            ) {
-              const po = data[0].PostOffice[0];
-              detectedCity = po.District || po.Block || po.Circle || "";
-              detectedState = po.State || "";
-            }
-          }
-        } catch (fetchErr) {
-          console.warn(
-            "Live postal API unavailable, trying local dataset:",
-            fetchErr,
-          );
-        }
-
-        // 2. Fallback: Local centralized directory if offline
-        if (!detectedCity || !detectedState) {
-          const fallbackRes = await mockLookupPincode(clean);
-          if (fallbackRes.locations && fallbackRes.locations.length > 0) {
-            detectedCity = fallbackRes.locations[0].city;
-            detectedState = fallbackRes.locations[0].state;
-          }
-        }
-
-        if (detectedCity && detectedState) {
-          setCity(detectedCity);
-          setState(detectedState);
-          toast.success(`Location detected: ${detectedCity}, ${detectedState}`);
+        const res = await mockLookupPincode(clean);
+        if (res && res.locations && res.locations.length > 0) {
+          const loc = res.locations[0];
+          setCity(loc.city || loc.district);
+          setState(loc.state);
+          toast.success(`Detected location: ${loc.city || loc.district}, ${loc.state}`);
         } else {
-          toast.error("PIN code not found. Please verify the 6-digit code.");
+          toast.error("Could not resolve location for this PIN code.");
         }
       } catch {
-        toast.error("Failed to lookup PIN code location.");
+        toast.error("Failed to lookup PIN code.");
       } finally {
         setIsSearchingPin(false);
       }
     }
   };
 
-  // 3. Avatar Upload & Remove Handlers
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please upload a valid image file (JPG, PNG, WebP).");
-      return;
-    }
-
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size must be under 5MB.");
+      toast.error("Image size must be less than 5MB");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      setProfileImageUrl(result);
+    reader.onloadend = () => {
+      const dataUrl = reader.result as string;
+      setProfileImageUrl(dataUrl);
       setIsAvatarModalOpen(false);
-      toast.success('Profile photo updated! Click "Save Changes" to persist.');
+      toast.success("Profile photo updated! Remember to save changes.");
     };
     reader.readAsDataURL(file);
   };
 
   const handleRemoveAvatar = () => {
     setProfileImageUrl("");
-    if (fileInputRef.current) fileInputRef.current.value = "";
     setIsAvatarModalOpen(false);
     toast.success("Profile photo removed.");
   };
 
-  // 4. Language toggles
   const toggleLanguage = (lang: string) => {
     if (languages.includes(lang)) {
       if (languages.length === 1) {
-        toast.error("Please keep at least one language.");
+        toast.error("Please keep at least one primary language.");
         return;
       }
       setLanguages(languages.filter((l) => l !== lang));
@@ -252,7 +204,6 @@ export const PriestProfilePage: React.FC = () => {
     setCustomLanguage("");
   };
 
-  // 5. Service Areas management
   const handleAddArea = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = newAreaInput.trim();
@@ -273,7 +224,6 @@ export const PriestProfilePage: React.FC = () => {
     setServiceAreas(serviceAreas.filter((a) => a !== area));
   };
 
-  // 6. Save Changes handler
   const handleSave = async () => {
     const parseResult = updatePriestProfileSchema.safeParse({
       fullName: fullName.trim(),
@@ -317,7 +267,6 @@ export const PriestProfilePage: React.FC = () => {
     }
   };
 
-  // Fallback initials for Avatar
   const getInitials = (name: string) => {
     if (!name) return "PT";
     const parts = name.trim().split(" ");
@@ -327,18 +276,17 @@ export const PriestProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-100 space-y-3">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="text-xs text-muted-foreground">
-          Loading your Vedic credentials...
-        </p>
+      <div className="w-full min-h-[60vh] flex flex-col items-center justify-center bg-white space-y-3">
+        <div className="h-12 w-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-sm animate-pulse">
+          ॐ
+        </div>
+        <p className="text-xs text-stone-600 font-medium">Loading your Vedic credentials...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl space-y-6 pb-16">
-      {/* Hidden File Input for Avatar */}
+    <div className="w-full max-w-7xl space-y-6 pb-16 text-stone-900">
       <input
         type="file"
         ref={fileInputRef}
@@ -347,33 +295,35 @@ export const PriestProfilePage: React.FC = () => {
         className="hidden"
       />
 
-      {/* Profile Picture Management Modal (Identical to Devotee Profile) */}
+      {/* Avatar Modal */}
       <Dialog open={isAvatarModalOpen} onOpenChange={setIsAvatarModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md p-6 rounded-3xl bg-white border-2 border-amber-300 shadow-xl">
           <DialogHeader>
-            <DialogTitle className="font-serif text-xl">
-              Profile Picture
+            <DialogTitle className="font-serif text-xl font-bold text-stone-950 flex items-center gap-2">
+              <span className="text-amber-600 font-serif font-black text-xl">ॐ</span>
+              <span>Purohit Profile Picture</span>
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Upload a clear photo for your Priest profile or reset to default
-              initials.
+            <DialogDescription className="text-xs text-stone-600">
+              Upload a clear photo for your Purohit roster listing or reset to default initials.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col items-center justify-center py-6 gap-4">
-            <Avatar className="w-28 h-28 border-2 border-border shadow-sm ring-4 ring-muted">
-              {profileImageUrl ? (
-                <AvatarImage
-                  src={profileImageUrl}
-                  alt={fullName}
-                  className="object-cover"
-                />
-              ) : null}
-              <AvatarFallback className="bg-amber-100 text-amber-900 font-serif text-3xl font-bold">
-                {getInitials(fullName)}
-              </AvatarFallback>
-            </Avatar>
-            <p className="text-xs text-muted-foreground">
+            <div className="p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm">
+              <Avatar className="w-28 h-28 border-2 border-white">
+                {profileImageUrl ? (
+                  <AvatarImage
+                    src={profileImageUrl}
+                    alt={fullName}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="bg-[#780016] text-white font-serif text-3xl font-bold">
+                  {getInitials(fullName)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <p className="text-xs text-stone-500 font-medium">
               Supported formats: JPG, PNG, WEBP (Max 5MB)
             </p>
           </div>
@@ -384,7 +334,7 @@ export const PriestProfilePage: React.FC = () => {
                 type="button"
                 variant="destructive"
                 onClick={handleRemoveAvatar}
-                className="w-full sm:w-auto text-xs"
+                className="w-full sm:w-auto text-xs rounded-xl"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Remove Photo
@@ -398,14 +348,14 @@ export const PriestProfilePage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={() => setIsAvatarModalOpen(false)}
-                className="flex-1 sm:flex-none text-xs"
+                className="flex-1 sm:flex-none text-xs rounded-xl"
               >
                 Cancel
               </Button>
               <Button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex-1 sm:flex-none text-xs gap-1.5"
+                className="bg-[#780016] hover:bg-red-800 text-white font-bold border border-amber-400 flex-1 sm:flex-none text-xs gap-1.5 rounded-xl cursor-pointer"
               >
                 <Upload className="w-4 h-4" />
                 Upload New Photo
@@ -415,33 +365,31 @@ export const PriestProfilePage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 1. Header & Primary Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+      {/* 1. Header & Primary Action (100% Flexbox) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl border-2 border-amber-300 bg-white shadow-sm">
         <div>
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="text-primary border-primary/30 text-[11px]"
+              className="text-amber-900 border-amber-400 bg-amber-100 text-[11px] font-bold"
             >
-              <Sparkles className="h-3 w-3 mr-1 text-primary" /> Priest
-              Credentials
+              Vedic Acharya Dossier
             </Badge>
             {priest?.approvalStatus === "APPROVED" ? (
-              <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] gap-1">
-                <ShieldCheck className="h-3 w-3" /> Verified Priest
+              <Badge className="bg-emerald-600 text-white text-[11px] font-bold gap-1">
+                <ShieldCheck className="h-3 w-3" /> Verified Purohit
               </Badge>
             ) : (
-              <Badge variant="secondary" className="text-[11px]">
+              <Badge variant="secondary" className="text-[11px] font-bold">
                 {priest?.approvalStatus}
               </Badge>
             )}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-foreground mt-1">
-            Vedic Profile & Qualifications
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-serif text-stone-950 mt-1">
+            Vedic Profile & Credentials
           </h1>
-          <p className="text-xs text-muted-foreground">
-            Manage your credentials, Vedic lineage, languages, service
-            localities, and puja offerings.
+          <p className="text-xs text-stone-600">
+            Manage your credentials, Gurukul lineage, languages, service localities, and puja offerings.
           </p>
         </div>
 
@@ -449,34 +397,33 @@ export const PriestProfilePage: React.FC = () => {
           size="sm"
           onClick={handleSave}
           disabled={isSaving}
-          className="gap-2 text-xs font-semibold px-5 h-9 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs shrink-0 self-start sm:self-auto"
+          className="gap-2 text-xs font-bold px-6 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-xl shadow-xs shrink-0 cursor-pointer puja-btn-tap"
         >
           {isSaving ? (
             <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Saving...
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Saving Changes...
             </>
           ) : (
             <>
-              <Check className="w-3.5 h-3.5" />
-              Save Changes
+              <Check className="w-4 h-4" />
+              Save Profile Changes
             </>
           )}
         </Button>
       </div>
 
-      {/* 2. Top Summary Card with Interactive Avatar Trigger */}
-      <div className="p-5 sm:p-6 rounded-lg bg-linear-to-r from-amber-500/10 via-brand-saffron/10 to-primary/5 border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 w-full sm:w-auto text-center sm:text-left">
-          {/* Clickable Avatar on Top for Mobile */}
+      {/* 2. Top Summary Card with Interactive Avatar Trigger (Pure White, Haldi Gold Border) */}
+      <div className="p-6 sm:p-8 rounded-3xl border-2 border-amber-300 bg-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto text-center sm:text-left">
           <div className="relative group shrink-0">
             <button
               type="button"
               onClick={() => setIsAvatarModalOpen(true)}
-              className="relative block p-1 rounded-full bg-linear-to-tr from-primary via-brand-saffron to-amber-500 shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-transform hover:scale-105"
+              className="relative block p-1 rounded-full ring-4 ring-amber-400 bg-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-700 transition-transform hover:scale-105 cursor-pointer"
               title="Click to change profile picture"
             >
-              <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-background">
+              <Avatar className="w-24 h-24 sm:w-20 sm:h-20 border-2 border-white">
                 {profileImageUrl ? (
                   <AvatarImage
                     src={profileImageUrl}
@@ -484,83 +431,75 @@ export const PriestProfilePage: React.FC = () => {
                     className="object-cover"
                   />
                 ) : null}
-                <AvatarFallback className="bg-primary/10 text-primary font-serif text-2xl font-bold">
+                <AvatarFallback className="bg-[#780016] text-white font-serif text-2xl font-bold">
                   {getInitials(fullName)}
                 </AvatarFallback>
               </Avatar>
 
-              {/* Camera Overlay on Hover */}
-              <div className="absolute inset-1 rounded-full bg-black/40 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
+              <div className="absolute inset-1 rounded-full bg-stone-950/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <Camera className="w-5 h-5 mb-0.5" />
-                <span className="text-[9px] font-medium tracking-wide uppercase">
-                  Edit
-                </span>
+                <span className="text-[9px] font-bold tracking-wide uppercase">Edit</span>
               </div>
             </button>
           </div>
 
-          {/* Details on Bottom for Mobile */}
           <div className="space-y-1.5 flex-1">
-            <h2 className="text-xl sm:text-2xl font-bold font-serif text-foreground">
-              {fullName || "Pandit Ji"}
+            <h2 className="text-xl sm:text-2xl font-extrabold font-serif text-stone-950">
+              {fullName || "Acharya Pandit Ji"}
             </h2>
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-stone-600">
+              <span className="font-bold text-stone-900">
                 {experienceYears} Years Vedic Experience
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1 text-amber-600 font-bold">
+              <span className="flex items-center gap-1 text-amber-700 font-bold">
                 <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                 {priest?.rating || 4.9} ({priest?.reviewCount || 0} reviews)
               </span>
               <span>•</span>
-              <span>
+              <span className="font-medium text-stone-800">
                 {city}, {state}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Tap avatar to upload a new profile photo or remove your picture.
+            <p className="text-xs text-stone-500">
+              Tap avatar to upload a new profile picture.
             </p>
           </div>
         </div>
 
-        {/* Locality Quick Badge */}
-        <div className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-card border border-border shadow-2xs text-xs text-muted-foreground shrink-0">
-          <MapPin className="w-4 h-4 text-primary" />
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-50/70 border border-amber-300 text-xs text-stone-800 font-bold shrink-0">
+          <MapPin className="w-4 h-4 text-red-700" />
           <span>{serviceAreas.length} Active Localities</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 3. Basic Details & Experience */}
-        <Card className="border-border/80 shadow-xs">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-primary" />
-              <CardTitle className="text-base font-serif">
-                Basic Profile & Experience
-              </CardTitle>
-            </div>
-            <CardDescription className="text-xs">
-              Your name, Vedic experience, and PIN-code based home location.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
-            <div className="space-y-1.5">
-              <label className="font-semibold text-foreground">
+      {/* 3 & 4. Details Deck (100% Flexbox, Zero CSS Grids) */}
+      <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
+        {/* Basic Details & Experience */}
+        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+            <User className="w-4 h-4 text-red-700" />
+            <h3 className="text-base font-serif font-bold text-stone-950">
+              Basic Profile & Experience
+            </h3>
+          </div>
+
+          <div className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="font-bold text-stone-800 block">
                 Full Legal Name *
               </label>
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="e.g. Pandit Ramesh Shastri"
-                className="h-9 text-xs"
+                className="h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="font-semibold text-foreground flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-primary" />
+            <div className="space-y-1">
+              <label className="font-bold text-stone-800 flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-amber-600" />
                 Years of Vedic Experience *
               </label>
               <Input
@@ -570,18 +509,18 @@ export const PriestProfilePage: React.FC = () => {
                 value={experienceYears}
                 onChange={(e) => setExperienceYears(Number(e.target.value))}
                 placeholder="18"
-                className="h-9 text-xs"
+                className="h-10 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white text-xs"
               />
             </div>
 
             {/* PIN Code with Auto-Detection */}
-            <div className="space-y-1.5 pt-1">
+            <div className="space-y-1 pt-1">
               <div className="flex items-center justify-between">
-                <label className="font-semibold text-foreground">
+                <label className="font-bold text-stone-800 block">
                   6-Digit PIN Code *
                 </label>
                 {isSearchingPin && (
-                  <span className="text-[11px] text-primary flex items-center gap-1">
+                  <span className="text-[11px] text-amber-700 flex items-center gap-1 font-bold">
                     <Loader2 className="w-3 h-3 animate-spin" /> Detecting...
                   </span>
                 )}
@@ -592,7 +531,7 @@ export const PriestProfilePage: React.FC = () => {
                   maxLength={6}
                   onChange={(e) => handlePincodeLookup(e.target.value)}
                   placeholder="e.g. 400050"
-                  className="h-9 text-xs font-mono tracking-wider"
+                  className="h-10 text-xs font-mono tracking-wider rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
                 />
                 <Button
                   type="button"
@@ -600,315 +539,273 @@ export const PriestProfilePage: React.FC = () => {
                   size="sm"
                   onClick={() => handlePincodeLookup(pincode)}
                   disabled={isSearchingPin || pincode.length !== 6}
-                  className="h-9 text-xs gap-1 shrink-0"
+                  className="h-10 text-xs gap-1 shrink-0 rounded-xl border-amber-300 font-bold"
                 >
-                  <Search className="w-3.5 h-3.5" /> Lookup
+                  <Search className="w-3.5 h-3.5 text-amber-600" /> Lookup
                 </Button>
               </div>
             </div>
 
-            {/* Detected City & State (Auto-Populated) */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <span className="font-medium text-muted-foreground text-[11px]">
+            {/* Detected City & State (100% Flexbox) */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
+              <div className="flex-1 space-y-1">
+                <span className="font-bold text-stone-500 text-[10px] uppercase">
                   Detected City
                 </span>
-                <div className="p-2 rounded-md bg-muted/50 border text-foreground font-medium text-xs">
+                <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
                   {city || "Enter PIN Code"}
                 </div>
               </div>
-              <div className="space-y-1">
-                <span className="font-medium text-muted-foreground text-[11px]">
+              <div className="flex-1 space-y-1">
+                <span className="font-bold text-stone-500 text-[10px] uppercase">
                   Detected State
                 </span>
-                <div className="p-2 rounded-md bg-muted/50 border text-foreground font-medium text-xs">
+                <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-stone-900 font-bold text-xs">
                   {state || "Enter PIN Code"}
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* 4. Verified Contact Information (Read-Only) */}
-        <Card className="border-border/80 shadow-xs">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <CardTitle className="text-base font-serif">
-                Verified Contact Channels
-              </CardTitle>
-            </div>
-            <CardDescription className="text-xs">
-              Primary communication channels verified via OTP authentication.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
-            <div className="p-3.5 rounded-xl bg-muted/40 border space-y-2">
+        {/* Verified Contact Information */}
+        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <h3 className="text-base font-serif font-bold text-stone-950">
+              Verified Contact Channels
+            </h3>
+          </div>
+
+          <div className="space-y-4 text-xs">
+            <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-primary" /> Registered
-                  Mobile
+                <span className="font-bold text-stone-700 flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-red-700" /> Registered Mobile
                 </span>
                 <Badge
                   variant="outline"
-                  className="text-emerald-700 bg-emerald-500/10 border-emerald-500/30 text-[10px] gap-1"
+                  className="text-emerald-800 bg-emerald-100 border-emerald-300 text-[10px] font-bold gap-1"
                 >
-                  <Check className="w-3 h-3" /> Phone Verified
+                  <Check className="w-3 h-3 text-emerald-700" /> Phone Verified
                 </Badge>
               </div>
-              <p className="font-mono text-sm font-bold text-foreground">
+              <p className="font-mono text-sm font-bold text-stone-950">
                 {priest?.phoneNumber || "+919876543211"}
               </p>
-              <p className="text-[10px] text-muted-foreground">
-                Devotees contact you on this verified number for ritual
-                coordination.
+              <p className="text-[11px] text-stone-600">
+                Devotees contact you on this verified number for ritual coordination.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-muted/40 border space-y-2">
+            <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-primary" /> Registered Email
+                <span className="font-bold text-stone-700 flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-amber-600" /> Registered Email
                 </span>
                 <Badge
                   variant="outline"
-                  className="text-emerald-700 bg-emerald-500/10 border-emerald-500/30 text-[10px] gap-1"
+                  className="text-emerald-800 bg-emerald-100 border-emerald-300 text-[10px] font-bold gap-1"
                 >
-                  <Check className="w-3 h-3" /> Email Verified
+                  <Check className="w-3 h-3 text-emerald-700" /> Email Verified
                 </Badge>
               </div>
-              <p className="font-mono text-xs font-semibold text-foreground">
+              <p className="font-medium text-xs text-stone-950">
                 {priest?.email || "priest@example.demo"}
               </p>
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-[11px] text-stone-600">
                 Booking updates, scheduling notifications, and platform alerts.
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* 5. Vedic Lineage & Bio (Full Width) */}
-      <Card className="border-border/80 shadow-xs">
-        <CardHeader className="pb-3 border-b">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-primary" />
-            <CardTitle className="text-base font-serif">
-              Vedic Lineage & Bio
-            </CardTitle>
+      {/* 5. Vedic Lineage & Bio */}
+      <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-3">
+        <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+          <BookOpen className="w-4 h-4 text-red-700" />
+          <h3 className="text-base font-serif font-bold text-stone-950">
+            Vedic Lineage & Bio
+          </h3>
+        </div>
+        <p className="text-xs text-stone-600">
+          Describe your Gurukul education, Veda shakha, training, and spiritual background.
+        </p>
+        <Textarea
+          rows={4}
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          placeholder="Vedic scholar trained in Varanasi Gurukul. Specializes in Griha Pravesh, Vastu Shanti, and Satyanarayan Katha with over 18 years of ritual expertise..."
+          className="text-xs leading-relaxed resize-y rounded-2xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+        />
+        <div className="flex justify-between items-center text-[11px] text-stone-500 pt-1 font-medium">
+          <span>Minimum 20 characters. Authentic background helps devotees build trust.</span>
+          <span>{bio.length} characters</span>
+        </div>
+      </div>
+
+      {/* 6 & 7. Languages & Offerings Deck (100% Flexbox, Zero CSS Grids) */}
+      <div className="flex flex-col md:flex-row items-stretch gap-6 w-full">
+        {/* Languages Spoken */}
+        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+            <LanguagesIcon className="w-4 h-4 text-red-700" />
+            <h3 className="text-base font-serif font-bold text-stone-950">
+              Languages Spoken ({languages.length})
+            </h3>
           </div>
-          <CardDescription className="text-xs">
-            Describe your Gurukul education, Veda shakha, training, and
-            spiritual background.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-4 sm:p-5 space-y-2 text-xs">
-          <Textarea
-            rows={4}
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="Vedic scholar trained in Varanasi Gurukul. Specializes in Griha Pravesh, Vastu Shanti, and Satyanarayan Katha with over 18 years of ritual expertise..."
-            className="text-xs leading-relaxed resize-y"
-          />
-          <div className="flex justify-between items-center text-[10px] text-muted-foreground pt-1">
-            <span>
-              Minimum 20 characters. Authentic background helps devotees build
-              trust.
-            </span>
-            <span>{bio.length} characters</span>
-          </div>
-        </CardContent>
-      </Card>
+          <p className="text-xs text-stone-600">
+            Select all Vedic and regional languages you can perform mantras and katha in.
+          </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 6. Languages Spoken */}
-        <Card className="border-border/80 shadow-xs">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center gap-2">
-              <LanguagesIcon className="w-4 h-4 text-primary" />
-              <CardTitle className="text-base font-serif">
-                Languages Spoken ({languages.length})
-              </CardTitle>
-            </div>
-            <CardDescription className="text-xs">
-              Select all Vedic and regional languages you can perform mantras
-              and katha in.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
-            <div className="flex flex-wrap gap-2">
-              {POPULAR_LANGUAGES.map((lang) => {
-                const isSelected = languages.includes(lang);
-                return (
-                  <button
-                    key={lang}
-                    type="button"
-                    onClick={() => toggleLanguage(lang)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all flex items-center gap-1.5 ${
-                      isSelected
-                        ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                        : "bg-muted/40 text-muted-foreground hover:bg-muted border-border/70"
-                    }`}
-                  >
-                    {isSelected && <Check className="w-3 h-3" />}
-                    {lang}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Custom Language Addition */}
-            <form
-              onSubmit={handleAddCustomLanguage}
-              className="flex gap-2 pt-2 border-t border-border/60"
-            >
-              <Input
-                placeholder="Add other language (e.g. Odia)..."
-                value={customLanguage}
-                onChange={(e) => setCustomLanguage(e.target.value)}
-                className="h-8 text-xs flex-1"
-              />
-              <Button
-                type="submit"
-                size="sm"
-                variant="outline"
-                className="h-8 text-xs gap-1"
-              >
-                <Plus className="w-3 h-3" /> Add
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* 7. Active Puja Services & Offerings (Catalog & Dakshina) */}
-        <Card className="border-border/80 shadow-xs">
-          <CardHeader className="p-4 sm:p-5 border-b">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-primary shrink-0" />
-                  <CardTitle className="text-base font-serif font-bold text-foreground">
-                    Puja Services Provided (
-                    {services.filter((s) => s.isActive).length})
-                  </CardTitle>
-                </div>
-                <CardDescription className="text-xs">
-                  Ceremonies and rituals you currently offer to devotees.
-                </CardDescription>
-              </div>
-              <Link to="/priest/services" className="self-start sm:self-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs text-primary hover:text-primary gap-1.5 h-8 px-2.5"
+          <div className="flex flex-wrap gap-2">
+            {POPULAR_LANGUAGES.map((lang) => {
+              const isSelected = languages.includes(lang);
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => toggleLanguage(lang)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                    isSelected
+                      ? "bg-[#780016] text-white border-amber-400 shadow-xs"
+                      : "bg-white text-stone-700 hover:bg-amber-50 border-stone-300"
+                  }`}
                 >
-                  Manage Services <ExternalLink className="w-3 h-3" />
-                </Button>
-              </Link>
+                  {isSelected && <Check className="w-3 h-3 text-amber-300" />}
+                  {lang}
+                </button>
+              );
+            })}
+          </div>
+
+          <form
+            onSubmit={handleAddCustomLanguage}
+            className="flex gap-2 pt-2 border-t border-stone-200"
+          >
+            <Input
+              placeholder="Add other language (e.g. Odia)..."
+              value={customLanguage}
+              onChange={(e) => setCustomLanguage(e.target.value)}
+              className="h-10 text-xs flex-1 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+            />
+            <Button
+              type="submit"
+              size="sm"
+              variant="outline"
+              className="h-10 text-xs gap-1 rounded-xl border-amber-300 font-bold"
+            >
+              <Plus className="w-3.5 h-3.5 text-amber-600" /> Add
+            </Button>
+          </form>
+        </div>
+
+        {/* Active Puja Services */}
+        <div className="flex-1 rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-stone-200">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+              <h3 className="text-base font-serif font-bold text-stone-950">
+                Puja Services ({services.filter((s) => s.isActive).length})
+              </h3>
             </div>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-5 space-y-3 text-xs">
+            <Link to="/priest/services">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs text-red-700 hover:text-red-800 border-amber-300 gap-1.5 h-8 px-3 rounded-xl font-bold"
+              >
+                Manage All <ExternalLink className="w-3 h-3" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="space-y-2.5 text-xs">
             {services.length > 0 ? (
               <div className="space-y-2">
                 {services.map((srv) => (
                   <div
                     key={srv.id}
-                    className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-center justify-between gap-3 hover:bg-muted/60 transition-colors"
+                    className="p-3 rounded-xl bg-amber-50/40 border border-amber-200 flex items-center justify-between gap-3"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                      <span className="font-medium text-foreground text-xs truncate">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
+                      <span className="font-bold text-stone-900 text-xs truncate">
                         {srv.serviceName}
                       </span>
                     </div>
-                    <span className="font-mono font-bold text-xs text-primary shrink-0">
+                    <span className="font-mono font-bold text-xs text-red-800 shrink-0">
                       {formatINR(srv.price)}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-4 space-y-2">
-                <p className="text-muted-foreground text-xs">
-                  No active ceremony offerings.
-                </p>
-                <Link to="/priest/services">
-                  <Button size="sm" variant="outline" className="text-xs">
-                    Add Services
-                  </Button>
-                </Link>
-              </div>
+              <p className="text-stone-500 text-xs">No active ceremony offerings.</p>
             )}
-            <p className="text-[11px] text-muted-foreground pt-1">
-              To add or change rituals, prices, or activate/pause services, use
-              the dedicated Services page.
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* 8. Service Areas / Localities */}
-      <Card className="border-border/80 shadow-xs">
-        <CardHeader className="pb-3 border-b">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
-            <CardTitle className="text-base font-serif">
-              Service Localities & Neighborhoods ({serviceAreas.length})
-            </CardTitle>
-          </div>
-          <CardDescription className="text-xs">
-            Localities and sectors where you are available to travel for in-home
-            pujas.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
-          <div className="flex flex-wrap gap-2">
-            {serviceAreas.map((area) => (
-              <Badge
-                key={area}
-                variant="secondary"
-                className="pl-3 pr-1.5 py-1 text-xs flex items-center gap-1.5 bg-muted/60 hover:bg-muted border text-foreground"
-              >
-                <span>{area}</span>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveArea(area)}
-                  className="rounded-full p-0.5 hover:bg-destructive hover:text-white transition-colors"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </Badge>
-            ))}
-          </div>
+      <div className="rounded-3xl border-2 border-amber-300 bg-white p-6 sm:p-8 shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-2 border-b border-stone-200">
+          <MapPin className="w-4 h-4 text-red-700" />
+          <h3 className="text-base font-serif font-bold text-stone-950">
+            Service Localities & Neighborhoods ({serviceAreas.length})
+          </h3>
+        </div>
+        <p className="text-xs text-stone-600">
+          Localities and sectors where you are available to travel for in-home pujas.
+        </p>
 
-          <form
-            onSubmit={handleAddArea}
-            className="flex gap-2 pt-2 border-t border-border/60 max-w-md"
-          >
-            <Input
-              placeholder="Add locality (e.g. Bandra, Juhu, Powai)..."
-              value={newAreaInput}
-              onChange={(e) => setNewAreaInput(e.target.value)}
-              className="h-8 text-xs flex-1"
-            />
-            <Button
-              type="submit"
-              size="sm"
+        <div className="flex flex-wrap gap-2">
+          {serviceAreas.map((area) => (
+            <Badge
+              key={area}
               variant="outline"
-              className="h-8 text-xs gap-1"
+              className="pl-3 pr-1.5 py-1 text-xs flex items-center gap-1.5 bg-amber-50/60 border-amber-300 font-bold text-stone-900 rounded-full"
             >
-              <Plus className="w-3 h-3" /> Add Area
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              <span>{area}</span>
+              <button
+                type="button"
+                onClick={() => handleRemoveArea(area)}
+                className="rounded-full p-0.5 hover:bg-red-700 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
+
+        <form
+          onSubmit={handleAddArea}
+          className="flex gap-2 pt-2 border-t border-stone-200 max-w-md"
+        >
+          <Input
+            placeholder="Add locality (e.g. Bandra, Juhu, Powai)..."
+            value={newAreaInput}
+            onChange={(e) => setNewAreaInput(e.target.value)}
+            className="h-10 text-xs flex-1 rounded-xl border-stone-300 focus:border-amber-500 focus:ring-amber-500 bg-white"
+          />
+          <Button
+            type="submit"
+            size="sm"
+            variant="outline"
+            className="h-10 text-xs gap-1 rounded-xl border-amber-300 font-bold"
+          >
+            <Plus className="w-3.5 h-3.5 text-amber-600" /> Add Area
+          </Button>
+        </form>
+      </div>
 
       {/* 9. Bottom Action Bar */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
         <Button
           onClick={handleSave}
           disabled={isSaving}
-          className="gap-2 text-xs font-semibold px-6 h-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs"
+          className="gap-2 text-xs font-bold px-7 h-11 bg-[#780016] hover:bg-red-800 text-white border border-amber-400 rounded-xl shadow-xs cursor-pointer puja-btn-tap"
         >
           {isSaving ? (
             <>

@@ -127,7 +127,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-border/80 bg-card shadow-lg">
+      <DialogContent className="sm:max-w-120 p-0 overflow-hidden border-border/80 bg-card shadow-lg">
         {/* Header with Sacred Saffron accent */}
         <div className="bg-primary/5 px-6 pt-6 pb-4 border-b border-border/60">
           <DialogHeader className="space-y-1 text-left">
@@ -174,9 +174,9 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
             />
           </div>
 
-          {/* Time Pickers */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
+          {/* Time Pickers (Flexbox) */}
+          <div className="flex items-center gap-3 w-full">
+            <div className="flex-1 space-y-1.5">
               <Label htmlFor="start-time" className="text-xs font-semibold flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-primary" /> Start Time
               </Label>
@@ -193,7 +193,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="flex-1 space-y-1.5">
               <Label htmlFor="end-time" className="text-xs font-semibold flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-primary" /> End Time
               </Label>
@@ -211,16 +211,16 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
             </div>
           </div>
 
-          {/* Vedic Muhurat Presets */}
+          {/* Vedic Muhurat Presets (Flexbox) */}
           <div className="space-y-1.5 pt-1 border-t border-border/40">
             <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
               <Sparkles className="h-3 w-3 text-amber-500" /> Standard Muhurat Times:
             </span>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex items-center gap-2 w-full">
               <button
                 type="button"
                 onClick={() => applyPreset('08:00', '11:00')}
-                className="p-6 text-center text-[13px] rounded-md border border-border bg-muted/20 hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Morning</div>
                 <div className="text-muted-foreground font-mono text-[12px]">08:00 - 11:00</div>
@@ -228,7 +228,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               <button
                 type="button"
                 onClick={() => applyPreset('11:30', '14:30')}
-                className="p-6 text-center text-[13px] rounded-md border border-border bg-muted/20 hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Midday</div>
                 <div className="text-muted-foreground font-mono text-[12px]">11:30 - 14:30</div>
@@ -236,7 +236,7 @@ export const AddSlotModal: React.FC<AddSlotModalProps> = ({
               <button
                 type="button"
                 onClick={() => applyPreset('16:00', '19:00')}
-                className="p-6 text-center text-[13px] rounded-md border border-border bg-muted/20 hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                className="flex-1 p-3 text-center text-[12px] rounded-xl border border-amber-200 bg-white hover:border-amber-400 hover:bg-amber-50 transition-colors cursor-pointer"
               >
                 <div className="font-medium text-foreground">Evening</div>
                 <div className="text-muted-foreground font-mono text-[12px]">16:00 - 19:00</div>

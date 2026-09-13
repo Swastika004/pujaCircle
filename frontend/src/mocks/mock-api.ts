@@ -1,4 +1,4 @@
-import { mockDb } from './db';
+import { mockDb } from './data';
 import { delay } from './delay';
 import {
   AuthUser,
@@ -1512,6 +1512,16 @@ export async function mockAdminUnbanPriest(priestId: string): Promise<{ success:
   priest.accountStatus = 'ACTIVE';
   delete priest.banReason;
   return { success: true, message: `Priest account has been reactivated.` };
+}
+
+export async function mockAdminReopenPriestApplication(priestId: string): Promise<{ success: boolean; message: string }> {
+  await delay(250);
+  const priest = mockDb.priests.find((p) => p.id === priestId);
+  if (!priest) return { success: false, message: 'Priest not found.' };
+
+  priest.approvalStatus = 'PENDING';
+  delete priest.rejectionReason;
+  return { success: true, message: 'Priest application reopened for verification.' };
 }
 
 export async function mockAdminGetUsers(): Promise<{ success: boolean; data: any[] }> {

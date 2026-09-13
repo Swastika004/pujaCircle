@@ -6,14 +6,14 @@ export interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement
   className?: string;
   /** Optional container to wrap inner content */
   container?: boolean;
-  /** Optional ambient sacred glow */
+  /** Optional decorative sacred hairline accents */
   ambientGlow?: boolean;
 }
 
 /**
  * GridBackground
- * Minimalist sacred Vedic background with a soft, serene morning dawn ambient aura
- * and an ultra-clean feathered structural grid.
+ * Redesigned with solid decorative framing and hairline borders.
+ * Strict zero-gradient and zero-grid architecture.
  */
 export const GridBackground: React.FC<GridBackgroundProps> = ({
   children,
@@ -30,30 +30,20 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       )}
       {...props}
     >
-      {/* 1. Subtle Structural Grid with Feathered Edge Mask */}
+      {/* 1. Auspicious Top Hairline Framing Strip */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-grid opacity-75 mask-[radial-gradient(ellipse_80%_80%_at_50%_35%,black_40%,transparent_100%)]"
+        className="pointer-events-none absolute top-0 left-0 right-0 h-1 bg-amber-500/30"
       />
-
-      {/* 2. Sacred Dawn Ambient Lighting */}
+      
       {ambientGlow && (
-        <>
-          {/* Top-center soft auspicious dawn glow */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,hsl(var(--primary)/0.06),transparent_70%)]"
-          />
-
-          {/* Gentle secondary gold ambient warmth */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_400px_at_85%_15%,hsl(var(--brand-gold)/0.04),transparent)]"
-          />
-        </>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 border-x border-amber-500/10 max-w-7xl mx-auto"
+        />
       )}
 
-      {/* 3. Foreground Content */}
+      {/* 2. Foreground Content */}
       <div className="relative z-10">
         {container ? (
           <div className="container py-8 sm:py-12 md:py-16 px-4">

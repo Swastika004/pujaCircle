@@ -1,75 +1,81 @@
 import React from 'react';
-import { User, Flame } from 'lucide-react';
+import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface AuthRoleTabsProps {
   activeRole: 'USER' | 'PRIEST';
-  onChange: (role: 'USER' | 'PRIEST') => void;
+  onChange?: (role: 'USER' | 'PRIEST') => void;
+  onRoleChange?: (role: 'USER' | 'PRIEST') => void;
   className?: string;
 }
 
 /**
  * AuthRoleTabs
- * Premium segmented role-switcher pill for Auth cards (Devotee vs Purohit).
- * Features solid saffron active state, smooth easing, and clear iconography.
+ * Fluid segmented role-switcher pill for Auth forms (Devotee vs Purohit).
+ * 100% Flexbox, pure solid white background, radiant Haldi gold trims,
+ * deep temple vermilion active fill, and sacred Om insignia.
  */
 export const AuthRoleTabs: React.FC<AuthRoleTabsProps> = ({
   activeRole,
   onChange,
+  onRoleChange,
   className,
 }) => {
+  const triggerChange = (role: 'USER' | 'PRIEST') => {
+    if (onChange) onChange(role);
+    if (onRoleChange) onRoleChange(role);
+  };
+
   return (
     <div
       className={cn(
-        'w-full bg-card p-1.5 rounded-lg border border-border/80 shadow-xs mb-4',
+        'w-full bg-white p-1.5 rounded-2xl border-2 border-amber-300 shadow-sm mb-4',
         className
       )}
     >
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="flex items-center gap-2 w-full">
         {/* 1. Devotee Tab */}
         <button
           type="button"
-          onClick={() => onChange('USER')}
+          onClick={() => triggerChange('USER')}
           className={cn(
-            'flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs transition-all duration-200 select-none cursor-pointer',
+            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
             activeRole === 'USER'
-              ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-              : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 font-medium'
+              ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
+              : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'
           )}
           aria-pressed={activeRole === 'USER'}
         >
           <User
             className={cn(
               'h-4 w-4 shrink-0 transition-transform duration-200',
-              activeRole === 'USER'
-                ? 'text-primary-foreground scale-105'
-                : 'text-muted-foreground'
+              activeRole === 'USER' ? 'text-amber-300 scale-105' : 'text-stone-500'
             )}
           />
-          <span>User</span>
+          <span>Devotee</span>
         </button>
 
         {/* 2. Priest Tab */}
         <button
           type="button"
-          onClick={() => onChange('PRIEST')}
+          onClick={() => triggerChange('PRIEST')}
           className={cn(
-            'flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs transition-all duration-200 select-none cursor-pointer',
+            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
             activeRole === 'PRIEST'
-              ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-              : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 font-medium'
+              ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
+              : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'
           )}
           aria-pressed={activeRole === 'PRIEST'}
         >
-          <Flame
+          <span
             className={cn(
-              'h-4 w-4 shrink-0 transition-transform duration-200',
-              activeRole === 'PRIEST'
-                ? 'text-primary-foreground scale-105'
-                : 'text-primary'
+              'text-sm font-serif font-black leading-none shrink-0 transition-transform duration-200',
+              activeRole === 'PRIEST' ? 'text-amber-300 scale-105' : 'text-amber-600'
             )}
-          />
-          <span>Priest (Purohit)</span>
+          >
+            ॐ
+          </span>
+          <span>Vedic Purohit</span>
         </button>
       </div>
     </div>

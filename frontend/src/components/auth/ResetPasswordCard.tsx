@@ -6,8 +6,7 @@ import { resetPasswordSchema, ResetPasswordInput } from '@/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Lock, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, CheckCircle2, AlertCircle, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 export interface ResetPasswordCardProps {
@@ -16,7 +15,13 @@ export interface ResetPasswordCardProps {
   demoPassword: string;
 }
 
+/**
+ * ResetPasswordCard
+ * Ultra-Premium Split-Card Password Reset for Devotees and Purohits.
+ * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, zero grids, zero gradients.
+ */
 export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
+  role,
   loginPath,
   demoPassword,
 }) => {
@@ -24,6 +29,8 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isPriest = role === 'PRIEST';
 
   const {
     register,
@@ -55,121 +62,186 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
     setValue('newPassword', demoPassword, { shouldValidate: true });
     setValue('confirmPassword', demoPassword, { shouldValidate: true });
     setError(null);
+    toast.info('Filled demo password reset values.');
   };
 
   return (
-    <div className="container max-w-md py-12 px-4">
-      <Card className="shadow-md border-border/80">
-        <CardHeader className="text-center space-y-1 pb-4">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary mb-1">
-            <Lock className="h-5 w-5" />
-          </div>
-          <CardTitle className="text-2xl font-bold font-serif text-foreground">
-            Set New Password
-          </CardTitle>
-          <CardDescription className="text-xs">
-            Enter the 6-digit recovery OTP and your new password.
-          </CardDescription>
-        </CardHeader>
+    <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
+        {/* Left Showcase Panel */}
+        <div className={`hidden lg:flex flex-col justify-between w-5/12 ${isPriest ? 'bg-[#450A0A]' : 'bg-[#780016]'} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
+          <div className="space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="h-10 w-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
+                ॐ
+              </div>
+              <div>
+                <div className="font-serif font-black text-lg tracking-wider text-amber-300">
+                  PUJACIRCLE
+                </div>
+                <div className="text-[10px] text-amber-100 uppercase tracking-widest font-semibold">
+                  Credential Security
+                </div>
+              </div>
+            </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-3.5">
+            <div className="space-y-3 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>{isPriest ? 'Purohit Sanctum' : 'Devotee Sanctum'}</span>
+              </div>
+              <h2 className="text-2xl font-bold font-serif text-white leading-snug">
+                Establish Your New Portal Passkey
+              </h2>
+              <p className="text-xs text-amber-100/90 leading-relaxed">
+                Enter your 6-digit verification code sent to your email, followed by a secure new password for your account.
+              </p>
+            </div>
+
+            <div className="space-y-2.5 pt-2">
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Minimum 6 Characters Security Standard</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Immediate Session Unlocking</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-amber-100">
+                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>Mock OTP (123456) for Fast Testing</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-amber-400/30 space-y-1">
+            <div className="text-xs font-serif text-amber-200 italic">
+              “धर्मो रक्षति रक्षितः — Dharma protects those who protect it.”
+            </div>
+            <div className="text-[10px] text-amber-400 font-medium">
+              — Mahabharata
+            </div>
+          </div>
+        </div>
+
+        {/* Right Form Panel */}
+        <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
+          <div>
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold font-serif text-stone-900">
+                Set New Password
+              </h1>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Enter the mock verification code (123456) and your new credentials.
+              </p>
+            </div>
+
             {error && (
-              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 font-semibold">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="p-2.5 bg-muted/40 rounded-lg border text-xs text-muted-foreground">
-              Mock OTP: <strong className="text-primary font-mono">123456</strong>
+            <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
+              <span className="font-bold text-stone-900">Mock Recovery OTP:</span>
+              <span className="font-mono font-bold text-red-800 text-sm">123456</span>
             </div>
 
-            {/* Recovery OTP */}
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Recovery OTP</Label>
-              <Input
-                maxLength={6}
-                placeholder="123456"
-                {...register('otp')}
-                className="font-mono text-center tracking-widest text-sm"
-              />
-              {errors.otp && (
-                <p className="text-[11px] text-destructive">{errors.otp.message}</p>
-              )}
-            </div>
-
-            {/* New Password */}
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">New Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-stone-800">Recovery OTP (6 Digits)</Label>
                 <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter new password"
-                  {...register('newPassword')}
-                  className="pl-9 pr-9 text-xs"
+                  maxLength={6}
+                  placeholder="123456"
+                  {...register('otp')}
+                  className="font-mono text-center tracking-widest text-sm h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
                 />
+                {errors.otp && (
+                  <p className="text-[11px] text-red-700 font-semibold">{errors.otp.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-stone-800">New Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter new password"
+                    {...register('newPassword')}
+                    className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {errors.newPassword && (
+                  <p className="text-[11px] text-red-700 font-semibold">{errors.newPassword.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-stone-800">Confirm New Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
+                  <Input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder="Re-enter new password"
+                    {...register('confirmPassword')}
+                    className="pl-10 pr-10 text-xs h-11 rounded-xl border-amber-300 focus-visible:ring-red-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
+                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-[11px] text-red-700 font-semibold">{errors.confirmPassword.message}</p>
+                )}
+              </div>
+
+              <div className="flex justify-end pt-1">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={handleFillDemo}
+                  className="text-xs text-amber-700 hover:text-amber-800 font-bold cursor-pointer hover:underline flex items-center gap-1"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  <Sparkles className="h-3 w-3" />
+                  <span>Fill Demo Password</span>
                 </button>
               </div>
-              {errors.newPassword && (
-                <p className="text-[11px] text-destructive">{errors.newPassword.message}</p>
-              )}
-            </div>
 
-            {/* Confirm Password */}
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Confirm New Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Re-enter new password"
-                  {...register('confirmPassword')}
-                  className="pl-9 pr-9 text-xs"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+              <div className="space-y-3 pt-2">
+                <Button
+                  type="submit"
+                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-xl shadow-md cursor-pointer gap-2`}
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+                  <span>Update Password & Sign In</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </div>
-              {errors.confirmPassword && (
-                <p className="text-[11px] text-destructive">{errors.confirmPassword.message}</p>
-              )}
-            </div>
+            </form>
+          </div>
 
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="text-[11px] text-primary hover:underline font-medium block text-right w-full"
-            >
-              Fill demo values
-            </button>
-          </CardContent>
-
-          <CardFooter className="flex flex-col space-y-3 pt-2">
-            <Button type="submit" className="w-full text-xs font-medium gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5" /> Update Password & Sign In
-            </Button>
-            <div className="text-center text-xs text-muted-foreground">
-              <Link to={loginPath} className="text-primary hover:underline">
-                ← Cancel and Return to Sign In
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Card>
+          <div className="pt-6 text-center text-xs text-stone-600">
+            <Link to={loginPath} className="text-[#780016] font-bold hover:underline">
+              ← Back to Sign In
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
+
+export default ResetPasswordCard;

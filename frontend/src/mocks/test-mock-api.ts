@@ -32,7 +32,7 @@ import {
   mockAdminUnbanUser,
   mockAdminGetDashboardStats,
 } from './mock-api';
-import { mockDb, resetMockDb, validateMockDbIntegrity } from './db';
+import { mockDb, resetMockDb, validateMockDbIntegrity } from './data';
 import { sanitizeErrorMessage, getUserFriendlyErrorMessage } from '../lib/errorHandler';
 
 async function runValidationTests() {
