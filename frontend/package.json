@@ -8,10 +8,7 @@
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "preview": "vite preview",
-    "test:mock": "tsx src/mocks/test-mock-api.ts",
-    "test:advisor": "tsx src/mocks/test-advisor-matching.ts",
-    "test": "tsx src/mocks/test-mock-api.ts && tsx src/mocks/test-advisor-matching.ts"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",

@@ -10,14 +10,12 @@
     "build:frontend": "npm run build --prefix frontend",
     "build": "npm run build --prefix frontend",
     "typecheck": "npm run typecheck --prefix frontend",
-    "test:mock": "tsx --tsconfig frontend/tsconfig.json frontend/src/mocks/test-mock-api.ts",
-    "test:advisor": "tsx --tsconfig frontend/tsconfig.json frontend/src/mocks/test-advisor-matching.ts",
-    "test": "npm run test:mock && npm run test:advisor",
-    "lint:frontend": "npm run lint --prefix frontend"
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix backend",
+    "lint:frontend": "npm run lint --prefix frontend",
+    "lint:backend": "npm run lint --prefix backend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   },
   "keywords": [
