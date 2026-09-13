@@ -1,8 +1,9 @@
 import React from 'react';
-import { AuthLoginForm } from '@/components/auth/AuthLoginForm';
+import { AuthPage } from '@/pages/auth/AuthPage';
 
-const PriestLoginPage: React.FC = () => {
-  return <AuthLoginForm defaultRole="PRIEST" />;
+// Route alias: /priest/login -> renders AuthPage with Priest tab active by default
+export const PriestLoginPage: React.FC = () => {
+  return <AuthPage defaultTab="priest" />;
 };
 
 export default PriestLoginPage;

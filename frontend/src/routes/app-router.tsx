@@ -29,7 +29,8 @@ const HomePage = lazy(() => import('@/pages/public/HomePage'));
 const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 
-// User Auth Pages
+// Unified & User Auth Pages
+const AuthPage = lazy(() => import('@/pages/auth/AuthPage'));
 const UserLoginPage = lazy(() => import('@/pages/auth/user/UserLoginPage'));
 const UserRegisterPage = lazy(() => import('@/pages/auth/user/UserRegisterPage'));
 const UserForgotPasswordPage = lazy(() => import('@/pages/auth/user/UserForgotPasswordPage'));
@@ -98,6 +99,7 @@ export const appRouter = createBrowserRouter([
       { path: 'contact', element: <GuestOnlyRoute>{LazyPage(ContactPage)}</GuestOnlyRoute> },
 
       // Guest Auth Routes
+      { path: 'login', element: <GuestOnlyRoute>{LazyPage(AuthPage)}</GuestOnlyRoute> },
       { path: 'user/login', element: <GuestOnlyRoute>{LazyPage(UserLoginPage)}</GuestOnlyRoute> },
       { path: 'user/register', element: <GuestOnlyRoute>{LazyPage(UserRegisterPage)}</GuestOnlyRoute> },
       { path: 'user/forgot-password', element: <GuestOnlyRoute>{LazyPage(UserForgotPasswordPage)}</GuestOnlyRoute> },
