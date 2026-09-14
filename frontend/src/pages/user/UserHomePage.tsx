@@ -6,6 +6,7 @@ import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
 import { BookingStatusBadge } from '@/components/booking/BookingStatusBadge';
 import { formatINR, formatDate } from '@/lib/utils';
+import { logAppError } from '@/lib/errorHandler';
 import {
   Sparkles,
   Calendar,
@@ -36,7 +37,7 @@ export const UserHomePage: React.FC = () => {
           setBookings(bookRes.data);
         }
       } catch (err) {
-        console.error('Failed to load devotee bookings', err);
+        logAppError('UserHomePage.loadData', err);
       }
     }
     loadData();

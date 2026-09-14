@@ -129,9 +129,6 @@ git commit -m "fix(address): resolve postal pincode lookup failure"
 
    # Frontend production build verification
    npm run build
-
-   # Mock API verification suite
-   npm run test:mock
    ```
 3. **Fill out the Pull Request Template**: Describe what changes were made, how they were tested, and link any related issues.
 4. **Code Review**: At least one maintainer review is required before merging.

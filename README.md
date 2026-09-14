@@ -26,8 +26,8 @@ PujaCircle is a high-performance web platform built to connect devotees across u
 flowchart TB
     subgraph ClientTier["Client Tier (React 19 + TypeScript + Vite)"]
         direction TB
-        subgraph DevoteePortal["Devotee Experience"]
-            D1["Public Discovery & Search"]
+        subgraph DevoteeExperience["Devotee Experience"]
+            D1["Public Discovery & Featured Carousel"]
             D2["Sankalp Intent Advisor"]
             D3["Booking Request Flow"]
             D4["Verified 5-Star Reviews"]
@@ -41,7 +41,8 @@ flowchart TB
         subgraph AdminConsole["Admin Workspace"]
             A1["Purohit Vetting & Approval"]
             A2["Account Moderation & Suspension"]
-            A3["Platform Analytics & Metrics"]
+            A3["Catalog Management (<2MB Cover Upload)"]
+            A4["Platform Analytics & Metrics"]
         end
     end
 
@@ -101,6 +102,7 @@ stateDiagram-v2
 5. **Postal PIN Code Resolution**: 6-digit Indian PIN codes automatically resolve locality, city, district, and state.
 6. **5-Hour Priest SLA Window**: Purohits have 5 hours to accept or decline before the booking transitions to `EXPIRED`.
 7. **Verified Reviews Only**: 1–5 star ratings and reviews are strictly restricted to the devotee who booked and only after status reaches `COMPLETED`.
+8. **Strict Puja Cover Media Enforcement**: Admin puja catalog management strictly requires uploaded cover image files (< 2 MB) with real-time preview, showcased across interactive carousels, match cards, and ritual kits.
 
 ---
 
@@ -137,7 +139,7 @@ pujaCircle/
 │   │   │   ├── advisor/          # Sankalp intent intake & match result cards
 │   │   │   ├── auth/             # Unified login, OTP & password reset cards
 │   │   │   ├── booking/          # Status badges, rating modal, cancellation dialog
-│   │   │   ├── common/           # ErrorBoundary, logo, route guards, spinners
+│   │   │   ├── common/           # Carousel, ErrorBoundary, logo, route guards, spinners
 │   │   │   ├── layout/           # Navbar, footer, sidebar dashboard shells
 │   │   │   ├── legal/            # Terms, privacy, and cookie policy modals
 │   │   │   ├── priest/           # Slot creation, service forms, booking rows
@@ -252,12 +254,13 @@ PujaCircle adheres to an intentional, culturally resonant design system defined 
 
 ## 📖 Specifications & Documentation
 
-- [Product Requirements Document (PRD)](file:///d:/pujaCircle/docs/PRD.md)
-- [Software Requirements Specification (SRS)](file:///d:/pujaCircle/docs/SRS.md)
-- [Technical Requirements Document (TRD)](file:///d:/pujaCircle/docs/TRD.md)
-- [Design System & Aesthetic Guidelines](file:///d:/pujaCircle/docs/DESIGN.md)
+- [Product Requirements Document (PRD)](./docs/PRD.md)
+- [Software Requirements Specification (SRS)](./docs/SRS.md)
+- [Technical Requirements Document (TRD)](./docs/TRD.md)
+- [Design System & Aesthetic Guidelines](./docs/DESIGN.md)
+- [Contributing Guidelines](./CONTRIBUTING.md)
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License — see the [LICENSE](file:///d:/pujaCircle/LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.

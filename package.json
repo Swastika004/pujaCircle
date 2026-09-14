@@ -12,9 +12,7 @@
     "typecheck": "npm run typecheck --prefix frontend",
     "lint": "npm run lint --prefix frontend && npm run lint --prefix backend",
     "lint:frontend": "npm run lint --prefix frontend",
-    "lint:backend": "npm run lint --prefix backend",
-    "test:mock": "npx tsx --tsconfig frontend/tsconfig.json frontend/src/mocks/test-mock-api.ts",
-    "test": "npm run test:mock"
+    "lint:backend": "npm run lint --prefix backend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

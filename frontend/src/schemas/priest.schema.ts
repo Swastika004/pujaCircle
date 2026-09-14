@@ -24,12 +24,13 @@ export const priestServiceSchema = z
   .object({
     serviceName: z.string().trim().min(2, 'Service name must be at least 2 characters').max(100, 'Service name is too long'),
     price: z.coerce.number().int('Price must be a whole number').positive('Price must be a positive amount in Indian Rupees (₹)').max(500000, 'Price cannot exceed ₹5,00,000'),
-    pujaCatalogId: z.string().trim().optional(),
+    pujaCatalogId: z.string().trim().max(100).optional(),
     isCustom: z.boolean().optional(),
-    category: z.string().trim().optional(),
-    samagriList: z.array(z.string()).optional(),
+    category: z.string().trim().max(100).optional(),
+    samagriList: z.array(z.string().trim().min(1).max(200)).max(100).optional(),
     isActive: z.boolean().optional().default(true),
-  });
+  })
+  .strict();
 
 /**
  * Weekly Recurring Availability Rule Schema Base
