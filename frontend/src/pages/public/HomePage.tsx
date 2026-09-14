@@ -9,6 +9,9 @@ import {
   BookOpen,
   Compass,
   Users,
+  FileText,
+  ShieldCheck,
+  Flame,
 } from "lucide-react";
 import { SEED_PUJA_CATALOG } from "@/mocks/data";
 import { HeroVisualCarousel } from "@/components/common/HeroVisualCarousel";
@@ -82,10 +85,10 @@ export const HomePage: React.FC = () => {
             variants={itemVariants}
             className="text-stone-800 font-medium text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed"
           >
-            PujaCircle matches your family with experienced, credentialed Vedic
-            Purohits across West Bengal. Experience traditional rituals with
-            complete transparency, tailored samagri checklists, and direct cash
-            dakshina.
+            Not sure which ceremony fits your family's needs? Describe your life
+            situation to our <span className="font-semibold text-[#780016]">Sankalp Advisor</span> for
+            scriptural recommendations, generate your personalized <span className="font-semibold text-[#780016]">Samagri Checklist & Ritual Kit</span>,
+            and book verified <span className="font-semibold text-[#780016]">Gurukul Purohits</span> with direct in-person cash dakshina.
           </motion.p>
 
           {/* Dual Action CTAs with Micro-interaction */}
@@ -115,6 +118,29 @@ export const HomePage: React.FC = () => {
               </Button>
             </Link>
           </motion.div>
+
+          {/* Core Value Pillars */}
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full max-w-4xl pt-2"
+          >
+            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
+              <Compass className="h-4 w-4 text-[#991B1B] shrink-0" />
+              <span className="text-xs font-bold text-stone-900 text-left">Sankalp Ritual Advisor</span>
+            </div>
+            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
+              <FileText className="h-4 w-4 text-[#991B1B] shrink-0" />
+              <span className="text-xs font-bold text-stone-900 text-left">Custom Samagri Kit PDF</span>
+            </div>
+            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
+              <ShieldCheck className="h-4 w-4 text-[#991B1B] shrink-0" />
+              <span className="text-xs font-bold text-stone-900 text-left">Verified Gurukul Purohits</span>
+            </div>
+            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
+              <Flame className="h-4 w-4 text-[#991B1B] shrink-0" />
+              <span className="text-xs font-bold text-stone-900 text-left">In-Person Cash Dakshina</span>
+            </div>
+          </motion.div>
         </motion.section>
       </div>
 
@@ -143,14 +169,13 @@ export const HomePage: React.FC = () => {
           <div className="text-center space-y-2 max-w-xl mx-auto mb-10 sm:mb-12 relative z-10">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-red-950 text-xs font-extrabold shadow-sm">
               <CheckCircle2 className="h-3.5 w-3.5 text-red-950" />
-              <span>Sankalp Vidhi</span>
+              <span>Sankalp to Siddhi</span>
             </div>
             <h2 className="text-white font-serif text-3xl sm:text-4xl font-bold text-center">
               How PujaCircle Works
             </h2>
             <p className="text-amber-100/90 text-xs sm:text-sm text-center">
-              Three simple, transparent steps from ceremony scheduling to divine
-              completion.
+              From discovering the right ritual to sacred home completion—pure transparency every step of the way.
             </p>
           </div>
 
@@ -164,12 +189,14 @@ export const HomePage: React.FC = () => {
               <div className="w-14 h-14 rounded-full bg-linear-to-br from-amber-100 to-amber-200 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-2xl flex items-center justify-center shadow-lg shrink-0 group-hover:scale-105 transition-transform duration-300">
                 1
               </div>
-              <h3 className="text-white font-bold font-serif text-lg mt-4">
-                Select Your Ceremony
+              <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 mt-4">
+                Step 1 · Guidance
+              </span>
+              <h3 className="text-white font-bold font-serif text-lg mt-1">
+                Describe Your Life Situation
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Choose from Vedic rituals or ask the Sankalp Advisor for
-                ceremony recommendations tailored to your family needs.
+                Unsure which ritual fits? Share your life event—such as a new home, career transition, business opening, or family peace. The Sankalp Advisor recommends the exact Vedic ceremony with scriptural rationale and auspicious timing.
               </p>
             </motion.div>
 
@@ -182,12 +209,14 @@ export const HomePage: React.FC = () => {
               <div className="w-14 h-14 rounded-full bg-linear-to-br from-amber-100 to-amber-200 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-2xl flex items-center justify-center shadow-lg shrink-0 group-hover:scale-105 transition-transform duration-300">
                 2
               </div>
-              <h3 className="text-white font-bold font-serif text-lg mt-4">
-                Match with Vedic Purohit
+              <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 mt-4">
+                Step 2 · Preparation
+              </span>
+              <h3 className="text-white font-bold font-serif text-lg mt-1">
+                Get Personalized Ritual Kit
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Review verified priests in your neighborhood, examine language
-                skills, credentials, and transparent dakshina pricing.
+                Instantly receive your verified samagri checklist (so you never overpay or miss an offering), step-by-step Vedic vidhi order, and sacred Sankalp prayer text tailored with your name in a downloadable PDF.
               </p>
             </motion.div>
 
@@ -200,13 +229,14 @@ export const HomePage: React.FC = () => {
               <div className="w-14 h-14 rounded-full bg-linear-to-br from-amber-100 to-amber-200 border-2 border-[#C59A3F] text-[#780016] font-serif font-black text-2xl flex items-center justify-center shadow-lg shrink-0 group-hover:scale-105 transition-transform duration-300">
                 3
               </div>
-              <h3 className="text-white font-bold font-serif text-lg mt-4">
-                Sacred Puja & Cash Dakshina
+              <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 mt-4">
+                Step 3 · Sanctity
+              </span>
+              <h3 className="text-white font-bold font-serif text-lg mt-1">
+                Home Vidhi & Cash Dakshina
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                The priest arrives at your home with complete samagri guidance.
-                Experience the sacred rituals and pay cash directly after
-                completion.
+                Select a verified Gurukul-trained purohit in Kolkata by language and tradition. The priest conducts the sacred ceremony at your residence; pay transparent dakshina directly in cash upon completion.
               </p>
             </motion.div>
           </div>

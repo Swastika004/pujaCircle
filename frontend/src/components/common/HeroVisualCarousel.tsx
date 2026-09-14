@@ -11,38 +11,38 @@ export interface VisualItem {
 
 const DEFAULT_ITEMS: VisualItem[] = [
   {
-    id: "havan-ceremony",
-    image: "/images/havan_fire_ceremony.jpg",
-    title: "Vedic Havan & Agnihotra",
-    subtitle: "Sacred Agni Ritual & Purifying Mantras",
-    objectPosition: "center center",
-  },
-  {
     id: "griha-pravesh",
     image: "/images/hero_vedic_puja.jpg",
-    title: "Griha Pravesh Vastu",
-    subtitle: "Auspicious Home Sanctification",
+    title: "Griha Pravesh & Vastu Shanti",
+    subtitle: "New Home Sanctification & Vastu Blessing",
     objectPosition: "center 40%",
+  },
+  {
+    id: "havan-ceremony",
+    image: "/images/havan_fire_ceremony.jpg",
+    title: "Navagraha Shanti & Vedic Havan",
+    subtitle: "Purifying Agnihotra & Planetary Peace",
+    objectPosition: "center center",
   },
   {
     id: "samagri-thali",
     image: "/images/samagri_ritual_thali.jpg",
-    title: "Pure Samagri Vidhi",
-    subtitle: "Scriptural Herbal Offerings & Preparation",
+    title: "Personalized Samagri Checklist",
+    subtitle: "Scriptural Offerings & Ritual Kit Preparation",
     objectPosition: "center center",
   },
   {
     id: "devotee-blessing",
     image: "/images/devotee_family_blessing.jpg",
-    title: "Devotee Family Ashirwad",
-    subtitle: "Direct In-Person Vedic Purohit Blessings",
+    title: "Shri Satyanarayan Vrat Katha",
+    subtitle: "Family Prosperity & Auspicious Katha Vidhi",
     objectPosition: "center 35%",
   },
   {
     id: "vedic-purohit",
     image: "/images/verified_purohit_portrait.jpg",
-    title: "Gurukul Scholar Purohits",
-    subtitle: "Verified Lineage & Scriptural Chanting",
+    title: "Verified Gurukul Purohits",
+    subtitle: "Authentic Vedic Lineage & Scriptural Vidhi",
     objectPosition: "center 12%",
   },
 ];
