@@ -49,19 +49,30 @@ const DEFAULT_ITEMS: VisualItem[] = [
 
 interface HeroVisualCarouselProps {
   items?: VisualItem[];
-  holdDuration?: number; // Time in ms card stays in center (e.g. 2400ms)
-  transitionDuration?: number; // Time in ms for transition glide (e.g. 700ms)
+  transitionDuration?: number; // Time in ms for snapping glide
 }
 
-// Snappy easeOutQuart curve for modern responsive feel
+// Snappy easeOutQuart curve
 function easeOutQuart(x: number): number {
   return 1 - Math.pow(1 - x, 4);
 }
 
+// Calculates shortest signed circular distance along the track
+function getShortestTrackDelta(
+  fromScroll: number,
+  toScroll: number,
+  totalWidth: number,
+): number {
+  let diff = ((toScroll - fromScroll) % totalWidth + totalWidth) % totalWidth;
+  if (diff > totalWidth / 2) {
+    diff -= totalWidth;
+  }
+  return diff;
+}
+
 export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
   items = DEFAULT_ITEMS,
-  holdDuration = 2500,
-  transitionDuration = 700,
+  transitionDuration = 320,
 }) => {
   const totalReps = 3;
   const carouselItems = Array.from({ length: totalReps }, () => items).flat();
@@ -72,29 +83,29 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
 
   // Responsive dimensions: Large landscape cards with tight spacing
   const [dimensions, setDimensions] = useState({
-    cardWidth: 720,
-    cardHeight: 450,
-    cardGap: 24,
+    cardWidth: 640,
+    cardHeight: 380,
+    cardGap: 22,
   });
 
   const updateDimensions = useCallback(() => {
     const w = typeof window !== "undefined" ? window.innerWidth : 1200;
     if (w < 640) {
       setDimensions({
-        cardWidth: Math.min(w * 0.88, 380),
-        cardHeight: 240,
-        cardGap: 14,
+        cardWidth: Math.min(w * 0.88, 360),
+        cardHeight: 220,
+        cardGap: 12,
       });
     } else if (w < 1024) {
       setDimensions({
-        cardWidth: Math.min(w * 0.75, 540),
-        cardHeight: 340,
-        cardGap: 18,
+        cardWidth: Math.min(w * 0.75, 500),
+        cardHeight: 300,
+        cardGap: 16,
       });
     } else if (w < 1440) {
-      setDimensions({ cardWidth: 680, cardHeight: 425, cardGap: 22 });
+      setDimensions({ cardWidth: 620, cardHeight: 370, cardGap: 20 });
     } else {
-      setDimensions({ cardWidth: 800, cardHeight: 500, cardGap: 26 });
+      setDimensions({ cardWidth: 700, cardHeight: 410, cardGap: 24 });
     }
   }, []);
 
@@ -108,114 +119,166 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
   const step = cardWidth + cardGap;
   const totalTrackWidth = totalCards * step;
 
-  // Staggered stepped transition state
+  // Track state references (strictly normalized to [0, totalTrackWidth))
   const currentScrollRef = useRef<number>(0);
   const startScrollRef = useRef<number>(0);
-  const targetScrollRef = useRef<number>(0);
+  const travelDistanceRef = useRef<number>(0);
   const animStartTimeRef = useRef<number>(0);
   const isTransitioningRef = useRef<boolean>(false);
-  const dwellTimerRef = useRef<number>(0);
-  const isHoveredRef = useRef<boolean>(false);
   const isDraggingRef = useRef<boolean>(false);
   const dragStartXRef = useRef<number>(0);
   const dragStartScrollRef = useRef<number>(0);
+  const hasDraggedRef = useRef<boolean>(false);
 
-  // Trigger a smooth transition to next or previous slide
+  // Trigger smooth bounded transition to target slide
   const goToOffset = useCallback(
     (deltaSteps: number, now: number) => {
-      startScrollRef.current = currentScrollRef.current;
-      targetScrollRef.current = currentScrollRef.current + deltaSteps * step;
+      const current =
+        ((currentScrollRef.current % totalTrackWidth) + totalTrackWidth) %
+        totalTrackWidth;
+      const currentIdx = Math.round(current / step);
+      const targetIdx = (currentIdx + deltaSteps + totalCards) % totalCards;
+      const targetScroll = targetIdx * step;
+      const shortestDelta = getShortestTrackDelta(
+        current,
+        targetScroll,
+        totalTrackWidth,
+      );
+
+      startScrollRef.current = current;
+      travelDistanceRef.current = shortestDelta;
       animStartTimeRef.current = now;
       isTransitioningRef.current = true;
-      dwellTimerRef.current = 0;
     },
-    [step],
+    [step, totalCards, totalTrackWidth],
   );
 
-  // Pointer drag interaction
-  const handlePointerDown = (e: React.PointerEvent) => {
-    isDraggingRef.current = true;
+  // Pointer drag interaction: Mouse/Touch down
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return; // Only primary button
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Fallback
+    }
+
+    // Freeze motion immediately on click/touch
     isTransitioningRef.current = false;
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
     dragStartXRef.current = e.clientX;
     dragStartScrollRef.current = currentScrollRef.current;
+
     if (containerRef.current) {
       containerRef.current.style.cursor = "grabbing";
     }
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDraggingRef.current) return;
     const deltaX = e.clientX - dragStartXRef.current;
+    if (Math.abs(deltaX) > 4) {
+      hasDraggedRef.current = true;
+    }
+
+    // Direct 1:1 responsive dragging with cursor
     let nextScroll = dragStartScrollRef.current - deltaX;
     nextScroll =
       ((nextScroll % totalTrackWidth) + totalTrackWidth) % totalTrackWidth;
     currentScrollRef.current = nextScroll;
   };
 
-  const handlePointerUp = (e: React.PointerEvent) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDraggingRef.current) return;
     isDraggingRef.current = false;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignore
+    }
+
     if (containerRef.current) {
       containerRef.current.style.cursor = "grab";
     }
 
-    // Snap to nearest slide with fast spring
+    // If user clicked (did not drag): do nothing here; card click handles centering if needed
+    if (!hasDraggedRef.current) {
+      isTransitioningRef.current = false;
+      return;
+    }
+
+    // If user dragged: snap cleanly to nearest slide
     const deltaX = e.clientX - dragStartXRef.current;
-    const nearestIndex = Math.round(currentScrollRef.current / step);
-    const snapTarget = nearestIndex * step;
+    const current = currentScrollRef.current;
 
-    startScrollRef.current = currentScrollRef.current;
-    targetScrollRef.current =
-      Math.abs(deltaX) > 40
-        ? deltaX < 0
-          ? (Math.floor(dragStartScrollRef.current / step) + 1) * step
-          : (Math.ceil(dragStartScrollRef.current / step) - 1) * step
-        : snapTarget;
+    let targetScroll: number;
+    if (Math.abs(deltaX) > 40) {
+      // Swiped left (deltaX < 0) -> advance 1 slide
+      // Swiped right (deltaX > 0) -> go back 1 slide
+      const dir = deltaX < 0 ? 1 : -1;
+      const baseIdx = Math.round(dragStartScrollRef.current / step);
+      const targetIdx = (baseIdx + dir + totalCards) % totalCards;
+      targetScroll = targetIdx * step;
+    } else {
+      // Snap to closest slide
+      const nearestIdx = Math.round(current / step) % totalCards;
+      targetScroll = nearestIdx * step;
+    }
 
+    const shortestDelta = getShortestTrackDelta(
+      current,
+      targetScroll,
+      totalTrackWidth,
+    );
+
+    startScrollRef.current = current;
+    travelDistanceRef.current = shortestDelta;
     animStartTimeRef.current = performance.now();
     isTransitioningRef.current = true;
-    dwellTimerRef.current = 0;
   };
 
-  // Card click to center
+  // Card click: clicking a side card smoothly centers it; clicking center card stays still
   const handleCardClick = (distFromCenter: number) => {
-    if (Math.abs(distFromCenter) > cardWidth * 0.4) {
+    if (hasDraggedRef.current) return;
+    if (Math.abs(distFromCenter) > cardWidth * 0.3) {
       const direction = distFromCenter > 0 ? 1 : -1;
       goToOffset(direction, performance.now());
+    } else {
+      // Center card clicked: stay frozen right there
+      isTransitioningRef.current = false;
     }
   };
 
-  // 60/120fps hardware-accelerated animation frame loop
-  useAnimationFrame((time, delta) => {
+  // 60/120fps hardware-accelerated animation frame loop (NO auto-advance!)
+  useAnimationFrame((time) => {
     if (!containerRef.current) return;
 
     if (!isDraggingRef.current) {
-      // 1. If currently transitioning between slides
+      // Transition to snap target if settling after a drag/click
       if (isTransitioningRef.current) {
         const elapsed = time - animStartTimeRef.current;
         const progress = Math.min(elapsed / transitionDuration, 1);
         const eased = easeOutQuart(progress);
 
         currentScrollRef.current =
-          startScrollRef.current +
-          (targetScrollRef.current - startScrollRef.current) * eased;
+          ((startScrollRef.current + travelDistanceRef.current * eased) %
+            totalTrackWidth +
+            totalTrackWidth) %
+          totalTrackWidth;
 
         if (progress >= 1) {
-          currentScrollRef.current = targetScrollRef.current;
+          currentScrollRef.current =
+            ((startScrollRef.current + travelDistanceRef.current) %
+              totalTrackWidth +
+              totalTrackWidth) %
+            totalTrackWidth;
           isTransitioningRef.current = false;
-          dwellTimerRef.current = 0;
-        }
-      }
-      // 2. If resting at center (dwell timer)
-      else if (!isHoveredRef.current) {
-        dwellTimerRef.current += delta;
-        if (dwellTimerRef.current >= holdDuration) {
-          goToOffset(1, time);
         }
       }
     }
 
-    // Wrap scroll position continuously within track bounds
+    // Render 3D Coverflow cards
     const scroll =
       ((currentScrollRef.current % totalTrackWidth) + totalTrackWidth) %
       totalTrackWidth;
@@ -223,7 +286,6 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
     const containerCenter = containerWidth / 2;
     const halfTrack = totalTrackWidth / 2;
 
-    // Apply 3D Coverflow transformation to each card
     cardRefs.current.forEach((card, idx) => {
       if (!card) return;
 
@@ -232,7 +294,7 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
         ((rawX % totalTrackWidth) + totalTrackWidth) % totalTrackWidth;
       const distFromCenter = mod > halfTrack ? mod - totalTrackWidth : mod;
 
-      // Cull cards far outside viewport
+      // Cull cards outside viewport
       const screenX = containerCenter + distFromCenter - cardWidth / 2;
       const isVisible =
         screenX + cardWidth > -cardWidth &&
@@ -247,9 +309,9 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
       const normalized = distFromCenter / cardWidth;
       const clampedNorm = Math.max(-1.5, Math.min(1.5, normalized));
 
-      // 3D Coverflow angles: center card is straight and prominent; side cards angled inward
-      const rotateY = -clampedNorm * 22; // Inward angle facing center
-      const translateZ = -Math.abs(clampedNorm) * 80; // Recessed depth
+      // 3D Coverflow angles
+      const rotateY = -clampedNorm * 22;
+      const translateZ = -Math.abs(clampedNorm) * 80;
       const scale = 1 - Math.min(Math.abs(clampedNorm) * 0.08, 0.15);
       const zIndex = Math.round(50 - Math.abs(clampedNorm) * 10);
       const brightness = 1 - Math.min(Math.abs(clampedNorm) * 0.22, 0.35);
@@ -262,82 +324,88 @@ export const HeroVisualCarousel: React.FC<HeroVisualCarouselProps> = ({
   });
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full relative py-2 sm:py-4 select-none overflow-hidden perspective-[1400px] active:cursor-grabbing touch-pan-y"
-      onMouseEnter={() => {
-        isHoveredRef.current = true;
-      }}
-      onMouseLeave={() => {
-        isHoveredRef.current = false;
-      }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-    >
-      {/* Background Soft Golden Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-300 max-w-full h-100 rounded-full bg-linear-to-r from-amber-400/8 via-[#991B1B]/10 to-amber-400/8 blur-3xl pointer-events-none -z-10" />
-
-      {/* 3D Perspective Stage */}
+    <div className="w-full flex flex-col items-center">
+      {/* Interactive Carousel Stage (Clean, No Arrows, No Bottom Toolbar) */}
       <div
-        style={{
-          height: `${cardHeight + 40}px`,
+        ref={containerRef}
+        tabIndex={0}
+        aria-label="Vedic rituals carousel. Drag with cursor to slide."
+        className="w-full relative py-2 sm:py-4 select-none overflow-hidden perspective-[1400px] cursor-grab active:cursor-grabbing touch-pan-y focus:outline-none"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft") {
+            goToOffset(-1, performance.now());
+          } else if (e.key === "ArrowRight") {
+            goToOffset(1, performance.now());
+          }
         }}
-        className="relative w-full transform-3d flex items-center justify-center overflow-visible"
       >
-        {carouselItems.map((item, idx) => (
-          <div
-            key={`${item.id}-${idx}`}
-            ref={(el) => {
-              cardRefs.current[idx] = el;
-            }}
-            onClick={(e) => {
-              const el = e.currentTarget;
-              const dist = parseFloat(el.dataset.dist || "0");
-              handleCardClick(dist);
-            }}
-            style={{
-              width: `${cardWidth}px`,
-              height: `${cardHeight}px`,
-              left: "50%",
-              marginLeft: `-${cardWidth / 2}px`,
-              top: "50%",
-              marginTop: `-${cardHeight / 2}px`,
-              transformOrigin: "center center",
-              willChange: "transform, filter",
-            }}
-            className="absolute rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(197,154,63,0.25)] border-2 border-[#C59A3F]/50 bg-stone-950 transition-[border-color,box-shadow] duration-300 hover:border-amber-400 group cursor-pointer"
-          >
-            {/* Cinematic Landscape Photo */}
-            <img
-              src={item.image}
-              alt={item.title}
-              style={{
-                objectPosition: item.objectPosition || "center center",
+        {/* Background Soft Golden Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-300 max-w-full h-100 rounded-full bg-linear-to-r from-amber-400/8 via-[#991B1B]/10 to-amber-400/8 blur-3xl pointer-events-none -z-10" />
+
+        {/* 3D Perspective Stage */}
+        <div
+          style={{
+            height: `${cardHeight + 20}px`,
+          }}
+          className="relative w-full transform-3d flex items-center justify-center overflow-visible"
+        >
+          {carouselItems.map((item, idx) => (
+            <div
+              key={`${item.id}-${idx}`}
+              ref={(el) => {
+                cardRefs.current[idx] = el;
               }}
-              className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105"
-              loading="eager"
-              draggable={false}
-            />
+              onClick={(e) => {
+                const el = e.currentTarget;
+                const dist = parseFloat(el.dataset.dist || "0");
+                handleCardClick(dist);
+              }}
+              style={{
+                width: `${cardWidth}px`,
+                height: `${cardHeight}px`,
+                left: "50%",
+                marginLeft: `-${cardWidth / 2}px`,
+                top: "50%",
+                marginTop: `-${cardHeight / 2}px`,
+                transformOrigin: "center center",
+                willChange: "transform, filter",
+              }}
+              className="absolute rounded-2xl overflow-hidden shadow-[0_12px_30px_-6px_rgba(0,0,0,0.5)] border-2 border-[#C59A3F]/50 bg-stone-950 transition-[border-color,box-shadow] duration-300 hover:border-amber-400 group cursor-pointer"
+            >
+              {/* Cinematic Landscape Photo */}
+              <img
+                src={item.image}
+                alt={item.title}
+                style={{
+                  objectPosition: item.objectPosition || "center center",
+                }}
+                className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105"
+                loading="eager"
+                draggable={false}
+              />
 
-            {/* Very Light Black Overlay to Highlight Text */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/15 to-transparent pointer-events-none" />
+              {/* High Contrast Gradient Overlay for Text Readability */}
+              <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
 
-            {/* Cylindrical Highlight Sheen */}
-            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
+              {/* Cylindrical Highlight Sheen */}
+              <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
 
-            {/* Clean Minimal Typography (Crisp with Drop Shadow) */}
-            <div className="absolute bottom-0 inset-x-0 p-5 sm:p-7 text-left pointer-events-none flex flex-col justify-end">
-              <span className="text-xs sm:text-sm font-bold font-sans uppercase tracking-widest text-amber-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                {item.subtitle}
-              </span>
-              <h3 className="font-serif text-lg sm:text-2xl md:text-3xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-1 mt-1">
-                {item.title}
-              </h3>
+              {/* Clean Minimal Typography */}
+              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-7 text-left pointer-events-none flex flex-col justify-end">
+                <span className="text-xs sm:text-sm font-bold font-sans uppercase tracking-widest text-amber-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                  {item.subtitle}
+                </span>
+                <h3 className="font-serif text-lg sm:text-2xl md:text-3xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-1 mt-1">
+                  {item.title}
+                </h3>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
