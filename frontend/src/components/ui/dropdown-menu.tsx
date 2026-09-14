@@ -92,7 +92,12 @@ const DropdownMenuContent = React.forwardRef<
     ref,
   ) => (
     <BaseMenu.Portal>
-      <BaseMenu.Positioner sideOffset={sideOffset} align={align} side={side}>
+      <BaseMenu.Positioner
+        sideOffset={sideOffset}
+        align={align}
+        side={side}
+        className="z-50"
+      >
         <BaseMenu.Popup
           ref={ref}
           className={cn(
@@ -113,36 +118,54 @@ const DropdownMenuItem = React.forwardRef<
     inset?: boolean;
     asChild?: boolean;
   }
->(({ className, inset, asChild, children, render, ...props }, ref) => {
-  if (asChild && React.isValidElement(children)) {
+>(
+  (
+    {
+      className,
+      inset,
+      asChild,
+      children,
+      render,
+      onClick,
+      closeOnClick = true,
+      ...props
+    },
+    ref,
+  ) => {
+    if (asChild && React.isValidElement(children)) {
+      return (
+        <BaseMenu.Item
+          ref={ref}
+          render={children as React.ReactElement}
+          closeOnClick={closeOnClick}
+          onClick={onClick}
+          className={cn(
+            "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground **:pointer-events-none data-disabled:opacity-50",
+            inset && "pl-8",
+            className,
+          )}
+          {...props}
+        />
+      );
+    }
     return (
       <BaseMenu.Item
         ref={ref}
-        render={children as React.ReactElement}
+        render={render}
+        closeOnClick={closeOnClick}
+        onClick={onClick}
         className={cn(
-          "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground **:pointer-events-none data-disabled:opacity-50",
           inset && "pl-8",
           className,
         )}
         {...props}
-      />
+      >
+        {children}
+      </BaseMenu.Item>
     );
-  }
-  return (
-    <BaseMenu.Item
-      ref={ref}
-      render={render}
-      className={cn(
-        "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
-        inset && "pl-8",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </BaseMenu.Item>
-  );
-});
+  },
+);
 DropdownMenuItem.displayName = "DropdownMenuItem";
 
 const DropdownMenuCheckboxItem = React.forwardRef<

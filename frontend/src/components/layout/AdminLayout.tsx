@@ -1,5 +1,5 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import { Outlet } from "react-router-dom";
 import {
   LayoutDashboard,
   Flame,
@@ -7,44 +7,44 @@ import {
   BookOpen,
   Compass,
   User,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   DashboardSidebarShell,
   NavItem,
-} from '@/components/layout/DashboardSidebarShell';
+} from "@/components/layout/DashboardSidebarShell";
 
 // AdminLayout
 // Refactored using DashboardSidebarShell to eliminate duplication across Priest and Admin portals (Phase 3)
 export const AdminLayout: React.FC = () => {
   const navItems: NavItem[] = [
     {
-      label: 'Operations Dashboard',
-      path: '/admin/dashboard',
+      label: "Operations Dashboard",
+      path: "/admin/dashboard",
       icon: LayoutDashboard,
     },
     {
-      label: 'Purohit Approvals & Roster',
-      path: '/admin/priests',
+      label: "Purohit Approvals & Roster",
+      path: "/admin/priests",
       icon: Flame,
     },
     {
-      label: 'Registered Devotees',
-      path: '/admin/users',
+      label: "Registered Devotees",
+      path: "/admin/users",
       icon: Users,
     },
     {
-      label: 'Puja Catalog CRUD',
-      path: '/admin/catalog',
+      label: "Puja Catalog",
+      path: "/admin/catalog",
       icon: BookOpen,
     },
     {
-      label: 'Advisor QA Preview',
-      path: '/admin/advisor-preview',
+      label: "Advisor QA Preview",
+      path: "/admin/advisor-preview",
       icon: Compass,
     },
     {
-      label: 'Admin Profile',
-      path: '/admin/profile',
+      label: "Admin Profile",
+      path: "/admin/profile",
       icon: User,
     },
   ];

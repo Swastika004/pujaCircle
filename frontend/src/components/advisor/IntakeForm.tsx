@@ -61,9 +61,6 @@ export const IntakeForm: React.FC<IntakeFormProps> = ({
           className="block text-sm font-medium text-[hsl(var(--foreground))] items-center justify-between"
         >
           <span>Describe your situation or spiritual intent</span>
-          <span className="text-xs text-[hsl(var(--foreground-muted))]">
-            Plain language
-          </span>
         </label>
         <textarea
           id="rawInput"
