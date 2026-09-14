@@ -1096,6 +1096,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Copper Kalash with Nariyal', 'Fresh Mango Leaves (5 pairs)', 'Vastu Shanti Yantra', 'Desi Ghee (500g)', 'Havan Samagri herbs mixture', 'Panchamrit ingredients', 'Yellow Mustard seeds'],
     steps: ['Gauri-Ganesha Sthapana and Kalash Pujan', 'Navagraha invocation and Vastu Mandal consecration', 'Boiling milk ritual across auspicious threshold', 'Agni Pratishtapana and Vastu Shanti Havan', 'Aarti, Purnahuti, and Kalash Teertha sprinkling across rooms'],
     timingNote: 'Traditionally performed during Shukla Paksha morning hours.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'life-event',
   },
   {
@@ -1107,6 +1108,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Satyanarayan photo frame', 'Tulsi leaves (108 count)', 'Banana plant stems for mandap', 'Panchamrit and dry fruits', 'Suji Sheera Prasad with banana slices', 'Chandan paste and Kumkum', 'Pooja Supari and Paan leaves'],
     steps: ['Sankalp and Ganesha invocation', 'Navagraha and Lokpal worship', 'Recitation of 5 chapters of Satyanarayan Katha', 'Offering of Panchamrit and Maha Prasad', 'Mangal Aarti and distribution of charanamrit'],
     timingNote: 'Highly auspicious on Purnima (full moon) or Ekadashi evenings.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1118,6 +1120,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['White lotus or white flowers', 'Medha Sukta Samagri with Brahmi leaves', 'Saraswati Yantra', 'White Chandan and Akshat', 'Pure cow ghee', 'Stationery or books for blessing', 'Sweet yellow rice prasad'],
     steps: ['Sankalp dedicated to academic clarity and peace of mind', 'Dhyana slokas and Saraswati Avahana', 'Medha Sukta and Saraswati Stotram chanting 108 times', 'Sacred ahuti offerings into holy Agni', 'Blessing of pens and study materials with holy ash'],
     timingNote: 'Auspicious during Brahma Muhurta or Thursday/Wednesday mornings.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'life-event',
   },
   {
@@ -1129,6 +1132,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Navadhanya (nine grains)', '9 Colored cloth pieces', 'Navagraha Samidha wood sticks', 'Navagraha Yantra', 'Black sesame seeds', 'Ghee and Guggul', 'Darbha grass'],
     steps: ['Navagraha Mandal design with nine sacred grains', 'Sankalp for protection from planetary adversity', 'Individual Beej Mantra chanting for each of the nine grahas', 'Navagraha Havan with corresponding medicinal wood', 'Daan sankalp and Shanti Paath'],
     timingNote: 'Recommended on Amavasya, Saturday mornings, or during major planetary transit days.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1140,6 +1144,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Kuber Yantra and Lakshmi idol', 'Lotus seeds (Kamal Gatta)', 'Silver coin or Gomati Chakra (11 pieces)', 'Attar (perfume) and rose petals', 'Dry fruit naivedya and Kesar', 'Cow ghee and camphor'],
     steps: ['Dwarpala and Ganesha pujan at business entrance', 'Kuber Yantra Pran Pratishtha and coin sanctification', 'Kanakadhara and Sri Sukta path', 'Ahuti with Lotus seeds and ghee in Havan kund', 'Tilak of financial ledgers, cash register, and main safe'],
     timingNote: 'Ideal during Shukla Paksha Friday morning hours.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'business',
   },
   {
@@ -1151,6 +1156,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Kusha grass rings (Pavitri)', 'Black sesame seeds (Til)', 'Cooked white rice and barley flour', 'Pinda Daan brass plates', 'Tulsi leaves and Gangajal', 'White janeu and cotton vastra', 'Cow milk and honey'],
     steps: ['Achamana and Purificatory Kusha grass sankalp', 'Devarshi and Pitru Tarpana with black sesame and Gangajal', 'Preparation and offering of sacred Pindas', 'Havan offering to Agni Kavyavahana', 'Brahmana Bhojanam and Cow feeding sankalp'],
     timingNote: 'Perform on the annual memorial day of the departed ancestor during Aparahna (afternoon).',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'ancestral',
   },
   {
@@ -1162,6 +1168,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Gauri idol and Shiva lingam', 'Haldi knots and Kumkum', 'Mangalsutra and Varmala garlands', 'Akshat infused with turmeric', 'Havan samagri with sandal wood', 'Coconut and betel leaves'],
     steps: ['Gauri Pujan and Ganesha Vandana by the bride/groom', 'Kanyadaan and Mangalashtaka chanting', 'Agni Pradakshina and Saptapadi vows', 'Sindoor Daan and Mangalsutra dharana', 'Blessings from elders and Purohit Ashirvad'],
     timingNote: 'Traditionally held during Shukla Paksha in the spring or autumn wedding seasons.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1173,6 +1180,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Bael leaves (Bilva patra 108)', 'Giloy stems and Durva grass', 'Raw cow milk, honey, curd, and sugar candy', 'Maha Mrityunjaya Yantra', 'White sesame seeds and Ghee', 'Rudraksha Mala for chanting'],
     steps: ['Sankalp praying for patient health and long life', 'Panchamrit Rudrabhishek on Shiva Lingam', 'Chanting of Maha Mrityunjaya Mantra (1008 or 108 times)', 'Amrita homam using Giloy and Durva dipped in ghee', 'Sacred Bhasma tilak and Raksha sutra tying on wrist'],
     timingNote: 'Monday mornings, Pradosham, or during critical illness intervals.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1184,6 +1192,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Gangajal and Sugarcane juice', 'Pure cow milk, Curd, Ghee, and Honey', 'Chandan paste and Vibhuti', 'Bilva patra and Dhatura flowers', 'Camphor (Karpuram) for Maha Mangal Aarti', 'Panchamrit pot'],
     steps: ['Ganesha and Kalash invocation', 'Laghu Nyasa and meditation on Lord Sadashiva', 'Continuous stream Abhishek with Sri Rudram recital', 'Shringara decoration with Chandan, Bilva, and flowers', 'Shiva Sahasranama Archana and Maha Mangal Aarti'],
     timingNote: 'Most rewarding on Mondays, Shivratri, or Shravan month.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'festival',
   },
   {
@@ -1195,6 +1204,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Durva grass bundles (21 pairs)', 'Modak and Motichoor laddoos (21 pieces)', 'Red hibiscus flowers', 'Sindoor and Roli', 'Ghee and Modak ahuti items', 'Ganesha Yantra'],
     steps: ['Sankalp declaring specific obstacle to be removed', 'Shodashopachara Ganesha Puja', 'Ganapati Atharvashirsha recitation with Durva offerings', 'Ganapati Havan with ghee and sweet modaks', 'Modak Naivedya and Aarti'],
     timingNote: 'Sankashti Chaturthi, Vinayaka Chaturthi, or prior to any major endeavor.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'life-event',
   },
   {
@@ -1206,6 +1216,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Lead and Silver Naga-Nagin pair', 'Black urad dal and mustard oil', 'Nag Keshara flower herb', 'Rudraksha and Bilva leaves', 'Havan samagri and camphor', 'Panchamrit'],
     steps: ['Pratima sthapana of Ashta Nagas', 'Rahu and Ketu Japa', 'Naga Bali and Sarpa Sukta recitation', 'Rudra Abhishek for removing serpentine afflictions', 'Visarjan of silver snake pair in flowing water'],
     timingNote: 'Perform on Nag Panchami, Amavasya, or Tuesday/Saturday afternoons.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1217,6 +1228,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Red coral (Moonga) or red cloth', 'Red lentils (Masoor Dal)', 'Raktachandan (Red Sandalwood)', 'Jaggery and wheat prasad', 'Mangal Yantra', 'Pure cow ghee'],
     steps: ['Ganesha and Mangal Graha Avahana', 'Mangal Kavach and Rin-Mochak Mangal Stotram recitation', 'Chanting Mangal Beej mantra 108 times', 'Homam with red wood (Khadira) and red flowers', 'Offering red cloth and masoor dal daan'],
     timingNote: 'Tuesday mornings during Mars Hora.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1228,6 +1240,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Iron nail or Shani Yantra plate', 'Mustard oil (Til oil 1 litre)', 'Black sesame seeds and black cloth', 'Iron bowl for Chhaya Daan (shadow reflection)', 'Blue flowers (Aparajita)', 'Black urad dal'],
     steps: ['Shani Yantra Abhishek with mustard oil', 'Chhaya Daan where devotee looks into oil before offering', 'Shani Gayatri and Dasaratha Shani Stotram chant', 'Samidha havan with Shami tree wood', 'Charity of black umbrella and footwear sankalp'],
     timingNote: 'Saturday evenings or Shanischari Amavasya.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1239,6 +1252,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Bronze Thali with raw rice for writing name', 'Gold ring for whispering name into ear', 'New baby clothing and cradle garland', 'Honey and curd for Madhuparka', 'Panchamrit and dry fruits'],
     steps: ['Sankalp for child vitality and fame', 'Ayushya Devata pujan', 'Father whispers auspicious Vedic name in infant right ear', 'Writing baby name upon raw rice bed with golden stylus', 'Blessings from matriarchs and paternal elders'],
     timingNote: 'Traditionally observed on the 11th, 12th, or 21st day after childbirth.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1250,6 +1264,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Silver bowl and silver spoon', 'Kheer made of rice, milk, cardamom, and honey', 'Symbolic milestone items: Book, Pen, Coin, Soil, Clay toy', 'Pooja garland and sweets'],
     steps: ['Ganesha and Annapurna Puja', 'Consecration of Kheer with Gayatri mantra', 'Maternal uncle or father feeds first taste using silver spoon', 'Celebration ritual where child picks symbolic milestone object', 'Aarti and elder blessings'],
     timingNote: '6th month for boy child, 5th or 7th month for girl child on Shukla Paksha.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1261,6 +1276,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Turmeric paste and Ganga water', 'Curd and pure butter for scalping', 'Red sacred cloth to wrap shorn hair', 'Havan samagri and sweets', 'Barber dakshina and gifts'],
     steps: ['Ayushya Havan invoking long life and vitality', 'Purohit chant while making first symbolic scissor cuts', 'Complete tonsure by barber', 'Application of soothing Turmeric-Chandan paste to scalp', 'Hair immersion in holy river or riverbank repository'],
     timingNote: '1st or 3rd year of child during Uttarayana period.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1272,6 +1288,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Three-strand cotton Yajnopavita (Janeu)', 'Deer skin cloth piece and Munj grass belt', 'Palasa wood staff (Danda)', 'Bhiksha vessel and unpolished rice', 'Cow ghee and Havan herbs'],
     steps: ['Chaulakarma and sacred bath', 'Investiture of the sacred thread with Gayatri recitation', 'Father initiates young boy into sacred Gayatri Mantra initiation', 'Brahmachari staff acceptance and first Bhiksha collection', 'Ashirvad from Gurus and relatives'],
     timingNote: 'Spring season during Shukla Paksha for boys aged 8 to 16.',
+    coverImage: '/images/verified_purohit_portrait.jpg',
     category: 'life-event',
   },
   {
@@ -1283,6 +1300,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Foundation brick (Shila Nyas)', 'Silver serpent and turtle figurines', 'Five precious gems (Navaratna) or coins', 'Coconut wrapped in red moli', 'Ganga clay and raw milk', 'Spade tool with turmeric mark'],
     steps: ['Digging auspicious northeast corner pit', 'Bhumi Devi invocation and apology for excavation', 'Lowering silver turtle and gemstones into foundation trench', 'Laying and blessing of first foundation brick (Shila Nyas)', 'Purnahuti and sweet distribution to site labor'],
     timingNote: 'Shukla Paksha Monday or Thursday during auspicious morning hours.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'business',
   },
   {
@@ -1294,6 +1312,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Red ribbon and ceremonial scissors', 'Brass deepam (oil lamp)', 'Mango leaf toran for entry door', 'Coconut with swastika symbol', 'Laddoo boxes for staff and visitors'],
     steps: ['Ganesha puja and threshold toran consecration', 'Ceremonial ribbon cutting and auspicious right-foot entry', 'Lighting of traditional brass Akhand Deepam', 'Lakshmi and Kuber archana at finance desk', 'Distribution of sweets among staff and business partners'],
     timingNote: 'Morning hours between 09:00 and 11:30 during Amrit Choghadiya.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'business',
   },
   {
@@ -1305,6 +1324,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['New ledger book or tablet device', 'Red ink pen and gold coin', 'Saraswati and Lakshmi images', 'Turmeric and Kumkum for Swastika', 'Mithai and coriander seeds (Dhana)'],
     steps: ['Drawing Shubh-Labh and Swastika upon ledger opening page', 'Chitragupta and Lakshmi invocation for clean balance sheets', 'First transaction entry inscribed with sacred mantra', 'Offering Dhana and Jaggery naivedya', 'Blessing of pens, laptops, and registers'],
     timingNote: 'Dhanteras afternoon or Diwali Lakshmi Pujan evening.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'business',
   },
   {
@@ -1316,6 +1336,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Three distinct pindas made of Wheat, Rice, and Sesame', 'Kusha grass and Darbha mats', 'Black cloth, white cloth, and yellow cloth', 'Three metal pots with holy teerth', 'Honey, ghee, and milk'],
     steps: ['Purification and Sankalp addressing known and unknown pitrus', 'Offering three pindas representing Satvik, Rajasik, and Tamasik realms', 'Lord Vishnu and Lord Rudra tarpana for liberation', 'Brahmana daan and Cow feeding', 'Prarthana for lineage freedom from ancestral burdens'],
     timingNote: 'Amavasya, Pitru Paksha, or Panchak periods.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'ancestral',
   },
   {
@@ -1327,6 +1348,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Barley grains and black sesame seeds', 'White flowers and Kusha grass', 'Pinda thali and Gangajal', 'Kheer and puris prepared without salt for naivedya', 'Dry ration packs for charity'],
     steps: ['Early morning holy water ablution and Kusha ring wear', 'Detailed Tarpan for fathers, grandfathers, and maternal lines', 'Offering of food portions to Crow, Cow, and Dog (Pancha Bali)', 'Maha Pinda Daan ceremony', 'Distribution of food and clothes to needy families'],
     timingNote: 'Mahalaya Sarva Pitru Amavasya (Bhadrapada/Ashwin new moon).',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'ancestral',
   },
   {
@@ -1338,6 +1360,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Barley dough balls (Pindas)', 'Tulsi leaves and black sesame', 'Kusha grass mat', 'Betel leaves and coin offerings', 'White cotton towels and dakshina'],
     steps: ['Sankalp naming the devotee and three generations of ancestors', 'Vishnu Pada contemplation and Tarpana', 'Pinda Pradana with dedicated Vedic Suktas', 'Kusha visarjan and prayer for soul salvation', 'Final charity offering in name of ancestors'],
     timingNote: 'Pitru Paksha fortnight or any Somvati Amavasya.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'ancestral',
   },
   {
@@ -1349,6 +1372,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Kamal Gatta (Lotus seeds 108)', 'Silver Lakshmi-Ganesha coin', 'Clay deepams (16 pieces) with pure mustard/sesame oil', 'Makhana and dry fruits', 'Sri Sukta Havan herbs mixture', 'Kheer naivedya'],
     steps: ['Lighting 16 deepams around altar mandala', 'Kalash pujan and Mahalakshmi Dhyana', 'Sri Suktam chanting with lotus seeds offered in fire', 'Kuber Stotram and treasure box sanctification', 'Grand Lakshmi Aarti and sweet prasad distribution'],
     timingNote: 'Diwali Amavasya during Pradosh / Nishita Kaal.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'festival',
   },
   {
@@ -1360,6 +1384,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Red chunri and Shringar items (bangles, bindi, mirror)', 'Pomegranate fruits and red hibiscus', 'Chandi Havan samagri with dry coconut halves', 'Ghee and cloves (Lavang 108 pairs)', 'Camphor and Guggal'],
     steps: ['Argala, Kilaka, and Devi Kavach recital', 'Complete path of 13 chapters of Durga Saptashati', 'Chandi Havan with ahuti per chapter', 'Offering of dry coconut purnahuti into holy flames', 'Kanya Pujan with food and gifts for young girls'],
     timingNote: 'Chaitra or Sharad Navratri Ashtami/Navami days.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'festival',
   },
   {
@@ -1371,6 +1396,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Sindoor (orange vermilion) and Jasmine oil', 'Boondi laddoos and Bananas', 'Betel leaf garland (Pan ka bida)', 'Hanuman Chalisa and Ramayana books', 'Ghee diya and Dhoop sticks'],
     steps: ['Sri Rama and Lakshmana invocation', 'Hanuman Sindoor Arpan and tilak', 'Complete communal recitation of Sundarkand', 'Recitation of Hanuman Ashtak and Chalisa 7 times', 'Hanuman Aarti and distributing boondi prasad'],
     timingNote: 'Tuesday or Saturday evenings, Hanuman Jayanti.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'festival',
   },
   {
@@ -1382,6 +1408,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Dhatura fruits and flowers', 'Bael fruit and 1008 Bilva leaves', 'Bhasma from sacred cow dung', 'Raw sugarcane juice and cold mountain milk', 'Silver lingam peeth'],
     steps: ['First Prahar milk abhishek and Rigveda mantras', 'Second Prahar curd abhishek and Yajurveda chants', 'Third Prahar ghee abhishek and Samaveda chants', 'Fourth Prahar honey and Gangajal abhishek with Atharvaveda', 'Maha Mrityunjaya Akhand Jaap and Bhasma aarti'],
     timingNote: 'Maha Shivratri night (Phalguna Krishna Chaturdashi).',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'festival',
   },
   {
@@ -1393,6 +1420,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Small brass swing (Jhula) for Laddu Gopal', 'Panchamrit and Tulsi leaves', 'Makhan (fresh butter) and Mishri (sugar crystals)', 'Yellow silk robes (Peetambar) and Peacock feather crown', 'Flute and fragrant flowers'],
     steps: ['Midnight Shankha naada announcing Krishna Janma', 'Panchamrit Snanam of Laddu Gopal idol', 'Dressing in new Peetambar and placing on adorned Jhula', 'Communal swinging of the baby deity with Bhajan chanting', 'Offering Makhan Mishri and Panchamrit prasad'],
     timingNote: 'Janmashtami midnight during festive holy hours.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'festival',
   },
   {
@@ -1404,6 +1432,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Two metal snake replicas', 'Mustard seeds and sesame seeds', 'Blue and multi-colored cloth pieces', 'Durva grass and Kusha roots', 'Ghee and camphor'],
     steps: ['Sankalp to calm Rahu and Ketu afflicted transits', 'Rahu Beej mantra and Ketu Stotram chanting', 'Havan using Durva grass and sacred samidha', 'Offering colored cloths and pulse daan', 'Teertha sprinkling for clarity of mind'],
     timingNote: 'Tuesday or Saturday during Rahu Kaal window.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1415,6 +1444,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Yellow sapphire replica or turmeric roots (11 pieces)', 'Chana dal (split chickpeas) and yellow sweets', 'Brihaspati Yantra and yellow cloth', 'Ghee, honey, and sacred wood', 'Kesar (saffron) paste'],
     steps: ['Ganesha and Guru Devata invocation', 'Recitation of Brihaspati Kavach and Guru Stotram', 'Chandal dosha pacification homam with Peepal wood', 'Offering yellow clothes, turmeric, and chana dal daan', 'Applying auspicious Kesar tilak for mental clarity'],
     timingNote: 'Thursday mornings during Guru Hora.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1426,6 +1456,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Sudarshana Yantra', 'White mustard seeds and Rock salt', 'Whole red dried chillies (7 pieces for Nazar removal)', 'Ghee and Guggul incense', 'Red sacred thread for wrist'],
     steps: ['Drawing Sudarshana Chakra diagram on Havan altar', 'Waving rock salt and mustard seeds around family members to absorb ill-will', 'Chanting Sudarshana Maha Mantra 108 times', 'Offering protective herbs into sacred fire', 'Tying sanctified Raksha Sutra on family wrists'],
     timingNote: 'Tuesday or Saturday noon, or Amavasya evening.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1437,6 +1468,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Runaharta Ganesha Stotram text', 'Red flowers and Jaggery modaks', 'Red lentils and copper coin', 'Ghee and dry coconut', 'Red Chandan'],
     steps: ['Sankalp specifying sincere intent to achieve complete debt freedom', 'Recitation of Runaharta Ganesha Stotram 11 times', 'Havan with ghee-dipped Modak pieces', 'Arpan of copper coin and red flowers at Ganesha feet', 'Closing prayer for fiscal responsibility and blessing'],
     timingNote: 'Tuesday mornings or Angaraki Chaturthi.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'dosha-nivaran',
   },
   {
@@ -1448,6 +1480,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Santana Gopala Yantra and photo', 'Fresh cow milk and butter', 'Yellow flowers and Tulsi garlands', 'Dry fruits, honey, and sacred wood', 'Kheer naivedya'],
     steps: ['Ganesha and Santana Gopala Sthapana', 'Santana Gopala Mantra recitation 1008 times by priests and couple', 'Pavitra Havan with sweet ghee kheer ahuti', 'Consuming sanctified prasadam by husband and wife', 'Blessings for harmonious progeny'],
     timingNote: 'Shukla Paksha Thursday morning.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1459,6 +1492,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['60 Small Kalash pots with consecrated water', 'Ayushya Sukta samagri herbs', 'New silk vastra for the elderly couple', 'Garlands and flowers', 'Panchamrit and fruit basket'],
     steps: ['Ayushya Havan and Mrityunjaya Jaap', 'Consecration of 60 sacred kalash pots', 'Maha Abhishekam bath for the couple using holy water', 'Varmala exchange renewing sacred marriage companionship', 'Children touching parents feet for generational blessings'],
     timingNote: 'Celebrated during the birth month of completing 60 years of age.',
+    coverImage: '/images/devotee_family_blessing.jpg',
     category: 'life-event',
   },
   {
@@ -1470,6 +1504,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Brass Kalash with fresh water and mango leaves', 'Coconut with Mauli thread', 'Panchamrit (Milk, Curd, Honey, Sugar, Ghee)', 'Fresh seasonal fruits and flowers', 'Camphor and sweet prasad'],
     steps: ['Deepam lighting and Swasti Vachan chanting', 'Ganesha Vandana and Navagraha invocation', 'Recitation of Shanti Suktam from Vedas', 'Sprinkling sanctified Shanti water across household', 'Distribution of blessed sweet prasad'],
     timingNote: 'Auspicious on any morning during sunrise.',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'life-event',
   },
   {
@@ -1481,6 +1516,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['108 earthen clay lamps (deepams) and pure ghee', '108 red lotus flowers (Rakta Padma)', 'Bel leaves (Bilva patra with 108 leaves intact)', 'Red silk cloth and sindoor', 'Sugarcane and white pumpkin (Kushmanda) for symbolic offering', 'Panchamrita and fruits'],
     steps: ['Bodhana and Ghatasthapana sankalp', 'Mahashtami Chandi Path', 'Lighting 108 oil lamps during Sandhi transition', 'Balidan offering of sugarcane and white pumpkin (Kushmanda)', 'Maha Aarti and Ashirvad'],
     timingNote: 'Exactly during the sacred 48-minute Sandhi Kaal bridging Ashtami and Navami.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'festival',
   },
   {
@@ -1492,6 +1528,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Red Hibiscus (Jaba) garland (108 count)', 'Sindoor and Alaktaka (Alta)', 'Mustard oil lamps', 'Khomba / Coconut naivedya', 'Ghee, camphor, and Havan samagri', 'Shyama Puja book'],
     steps: ['Purification of ritual space and Nyasa', 'Avahana of Maa Dakshina Kali', 'Recitation of Kali Sahasranama and Karpuradi Stotram', 'Nishita Kaal Homam with red flowers and ghee', 'Khadga Pujan and Deeparadhana'],
     timingNote: 'Nishita Kaal midnight hours of Dipannita Amavasya.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'festival',
   },
   {
@@ -1503,6 +1540,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Four-armed Jagaddhatri Pratima or picture', 'Fresh white and yellow flowers', 'Panchamrit and honey', 'Sugarcane and ginger naivedya', 'Red vastra', 'Pure cow ghee'],
     steps: ['Saptami, Ashtami, and Navami triratri sankalp', 'Chandi path recitation', 'Shodashopachara pujan of Devi Jagaddhatri', 'Havan offering payasam and bilva leaves', 'Purnahuti and Pranama mantra chanting'],
     timingNote: 'Kartik Shukla Navami (October/November).',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'festival',
   },
   {
@@ -1514,6 +1552,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Alpona rice paste for footstep floor designs', 'Parijaat and lotus flowers', 'Taal and Narcol Naru (coconut laddoos)', 'Kheer and Moa sweets', 'Lakshmi Panchali book', 'Cowrie shells and silver coin'],
     steps: ['Drawing auspicious Lakshmi feet (Alpona) leading to altar', 'Reading of Lokkhi Panchali verse by verse', 'Offering of freshly harvested grain and coconut naivedya', 'Night vigil keeping lamps continuously burning', 'Distribution of Shital prasad'],
     timingNote: 'Sharad Purnima full-moon evening and night.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'festival',
   },
   {
@@ -1525,6 +1564,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Palash flowers (Butea monosperma)', 'Kool (Indian jujube / Ber fruit)', 'Saraswati idol with Veena', 'Abir (yellow powder)', 'Books, notebooks, and ink pens for blessing', 'Basanti yellow pulao'],
     steps: ['Sthapana of Saraswati and blessing of study instruments', 'Offering of sacred Palash flowers with Pushpanjali mantras', 'Hatey Khori ceremony for initiation into learning', 'Recitation of Saraswati Vandana and Stotram', 'Distribution of Kul and sweet prasad'],
     timingNote: 'Magha Shukla Panchami (Basant Panchami) morning.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'life-event',
   },
   {
@@ -1536,6 +1576,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Gangajal / river sand sanctification pot', 'Til (Sesame seeds) and Nolen Gur (date palm jaggery)', 'Kusha grass ring', 'Pithe sweets naivedya', 'New cotton vastra for charity'],
     steps: ['Surya Arghya at dawn with red flowers and Gangajal', 'Brahmarshi and Pitru Tarpana with black sesame', 'Offering newly harvested rice and Nolen Gur sweets', 'Havan dedicated to Surya and Agni Devatas', 'Distribution of blankets and food to the underprivileged'],
     timingNote: 'Poush Sankranti / Makar Sankranti sunrise.',
+    coverImage: '/images/havan_fire_ceremony.jpg',
     category: 'ancestral',
   },
   {
@@ -1547,6 +1588,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Small wooden Ratha chariot or picture', 'Tulsi leaves (108 count)', 'Khaja sweets and dry fruits', 'Pooja bell and conch shell', 'Chandan paste and fragrant garlands'],
     steps: ['Pahandi ritual welcoming the Deities to altar', 'Ratha Pratishtha and circumambulation', 'Recitation of Jagannath Ashtakam', 'Offering Chhappan Bhog / sweet naivedya', 'Chariot pulling invocation and Aarti'],
     timingNote: 'Ashadha Shukla Dwitiya (June/July).',
+    coverImage: '/images/hero_vedic_puja.jpg',
     category: 'festival',
   },
   {
@@ -1558,6 +1600,7 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
     samagriList: ['Brass / silver rice measuring vessel (Ser)', 'Raw unpolished fragrant paddy grains', 'Annapurna idol or picture', 'Panchamrit and seasonal cooked dishes', 'Ghee diya and flowers'],
     steps: ['Cleaning and blessing of the cooking hearth / kitchen altar', 'Filling the Ser vessel with golden paddy grains', 'Recitation of Sri Annapurna Stotram by Adi Shankaracharya', 'Bhog offering of cooked rice, dal, and payasam', 'Feeding family members and offering food charity to neighbors'],
     timingNote: 'Chaitra Shukla Ashtami or Shukla Paksha Friday mornings.',
+    coverImage: '/images/samagri_ritual_thali.jpg',
     category: 'life-event',
   },
 ];

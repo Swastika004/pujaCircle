@@ -86,21 +86,35 @@ export const RitualKitPage: React.FC = () => {
       </div>
 
       
-      <div className="bg-[hsl(var(--surface))] rounded-xl border border-[hsl(var(--border))] p-6 sm:p-8 shadow-xs space-y-4">
-        <div className="space-y-2">
-          <div className="inline-block px-2 py-0.5 rounded-sm text-xs font-medium bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground-muted))] capitalize">
-            {entry.category.replace('-', ' ')}
+      <div className="bg-[hsl(var(--surface))] rounded-xl border border-[hsl(var(--border))] shadow-xs space-y-4 overflow-hidden">
+        {/* Cover Image Banner */}
+        <div className="relative h-48 sm:h-64 w-full overflow-hidden bg-stone-900">
+          <img
+            src={entry.coverImage}
+            alt={entry.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
+            }}
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-transparent" />
+          <div className="absolute bottom-4 left-6 right-6 text-white space-y-1">
+            <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase bg-amber-400 text-red-950 shadow-sm">
+              {entry.category.replace('-', ' ')}
+            </span>
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-white tracking-tight drop-shadow-md">
+              {entry.name}
+            </h1>
+            <p className="text-sm sm:text-base text-amber-200 font-medium drop-shadow-sm">
+              Presiding Deity: {entry.deity}
+            </p>
           </div>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[hsl(var(--foreground))] tracking-tight">
-            {entry.name}
-          </h1>
-          <p className="text-sm sm:text-base text-[hsl(var(--brand-primary))] font-medium">
-            Presiding Deity: {entry.deity}
-          </p>
+        </div>
+
+        <div className="p-6 sm:p-8 pt-2 space-y-4">
           <p className="text-sm text-[hsl(var(--foreground-muted))] leading-relaxed">
             {entry.description}
           </p>
-        </div>
 
         
         <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[hsl(var(--border))]">
@@ -132,6 +146,7 @@ export const RitualKitPage: React.FC = () => {
           </button>
         </div>
       </div>
+    </div>
 
       
       <div className="rounded-lg border border-[hsl(var(--brand-accent))]/40 bg-[hsl(var(--brand-accent-soft))]/30 p-6 space-y-4">

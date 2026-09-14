@@ -9,20 +9,14 @@ import {
   BookOpen,
   Compass,
   Users,
-  FileText,
-  ShieldCheck,
-  Flame,
 } from "lucide-react";
-import { SEED_PUJA_CATALOG } from "@/mocks/data";
 import { HeroVisualCarousel } from "@/components/common/HeroVisualCarousel";
+import { FeaturedCeremoniesCarousel } from "@/components/common/FeaturedCeremoniesCarousel";
 
 // HomePage
 // High-contrast festive Indian temple aesthetic with modern scroll animations & microinteractions.
-// Follows strict Phase 2 spec: Hero with dual CTAs, 3-step how-it-works, and 4 featured catalog cards.
+// Follows strict Phase 2 spec: Hero with dual CTAs, 3-step how-it-works, and featured catalog carousel.
 export const HomePage: React.FC = () => {
-  // First 4 featured catalog ceremonies for home showcase
-  const featuredPujas = SEED_PUJA_CATALOG.slice(0, 4);
-
   // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -86,9 +80,19 @@ export const HomePage: React.FC = () => {
             className="text-stone-800 font-medium text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed"
           >
             Not sure which ceremony fits your family's needs? Describe your life
-            situation to our <span className="font-semibold text-[#780016]">Sankalp Advisor</span> for
-            scriptural recommendations, generate your personalized <span className="font-semibold text-[#780016]">Samagri Checklist & Ritual Kit</span>,
-            and book verified <span className="font-semibold text-[#780016]">Gurukul Purohits</span> with direct in-person cash dakshina.
+            situation to our{" "}
+            <span className="font-semibold text-[#780016]">
+              Sankalp Advisor
+            </span>{" "}
+            for scriptural recommendations, generate your personalized{" "}
+            <span className="font-semibold text-[#780016]">
+              Samagri Checklist & Ritual Kit
+            </span>
+            , and book verified{" "}
+            <span className="font-semibold text-[#780016]">
+              Gurukul Purohits
+            </span>{" "}
+            with direct in-person cash dakshina.
           </motion.p>
 
           {/* Dual Action CTAs with Micro-interaction */}
@@ -117,29 +121,6 @@ export const HomePage: React.FC = () => {
                 <span>Browse Priests</span>
               </Button>
             </Link>
-          </motion.div>
-
-          {/* Core Value Pillars */}
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full max-w-4xl pt-2"
-          >
-            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
-              <Compass className="h-4 w-4 text-[#991B1B] shrink-0" />
-              <span className="text-xs font-bold text-stone-900 text-left">Sankalp Ritual Advisor</span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
-              <FileText className="h-4 w-4 text-[#991B1B] shrink-0" />
-              <span className="text-xs font-bold text-stone-900 text-left">Custom Samagri Kit PDF</span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
-              <ShieldCheck className="h-4 w-4 text-[#991B1B] shrink-0" />
-              <span className="text-xs font-bold text-stone-900 text-left">Verified Gurukul Purohits</span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-amber-50/80 border border-amber-200/80 shadow-2xs">
-              <Flame className="h-4 w-4 text-[#991B1B] shrink-0" />
-              <span className="text-xs font-bold text-stone-900 text-left">In-Person Cash Dakshina</span>
-            </div>
           </motion.div>
         </motion.section>
       </div>
@@ -175,7 +156,8 @@ export const HomePage: React.FC = () => {
               How PujaCircle Works
             </h2>
             <p className="text-amber-100/90 text-xs sm:text-sm text-center">
-              From discovering the right ritual to sacred home completion—pure transparency every step of the way.
+              From discovering the right ritual to sacred home completion—pure
+              transparency every step of the way.
             </p>
           </div>
 
@@ -196,7 +178,10 @@ export const HomePage: React.FC = () => {
                 Describe Your Life Situation
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Unsure which ritual fits? Share your life event—such as a new home, career transition, business opening, or family peace. The Sankalp Advisor recommends the exact Vedic ceremony with scriptural rationale and auspicious timing.
+                Unsure which ritual fits? Share your life event—such as a new
+                home, career transition, business opening, or family peace. The
+                Sankalp Advisor recommends the exact Vedic ceremony with
+                scriptural rationale and auspicious timing.
               </p>
             </motion.div>
 
@@ -216,7 +201,10 @@ export const HomePage: React.FC = () => {
                 Get Personalized Ritual Kit
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Instantly receive your verified samagri checklist (so you never overpay or miss an offering), step-by-step Vedic vidhi order, and sacred Sankalp prayer text tailored with your name in a downloadable PDF.
+                Instantly receive your verified samagri checklist (so you never
+                overpay or miss an offering), step-by-step Vedic vidhi order,
+                and sacred Sankalp prayer text tailored with your name in a
+                downloadable PDF.
               </p>
             </motion.div>
 
@@ -236,7 +224,10 @@ export const HomePage: React.FC = () => {
                 Home Vidhi & Cash Dakshina
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Select a verified Gurukul-trained purohit in Kolkata by language and tradition. The priest conducts the sacred ceremony at your residence; pay transparent dakshina directly in cash upon completion.
+                Select a verified Gurukul-trained purohit in Kolkata by language
+                and tradition. The priest conducts the sacred ceremony at your
+                residence; pay transparent dakshina directly in cash upon
+                completion.
               </p>
             </motion.div>
           </div>
@@ -271,50 +262,7 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {featuredPujas.map((puja, index) => (
-              <motion.div
-                key={puja.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                whileHover={{ y: -5 }}
-                className="rounded-xl border border-[hsl(var(--border))] bg-white p-5 shadow-xs hover:shadow-lg hover:border-[#C59A3F] transition-all flex flex-col justify-between group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-amber-50 text-[#B45309] border border-amber-200 group-hover:bg-amber-100/70 transition-colors">
-                      {puja.category.replace("-", " ")}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-serif text-base font-bold text-stone-900 line-clamp-1 group-hover:text-[#780016] transition-colors">
-                      {puja.name}
-                    </h3>
-                    <p className="text-xs text-[#991B1B] font-medium mt-0.5">
-                      Deity: {puja.deity}
-                    </p>
-                  </div>
-
-                  <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed">
-                    {puja.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-stone-100">
-                  <Link
-                    to={`/advisor/ritual-kit?id=${puja.id}`}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-[#991B1B] hover:text-white bg-amber-50/60 hover:bg-[#780016] rounded-md transition-all duration-200 border border-amber-300/40"
-                  >
-                    <span>View Ritual Kit & Vidhi</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <FeaturedCeremoniesCarousel />
         </motion.section>
       </div>
     </div>

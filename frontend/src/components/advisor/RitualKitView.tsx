@@ -82,32 +82,39 @@ export const RitualKitView: React.FC<RitualKitViewProps> = ({
           initial="initial"
           animate="animate"
           exit="exit"
-          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-xl space-y-6"
+          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-xl space-y-6"
         >
-          <div className="flex items-start justify-between border-b border-[hsl(var(--border))] pb-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="rounded-sm bg-[hsl(var(--advisor-accent-soft))] px-2.5 py-0.5 text-xs font-semibold text-[hsl(var(--advisor-accent))]">
-                  Personalized Ritual Kit
-                </span>
-                <span className="text-xs text-[hsl(var(--foreground-muted))]">
-                  • {entry.name}
-                </span>
-              </div>
-              <h2 className="font-serif text-2xl font-semibold text-[hsl(var(--foreground))]">
-                Samagri & Preparations
-              </h2>
-              <p className="text-xs text-[hsl(var(--foreground-muted))]">
-                Vedic ritual requirements, deity offerings, and auspicious guidance.
-              </p>
-            </div>
+          {/* Ceremony Cover Image Hero Banner */}
+          <div className="relative h-44 -mx-6 -mt-6 rounded-t-xl overflow-hidden bg-stone-900 border-b border-[hsl(var(--border))]">
+            <img
+              src={entry.coverImage}
+              alt={entry.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
+              }}
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/20" />
+
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md p-2 text-[hsl(var(--foreground-muted))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
+              className="absolute top-3 right-3 rounded-full p-2 bg-black/60 hover:bg-black/80 text-white backdrop-blur-xs transition-colors z-20 cursor-pointer shadow-md"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
+
+            <div className="absolute bottom-4 left-6 right-6 text-white space-y-1 z-10">
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-400 text-red-950">
+                {entry.category.replace('-', ' ')}
+              </span>
+              <h2 className="font-serif text-2xl font-bold text-white drop-shadow-md">
+                {entry.name}
+              </h2>
+              <p className="text-xs text-amber-200 font-medium drop-shadow-sm">
+                Presiding Deity: {entry.deity}
+              </p>
+            </div>
           </div>
 
           <div className="rounded-md border border-[hsl(var(--brand-accent))]/30 bg-[hsl(var(--brand-accent-soft))]/40 p-4 space-y-3">
