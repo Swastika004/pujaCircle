@@ -9,7 +9,6 @@ import {
   Clock,
   Calendar,
   BookOpen,
-  Compass,
   ArrowRight,
 } from 'lucide-react';
 
@@ -147,16 +146,7 @@ export const AdminDashboardPage: React.FC = () => {
             <ArrowRight className="w-4 h-4 text-[#991B1B]" />
           </Link>
 
-          <Link
-            to="/admin/advisor-preview"
-            className="p-4 rounded-md bg-white border border-[hsl(var(--border))] hover:border-[#C59A3F] transition-all flex items-center justify-between"
-          >
-            <div>
-              <p className="font-bold text-stone-900">Advisor QA Preview</p>
-              <p className="text-stone-500 mt-0.5">Inspect matching engine queries</p>
-            </div>
-            <Compass className="w-4 h-4 text-[hsl(var(--advisor-accent))]" />
-          </Link>
+
         </div>
       </div>
     </div>

@@ -42,8 +42,6 @@
   --color-brand-accent: hsl(var(--brand-accent));
   --color-brand-accent-soft: hsl(var(--brand-accent-soft));
   --color-surface-alt: hsl(var(--surface-alt));
-  --color-advisor-accent: hsl(var(--advisor-accent));
-  --color-advisor-accent-soft: hsl(var(--advisor-accent-soft));
 
   /* Backward-compatible color aliases */
   --color-brand-saffron: hsl(var(--brand-saffron));
@@ -122,7 +120,7 @@
   /* ==========================================================================
      PujaCircle Master Palette v2.0 (DESIGN.md)
      Warm Ivory canvas, Deep Saffron primary, Regal Maroon secondary,
-     Muted Gold accent, Charcoal foreground, Advisor Accent violet.
+     Muted Gold accent, Charcoal foreground.
      ========================================================================== */
 
   /* Brand Signature Colors v2.0 per DESIGN §2 */
@@ -136,8 +134,6 @@
   --surface-alt: 40 33% 91%;
   --foreground: 220 12% 12%;
   --foreground-muted: 30 5% 40%;
-  --advisor-accent: 258 30% 40%;
-  --advisor-accent-soft: 258 35% 94%;
 
   /* Backward-compatible color aliases */
   --brand-saffron: var(--brand-primary);

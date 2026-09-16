@@ -10,7 +10,7 @@ import {
   Flame,
   CheckCircle2,
 } from "lucide-react";
-import { PujaCatalogEntry } from "@/types/advisor";
+import { PujaCatalogEntry } from "@/types/catalog.types";
 import { mockDb } from "@/mocks/data";
 
 const CATEGORIES = [
@@ -237,10 +237,10 @@ export const FeaturedCeremoniesCarousel: React.FC = () => {
                 {/* Card Footer CTA */}
                 <div className="pt-3 border-t border-stone-100">
                   <Link
-                    to={`/advisor/ritual-kit?id=${puja.id}`}
+                    to={`/priests?service=${encodeURIComponent(puja.name)}&catalogId=${puja.id}`}
                     className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-[#780016] group-hover:text-white bg-amber-50/70 group-hover:bg-[#780016] rounded-xl transition-all duration-300 border border-amber-300/60 group-hover:border-[#780016] shadow-2xs group-hover:shadow-md cursor-pointer"
                   >
-                    <span>View Ritual Kit & Vidhi</span>
+                    <span>Book Priest for Ceremony</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </div>

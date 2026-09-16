@@ -5,7 +5,6 @@ import {
   Flame,
   Users,
   BookOpen,
-  Compass,
   User,
 } from "lucide-react";
 import {
@@ -37,11 +36,7 @@ export const AdminLayout: React.FC = () => {
       path: "/admin/catalog",
       icon: BookOpen,
     },
-    {
-      label: "Advisor QA Preview",
-      path: "/admin/advisor-preview",
-      icon: Compass,
-    },
+
     {
       label: "Admin Profile",
       path: "/admin/profile",

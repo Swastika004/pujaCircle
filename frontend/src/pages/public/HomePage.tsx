@@ -7,7 +7,6 @@ import {
   ArrowRight,
   CheckCircle2,
   BookOpen,
-  Compass,
   Users,
 } from "lucide-react";
 import { HeroVisualCarousel } from "@/components/common/HeroVisualCarousel";
@@ -79,20 +78,11 @@ export const HomePage: React.FC = () => {
             variants={itemVariants}
             className="text-stone-800 font-medium text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed"
           >
-            Not sure which ceremony fits your family's needs? Describe your life
-            situation to our{" "}
-            <span className="font-semibold text-[#780016]">
-              Sankalp Advisor
-            </span>{" "}
-            for scriptural recommendations, generate your personalized{" "}
-            <span className="font-semibold text-[#780016]">
-              Samagri Checklist & Ritual Kit
-            </span>
-            , and book verified{" "}
+            Browse sacred Vedic ceremonies, prepare complete samagri offerings with authentic vidhi guidance, and book verified{" "}
             <span className="font-semibold text-[#780016]">
               Gurukul Purohits
             </span>{" "}
-            with direct in-person cash dakshina.
+            across West Bengal with direct in-person cash dakshina.
           </motion.p>
 
           {/* Dual Action CTAs with Micro-interaction */}
@@ -100,27 +90,27 @@ export const HomePage: React.FC = () => {
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 w-full max-w-md"
           >
-            <Link to="/advisor" className="w-full sm:w-auto flex-1">
+            <Link to="/priests" className="w-full sm:w-auto flex-1">
               <Button
                 size="lg"
                 className="w-full h-13 text-base font-bold gap-2.5 bg-linear-to-r from-[#991B1B] via-[#851313] to-[#6E0E0E] hover:from-[#780016] hover:to-[#550808] text-amber-100 px-8 py-3.5 rounded-md border-2 border-amber-400/50 shadow-[0_10px_25px_-5px_rgba(153,27,27,0.45)] hover:shadow-[0_14px_30px_-4px_rgba(153,27,27,0.6)] active:scale-[0.98] transition-all duration-300 cursor-pointer group"
               >
-                <Compass className="h-4 w-4 text-amber-300 transition-transform duration-300 group-hover:rotate-45" />
-                <span className="tracking-wide">Ask the Advisor</span>
+                <Users className="h-4 w-4 text-amber-300 transition-transform duration-300 group-hover:scale-110" />
+                <span className="tracking-wide">Browse Priests</span>
                 <ArrowRight className="h-4 w-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
 
-            <Link to="/priests" className="w-full sm:w-auto flex-1">
+            <a href="#featured-catalog" className="w-full sm:w-auto flex-1">
               <Button
                 size="lg"
                 variant="outline"
                 className="w-full h-13 px-7 text-sm sm:text-base font-bold border-2 border-[#C59A3F]/50 text-stone-800 bg-white/90 hover:bg-amber-50/90 hover:border-[#C59A3F] hover:text-[#780016] rounded-md shadow-sm hover:shadow-md active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 group"
               >
-                <Users className="h-4 w-4 text-[#991B1B] transition-transform duration-300 group-hover:scale-110" />
-                <span>Browse Priests</span>
+                <BookOpen className="h-4 w-4 text-[#991B1B] transition-transform duration-300 group-hover:scale-110" />
+                <span>Explore Ceremonies</span>
               </Button>
-            </Link>
+            </a>
           </motion.div>
         </motion.section>
       </div>
@@ -172,16 +162,13 @@ export const HomePage: React.FC = () => {
                 1
               </div>
               <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 mt-4">
-                Step 1 · Guidance
+                Step 1 · Ceremony
               </span>
               <h3 className="text-white font-bold font-serif text-lg mt-1">
-                Describe Your Life Situation
+                Choose Your Ceremony
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Unsure which ritual fits? Share your life event—such as a new
-                home, career transition, business opening, or family peace. The
-                Sankalp Advisor recommends the exact Vedic ceremony with
-                scriptural rationale and auspicious timing.
+                Explore traditional Vedic ceremonies—such as Griha Pravesh, Satyanarayan Katha, Rudrabhishek, or Vastu Shanti—with verified samagri requirements and vidhi steps.
               </p>
             </motion.div>
 
@@ -195,16 +182,13 @@ export const HomePage: React.FC = () => {
                 2
               </div>
               <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 mt-4">
-                Step 2 · Preparation
+                Step 2 · Scholar
               </span>
               <h3 className="text-white font-bold font-serif text-lg mt-1">
-                Get Personalized Ritual Kit
+                Select Verified Purohit
               </h3>
               <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed mt-2 max-w-xs">
-                Instantly receive your verified samagri checklist (so you never
-                overpay or miss an offering), step-by-step Vedic vidhi order,
-                and sacred Sankalp prayer text tailored with your name in a
-                downloadable PDF.
+                Select a verified Gurukul-trained purohit in Kolkata by language, traditions, and community rating. Reserve an auspicious date and time directly.
               </p>
             </motion.div>
 
@@ -237,6 +221,7 @@ export const HomePage: React.FC = () => {
            Sacred Puja Catalog (Featured Cards with Micro-Hover Motion)
            ========================================================================== */}
         <motion.section
+          id="featured-catalog"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -254,10 +239,10 @@ export const HomePage: React.FC = () => {
               </h2>
             </div>
             <Link
-              to="/advisor"
+              to="/priests"
               className="text-xs font-semibold text-[#991B1B] hover:text-[#780016] hover:underline inline-flex items-center gap-1 group"
             >
-              <span>Explore all ceremonies in Advisor</span>
+              <span>Explore all ceremonies & purohits</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>

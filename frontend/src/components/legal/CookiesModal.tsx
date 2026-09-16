@@ -53,9 +53,6 @@ export const CookiesModal: React.FC<CookiesModalProps> = ({ isOpen, onClose }) =
                 • <strong>Authentication Tokens:</strong> Retains active login state across page refreshes for devotees and priests.
               </p>
               <p>
-                • <strong>Ritual Profile Cache:</strong> Remembers your preferred devotee name for generating downloadable Sankalp vidhi PDFs.
-              </p>
-              <p>
                 • <strong>Search & Location Filters:</strong> Caches West Bengal district filters to streamline finding nearby Purohits.
               </p>
             </div>

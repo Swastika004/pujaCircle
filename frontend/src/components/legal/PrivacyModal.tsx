@@ -39,7 +39,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
               <span>1. Information We Collect</span>
             </h4>
             <p className="text-stone-600 pl-5">
-              We collect contact details (full name, phone number, email address), physical ceremony venue addresses, and ritual preferences requested during Sankalp advisor sessions. For Purohits, we record Gurukul training qualifications, years of experience, and service pricing.
+              We collect contact details (full name, phone number, email address), physical ceremony venue addresses, and ritual preferences for ceremonies. For Purohits, we record Gurukul training qualifications, years of experience, and service pricing.
             </p>
           </section>
 

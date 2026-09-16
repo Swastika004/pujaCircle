@@ -10,7 +10,7 @@ import { CookiesModal } from '@/components/legal/CookiesModal';
 // Renders strictly inside PublicLayout (never inside DashboardSidebarShell).
 // Content:
 // 1. Logo + one-line tagline
-// 2. Quick links: About, Contact, Browse Priests, Advisor
+// 2. Quick links: About, Contact, Browse Priests
 // 3. Short West Bengal service-area line
 // 4. Legal row with three modal buttons (Terms, Privacy, Cookies) and copyright line
 export const Footer: React.FC = () => {
@@ -47,9 +47,6 @@ export const Footer: React.FC = () => {
             </Link>
             <Link to="/priests" className="hover:text-[#991B1B] transition-colors">
               Browse Priests
-            </Link>
-            <Link to="/advisor" className="hover:text-[#991B1B] transition-colors">
-              Sankalp Advisor
             </Link>
           </div>
         </div>

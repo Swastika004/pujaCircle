@@ -191,12 +191,12 @@ export const PriestListingPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Active Advisor Filter Badge */}
+        {/* Active Ceremony Filter Badge */}
         {activeServiceName && (
           <div className="flex items-center gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-950">
             <Sparkles className="h-4 w-4 text-amber-600 shrink-0" />
             <span className="flex-1">
-              Filtering priests offering Advisor recommendation: <strong>{activeServiceName}</strong>
+              Filtering priests for ceremony: <strong>{activeServiceName}</strong>
             </span>
             <button
               type="button"

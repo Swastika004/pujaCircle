@@ -28,7 +28,7 @@ flowchart TB
         direction TB
         subgraph DevoteeExperience["Devotee Experience"]
             D1["Public Discovery & Featured Carousel"]
-            D2["Sankalp Intent Advisor"]
+            D2["Vedic Puja Catalog & Vidhis"]
             D3["Booking Request Flow"]
             D4["Verified 5-Star Reviews"]
         end
@@ -136,7 +136,6 @@ pujaCircle/
 │   │   ├── api/                  # Explicit typed API service layer
 │   │   ├── components/
 │   │   │   ├── admin/            # Moderation tables & approval dialogs
-│   │   │   ├── advisor/          # Sankalp intent intake & match result cards
 │   │   │   ├── auth/             # Unified login, OTP & password reset cards
 │   │   │   ├── booking/          # Status badges, rating modal, cancellation dialog
 │   │   │   ├── common/           # Carousel, ErrorBoundary, logo, route guards, spinners
@@ -148,8 +147,7 @@ pujaCircle/
 │   │   ├── mocks/                # Consolidated mock database & in-memory API engine
 │   │   ├── motion/               # Framer-motion animation variants
 │   │   ├── pages/                # Clean page orchestrators (< 150 lines)
-│   │   │   ├── admin/            # Priests, users, catalog, advisor preview
-│   │   │   ├── advisor/          # Intent intake, ranked recommendations, ritual kit
+│   │   │   ├── admin/            # Priests, users, catalog console
 │   │   │   ├── auth/             # Devotee, priest, and admin authentication
 │   │   │   ├── priest/           # Availability, services, bookings, profile
 │   │   │   ├── public/           # Landing, about, contact, priest directory

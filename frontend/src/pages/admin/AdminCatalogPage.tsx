@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search, Edit2, Trash2, Filter, X, Layers, UploadCloud, AlertCircle } from "lucide-react";
-import { PujaCatalogEntry } from "@/types/advisor";
+import { PujaCatalogEntry } from "@/types/catalog.types";
 import { mockDb } from "@/mocks/data";
 import { modalTransition, buttonPress } from "@/motion/variants";
 
@@ -196,8 +196,7 @@ export const AdminCatalogPage: React.FC = () => {
             </h1>
           </div>
           <p className="text-xs text-[hsl(var(--foreground-muted))] mt-1">
-            Curate and moderate rituals, deities, and intent-tag mappings
-            powering the Sankalp Advisor (SRS FR-18)
+            Curate and moderate sacred rituals, deities, and samagri requirements across the platform
           </p>
         </div>
 

@@ -19,7 +19,7 @@ import {
 import {
   Home,
   Users,
-  Compass,
+
   Calendar,
   MapPin,
   User,
@@ -96,10 +96,7 @@ export const Navbar: React.FC = () => {
                 <Users className="h-4 w-4 text-amber-700" />
                 <span>Browse Priests</span>
               </NavLink>
-              <NavLink to="/advisor" className={navLinkClass}>
-                <Compass className="h-4 w-4 text-[hsl(var(--advisor-accent))]" />
-                <span>Ask the Advisor</span>
-              </NavLink>
+
               <NavLink to="/user/bookings" className={navLinkClass}>
                 <Calendar className="h-4 w-4 text-amber-700" />
                 <span>My Bookings</span>
@@ -252,14 +249,7 @@ export const Navbar: React.FC = () => {
                         <Users className="h-4 w-4 text-amber-700" />
                         <span>Browse Priests</span>
                       </NavLink>
-                      <NavLink
-                        to="/advisor"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={mobileNavLinkClass}
-                      >
-                        <Compass className="h-4 w-4 text-[hsl(var(--advisor-accent))]" />
-                        <span>Ask the Advisor</span>
-                      </NavLink>
+
                       <NavLink
                         to="/user/bookings"
                         onClick={() => setMobileMenuOpen(false)}

@@ -9,7 +9,7 @@ import {
 } from '@/types/priest.types';
 import { Address, PincodeLocation } from '@/types/address.types';
 import { Booking, Rating } from '@/types/booking.types';
-import { PujaCatalogEntry, AdvisorQuery } from '@/types/advisor';
+import { PujaCatalogEntry } from '@/types/catalog.types';
 
 export interface MockUserRecord extends AuthUser {
   status?: AccountStatus;
@@ -39,7 +39,6 @@ export interface MockDbState {
     attempts: number;
   }>;
   pujaCatalog: PujaCatalogEntry[];
-  advisorQueries: AdvisorQuery[];
 }
 
 export const SEED_USERS: MockUserRecord[] = [
@@ -1605,92 +1604,6 @@ export const SEED_PUJA_CATALOG: PujaCatalogEntry[] = [
   },
 ];
 
-export const advisorTagRules: Record<string, string[]> = {
-  // Home, housewarming, vastu
-  flat: ['new-home', 'vastu', 'griha-pravesh'],
-  house: ['new-home', 'vastu', 'griha-pravesh'],
-  home: ['new-home', 'vastu', 'griha-pravesh'],
-  bought: ['new-home', 'griha-pravesh'],
-  apartment: ['new-home', 'vastu'],
-  moving: ['new-home', 'relocation'],
-  shifting: ['new-home', 'relocation'],
-  relocation: ['new-home', 'relocation'],
-  vastu: ['vastu', 'dosha-nivaran'],
-  // Education, exams, focus
-  exam: ['education', 'academic', 'saraswati', 'anxiety', 'focus'],
-  exams: ['education', 'academic', 'saraswati', 'anxiety', 'focus'],
-  study: ['education', 'academic', 'saraswati'],
-  studies: ['education', 'academic', 'saraswati'],
-  test: ['education', 'academic', 'saraswati'],
-  student: ['education', 'academic', 'saraswati'],
-  anxious: ['anxiety', 'mental-peace', 'peace', 'protection'],
-  anxiety: ['anxiety', 'mental-peace', 'peace', 'protection'],
-  stress: ['anxiety', 'mental-peace', 'peace', 'health'],
-  focus: ['education', 'focus', 'saraswati'],
-  concentration: ['education', 'focus', 'saraswati'],
-  // Bad luck, obstacles, struggles
-  luck: ['dosha-nivaran', 'bad-luck', 'navagraha', 'obstacles'],
-  unlucky: ['dosha-nivaran', 'bad-luck', 'navagraha', 'obstacles'],
-  obstacle: ['obstacles', 'ganapati', 'dosha-nivaran'],
-  obstacles: ['obstacles', 'ganapati', 'dosha-nivaran'],
-  struggle: ['dosha-nivaran', 'struggle', 'bad-luck'],
-  struggles: ['dosha-nivaran', 'struggle', 'bad-luck'],
-  recurring: ['dosha-nivaran', 'navagraha', 'bad-luck', 'recurring'],
-  working: ['obstacles', 'dosha-nivaran', 'navagraha'],
-  negative: ['dosha-nivaran', 'protection', 'negativity', 'evil-eye'],
-  negativity: ['dosha-nivaran', 'protection', 'negativity', 'evil-eye'],
-  // Business, shop, office, career
-  business: ['business', 'prosperity', 'vyapar', 'lakshmi'],
-  shop: ['business', 'inauguration', 'vyapar', 'prosperity'],
-  office: ['business', 'inauguration', 'vyapar', 'prosperity'],
-  startup: ['business', 'prosperity', 'new-venture'],
-  store: ['business', 'inauguration', 'vyapar'],
-  venture: ['business', 'prosperity', 'new-venture'],
-  commercial: ['business', 'commercial'],
-  growth: ['business', 'prosperity', 'growth'],
-  profit: ['business', 'prosperity', 'wealth'],
-  // Ancestral, death, shraddha
-  death: ['ancestral', 'shraddha', 'pitru'],
-  anniversary: ['ancestral', 'shraddha', 'anniversary', 'pitru'],
-  father: ['ancestral', 'pitru', 'family'],
-  mother: ['ancestral', 'pitru', 'family'],
-  ancestor: ['ancestral', 'pitru', 'tarpan'],
-  ancestors: ['ancestral', 'pitru', 'tarpan'],
-  shraddha: ['ancestral', 'shraddha', 'pitru'],
-  tarpan: ['ancestral', 'tarpan', 'pitru'],
-  // Marriage, wedding, relationships
-  wedding: ['marriage', 'wedding', 'vivah', 'relationship', 'family'],
-  marriage: ['marriage', 'wedding', 'vivah', 'relationship'],
-  daughter: ['family', 'marriage', 'daughter'],
-  son: ['family', 'marriage', 'son'],
-  matrimony: ['marriage', 'vivah'],
-  bride: ['marriage', 'wedding'],
-  groom: ['marriage', 'wedding'],
-  mangal: ['mangal', 'mangal-dosh', 'marriage', 'dosha-nivaran'],
-  // General blessings & family
-  bless: ['family', 'peace', 'bless', 'general-blessing', 'prosperity'],
-  blessing: ['family', 'peace', 'bless', 'general-blessing', 'prosperity'],
-  blessings: ['family', 'peace', 'bless', 'general-blessing', 'prosperity'],
-  family: ['family', 'peace', 'harmony', 'satyanarayan', 'bless'],
-  peace: ['peace', 'harmony', 'mental-peace', 'shanti'],
-  harmony: ['family', 'peace', 'harmony'],
-  // Health & long life
-  health: ['health', 'longevity', 'ayushya', 'maha-mrityunjaya'],
-  illness: ['health', 'longevity', 'maha-mrityunjaya', 'disease'],
-  sick: ['health', 'longevity', 'maha-mrityunjaya'],
-  disease: ['health', 'longevity', 'maha-mrityunjaya', 'disease'],
-  recovery: ['health', 'longevity', 'recovery'],
-  // Baby & children
-  baby: ['baby', 'newborn', 'namkaran', 'child', 'family'],
-  child: ['baby', 'child', 'namkaran', 'education', 'family'],
-  birth: ['birth', 'newborn', 'namkaran', 'birthday'],
-  birthday: ['birthday', 'ayushya', 'family'],
-  // Wealth & debts
-  wealth: ['wealth', 'prosperity', 'lakshmi', 'kuber'],
-  money: ['wealth', 'prosperity', 'lakshmi', 'money'],
-  debt: ['debt', 'dosha-nivaran', 'rin-mukti', 'financial-trouble'],
-};
-
 function deepClone<T>(val: T): T {
   return JSON.parse(JSON.stringify(val));
 }
@@ -1709,7 +1622,6 @@ export const mockDb: MockDbState = {
   pincodeDirectory: deepClone(SEED_PINCODE_DIRECTORY),
   otpRecords: [],
   pujaCatalog: deepClone(SEED_PUJA_CATALOG),
-  advisorQueries: [],
 };
 
 export const mockUsers = mockDb.users;

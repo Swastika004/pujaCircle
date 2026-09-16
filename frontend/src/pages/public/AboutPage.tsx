@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Info, Compass } from "lucide-react";
+import { ArrowRight, BookOpen, Info } from "lucide-react";
 
 // AboutPage
 // The Mission, Heritage & Operational Scope of PujaCircle.
@@ -110,26 +110,15 @@ export const AboutPage: React.FC = () => {
                 Ready to plan your family ceremony?
               </h3>
               <p className="text-xs text-stone-600 mt-0.5">
-                Consult the Sankalp Advisor or browse verified Vedic purohits in
-                your neighborhood.
+                Browse verified Vedic purohits in your neighborhood.
               </p>
             </div>
 
             <div className="flex items-center gap-3">
-              <Link to="/advisor">
-                <Button
-                  size="sm"
-                  className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold gap-1.5 rounded-md"
-                >
-                  <Compass className="w-3.5 h-3.5" />
-                  <span>Ask the Advisor</span>
-                </Button>
-              </Link>
               <Link to="/priests">
                 <Button
                   size="sm"
-                  variant="outline"
-                  className="border-stone-300 font-bold rounded-md"
+                  className="bg-[#991B1B] hover:bg-[#780016] text-white font-bold gap-1.5 rounded-md"
                 >
                   <span>Browse Priests</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1" />

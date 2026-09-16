@@ -12,18 +12,14 @@ import {
   Calendar,
   Clock,
   ArrowRight,
-  Compass,
   Users,
 } from 'lucide-react';
 
 // UserHomePage
 // Devotee Sanctuary Home Portal
-// Strictly matches Phase 2 spec:
 // 1. Welcome banner
-// 2. Prominent Ask-the-Advisor CTA card
-// 3. Upcoming booking summary card with link to details
-// 4. Link to full bookings list
-// All extra clutter (tabs, address card, vows card, progress tracker) removed.
+// 2. Upcoming booking summary card with link to details
+// 3. Link to full bookings list
 export const UserHomePage: React.FC = () => {
   const { user } = useAuthStore();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -59,7 +55,7 @@ export const UserHomePage: React.FC = () => {
             Namaste, {user?.name || 'Devotee'} 🙏
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-            Welcome to your sacred home portal. Schedule home ceremonies with verified Gurukul Purohits across West Bengal and prepare personalized ritual sankalp vidhis.
+            Welcome to your sacred home portal. Schedule home ceremonies with verified Gurukul Purohits across West Bengal with transparent direct cash dakshina.
           </p>
         </div>
 
@@ -77,24 +73,24 @@ export const UserHomePage: React.FC = () => {
       <div className="rounded-xl bg-[#780016] text-white p-6 sm:p-8 border border-[#C59A3F]/60 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="space-y-2 max-w-xl z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400 text-red-950 text-xs font-extrabold shadow-xs">
-            <Compass className="h-3.5 w-3.5 text-red-950" />
-            <span>Sankalp Vedic Advisor</span>
+            <Sparkles className="h-3.5 w-3.5 text-red-950" />
+            <span>Verified Purohits</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold font-serif text-white">
-            Unsure which Puja is right for your milestone?
+            Plan your next family ceremony with ease
           </h2>
           <p className="text-xs sm:text-sm text-amber-100/90 leading-relaxed">
-            Describe your family occasion, milestone, or spiritual intent. The Sankalp Advisor instantly recommends the ideal Vedic ritual, auspicious timings, and samagri requirements.
+            Find and book verified Gurukul-trained purohits in Kolkata and West Bengal districts with transparent cash dakshina and traditional Vedic vidhis.
           </p>
         </div>
 
         <div className="z-10 shrink-0 w-full sm:w-auto">
-          <Link to="/advisor" className="w-full sm:w-auto inline-block">
+          <Link to="/priests" className="w-full sm:w-auto inline-block">
             <Button
               size="lg"
               className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm h-11 px-6 rounded-md shadow-sm gap-2"
             >
-              <span>Ask the Advisor</span>
+              <span>Browse All Priests</span>
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

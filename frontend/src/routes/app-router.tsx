@@ -75,12 +75,7 @@ const AdminUsersPage = lazy(() => import('@/pages/admin/AdminUsersPage'));
 const AdminProfilePage = lazy(() => import('@/pages/admin/AdminProfilePage'));
 const AdminCatalogPage = lazy(() => import('@/pages/admin/AdminCatalogPage'));
 
-// Sankalp Advisor Pages
-const AdvisorIntakePage = lazy(() => import('@/pages/advisor/AdvisorIntakePage'));
-const AdvisorResultPage = lazy(() => import('@/pages/advisor/AdvisorResultPage'));
-const RitualKitPage = lazy(() => import('@/pages/advisor/RitualKitPage'));
 
-const AdminAdvisorPreviewPage = lazy(() => import('@/pages/admin/AdminAdvisorPreviewPage'));
 
 export const appRouter = createBrowserRouter([
   // ==========================================
@@ -130,14 +125,6 @@ export const appRouter = createBrowserRouter([
       { path: 'user/bookings/:id', element: <UserRouteGuard>{LazyPage(BookingDetailsPage)}</UserRouteGuard> },
       { path: 'user/addresses', element: <UserRouteGuard>{LazyPage(AddressesPage)}</UserRouteGuard> },
       { path: 'user/profile', element: <UserRouteGuard>{LazyPage(ProfilePage)}</UserRouteGuard> },
-
-      // Sankalp Advisor (Public & Devotee)
-      { path: 'advisor', element: LazyPage(AdvisorIntakePage) },
-      { path: 'advisor/results', element: LazyPage(AdvisorResultPage) },
-      { path: 'advisor/ritual-kit', element: LazyPage(RitualKitPage) },
-      { path: 'user/advisor', element: LazyPage(AdvisorIntakePage) },
-      { path: 'user/advisor/results', element: LazyPage(AdvisorResultPage) },
-      { path: 'user/advisor/ritual-kit', element: LazyPage(RitualKitPage) },
     ],
   },
 
@@ -183,7 +170,6 @@ export const appRouter = createBrowserRouter([
       { path: 'users', element: LazyPage(AdminUsersPage) },
       { path: 'profile', element: LazyPage(AdminProfilePage) },
       { path: 'catalog', element: LazyPage(AdminCatalogPage) },
-      { path: 'advisor-preview', element: LazyPage(AdminAdvisorPreviewPage) },
     ],
   },
 
