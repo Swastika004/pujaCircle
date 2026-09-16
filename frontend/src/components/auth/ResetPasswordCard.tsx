@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { resetPasswordSchema, ResetPasswordInput } from '@/schemas/auth.schema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Lock, CheckCircle2, AlertCircle, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { resetPasswordSchema, ResetPasswordInput } from "@/schemas/auth.schema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Lock,
+  CheckCircle2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
+import { toast } from "sonner";
 
 export interface ResetPasswordCardProps {
-  role: 'USER' | 'PRIEST';
+  role: "USER" | "PRIEST";
   loginPath: string;
   demoPassword: string;
 }
@@ -30,39 +38,52 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isPriest = role === 'PRIEST';
+  const isPriest = role === "PRIEST";
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      otp: '',
-      newPassword: '',
-      confirmPassword: '',
+      otp: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
+  const watchOtp = watch("otp");
+  const watchNewPassword = watch("newPassword");
+  const watchConfirmPassword = watch("confirmPassword");
+
+  const isFormValid = Boolean(
+    watchOtp?.trim().length === 6 &&
+    watchNewPassword &&
+    watchNewPassword.length >= 6 &&
+    watchConfirmPassword &&
+    watchConfirmPassword === watchNewPassword,
+  );
+
   const onSubmit = (data: ResetPasswordInput) => {
     setError(null);
-    if (data.otp.trim() !== '123456') {
-      setError('Invalid OTP code. Please use development mock code: 123456');
+    if (data.otp.trim() !== "123456") {
+      setError("Invalid OTP code. Please use development mock code: 123456");
       return;
     }
 
-    toast.success('Password updated successfully! Please sign in.');
+    toast.success("Password updated successfully! Please sign in.");
     navigate(loginPath);
   };
 
   const handleFillDemo = () => {
-    setValue('otp', '123456', { shouldValidate: true });
-    setValue('newPassword', demoPassword, { shouldValidate: true });
-    setValue('confirmPassword', demoPassword, { shouldValidate: true });
+    setValue("otp", "123456", { shouldValidate: true });
+    setValue("newPassword", demoPassword, { shouldValidate: true });
+    setValue("confirmPassword", demoPassword, { shouldValidate: true });
     setError(null);
-    toast.info('Filled demo password reset values.');
+    toast.info("Filled demo password reset values.");
   };
 
   return (
@@ -88,13 +109,14 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
             <div className="space-y-3 pt-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>{isPriest ? 'Purohit Sanctum' : 'Devotee Sanctum'}</span>
+                <span>{isPriest ? "Purohit Sanctum" : "Devotee Sanctum"}</span>
               </div>
               <h2 className="text-2xl font-bold font-serif text-white leading-snug">
                 Establish Your New Portal Passkey
               </h2>
               <p className="text-xs text-amber-100/90 leading-relaxed">
-                Enter your 6-digit verification code sent to your email, followed by a secure new password for your account.
+                Enter your 6-digit verification code sent to your email,
+                followed by a secure new password for your account.
               </p>
             </div>
 
@@ -130,8 +152,12 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
             {/* Top Row: Role Indicator Badge + Demo Fill */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
-                <span className="font-serif font-black">{isPriest ? 'ॐ' : '👤'}</span>
-                <span>{isPriest ? 'Purohit Passkey Reset' : 'Devotee Passkey Reset'}</span>
+                <span className="font-serif font-black">
+                  {isPriest ? "ॐ" : "👤"}
+                </span>
+                <span>
+                  {isPriest ? "Purohit Passkey Reset" : "Devotee Passkey Reset"}
+                </span>
               </div>
 
               <button
@@ -149,7 +175,8 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                 Set New Password
               </h1>
               <p className="text-xs text-stone-600 leading-relaxed">
-                Enter the mock verification code (123456) and your new credentials.
+                Enter the mock verification code (123456) and your new
+                credentials.
               </p>
             </div>
 
@@ -161,76 +188,105 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
             )}
 
             <div className="mb-4 p-3 rounded-md bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
-              <span className="font-bold text-stone-900">Mock Recovery OTP:</span>
-              <span className="font-mono font-bold text-red-800 text-sm">123456</span>
+              <span className="font-bold text-stone-900">
+                Mock Recovery OTP:
+              </span>
+              <span className="font-mono font-bold text-red-800 text-sm">
+                123456
+              </span>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-stone-800">Recovery OTP (6 Digits)</Label>
+                <Label className="text-xs font-bold text-stone-800">
+                  Recovery OTP (6 Digits)
+                </Label>
                 <Input
                   maxLength={6}
                   placeholder="123456"
-                  {...register('otp')}
+                  {...register("otp")}
                   className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                 />
                 {errors.otp && (
-                  <p className="text-[11px] text-red-700 font-semibold">{errors.otp.message}</p>
+                  <p className="text-[11px] text-red-700 font-semibold">
+                    {errors.otp.message}
+                  </p>
                 )}
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-stone-800">New Password</Label>
+                <Label className="text-xs font-bold text-stone-800">
+                  New Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                   <Input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter new password"
-                    {...register('newPassword')}
+                    {...register("newPassword")}
                     className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 {errors.newPassword && (
-                  <p className="text-[11px] text-red-700 font-semibold">{errors.newPassword.message}</p>
+                  <p className="text-[11px] text-red-700 font-semibold">
+                    {errors.newPassword.message}
+                  </p>
                 )}
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-stone-800">Confirm New Password</Label>
+                <Label className="text-xs font-bold text-stone-800">
+                  Confirm New Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                   <Input
-                    type={showConfirmPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Re-enter new password"
-                    {...register('confirmPassword')}
+                    {...register("confirmPassword")}
                     className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
-                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    aria-label={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
                   >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="text-[11px] text-red-700 font-semibold">{errors.confirmPassword.message}</p>
+                  <p className="text-[11px] text-red-700 font-semibold">
+                    {errors.confirmPassword.message}
+                  </p>
                 )}
               </div>
 
               <div className="space-y-3 pt-2">
                 <Button
                   type="submit"
-                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
+                  disabled={!isFormValid}
+                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2 disabled:opacity-50"
                 >
                   <span>Update Password & Sign In</span>
                   <ArrowRight className="h-4 w-4" />
@@ -240,7 +296,10 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
           </div>
 
           <div className="pt-6 text-center text-xs text-stone-600">
-            <Link to={loginPath} className="text-[#780016] font-bold hover:underline">
+            <Link
+              to={loginPath}
+              className="text-[#780016] font-bold hover:underline"
+            >
               ← Back to Sign In
             </Link>
           </div>

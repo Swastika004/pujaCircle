@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { forgotPasswordSchema, ForgotPasswordInput } from '@/schemas/auth.schema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { AuthRoleTabs } from '@/components/auth/AuthRoleTabs';
+import React, { useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  forgotPasswordSchema,
+  ForgotPasswordInput,
+} from "@/schemas/auth.schema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AuthRoleTabs } from "@/components/auth/AuthRoleTabs";
 import {
   Mail,
   ArrowRight,
   AlertCircle,
   Sparkles,
   CheckCircle2,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 export interface ForgotPasswordCardProps {
-  defaultRole?: 'USER' | 'PRIEST';
+  defaultRole?: "USER" | "PRIEST";
 }
 
 /**
@@ -26,41 +29,46 @@ export interface ForgotPasswordCardProps {
  * 100% Flexbox, pure solid white canvas, radiant Haldi gold trims, zero grids, zero gradients.
  */
 export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
-  defaultRole = 'USER',
+  defaultRole = "USER",
 }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const queryRole = searchParams.get('role')?.toUpperCase();
-  const initialRole = (queryRole === 'PRIEST' || queryRole === 'USER') ? queryRole : defaultRole;
+  const queryRole = searchParams.get("role")?.toUpperCase();
+  const initialRole =
+    queryRole === "PRIEST" || queryRole === "USER" ? queryRole : defaultRole;
 
-  const [activeRole, setActiveRole] = useState<'USER' | 'PRIEST'>(initialRole);
+  const [activeRole, setActiveRole] = useState<"USER" | "PRIEST">(initialRole);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isPriest = activeRole === 'PRIEST';
+  const isPriest = activeRole === "PRIEST";
 
   const roleConfig = {
     USER: {
-      title: 'Devotee Account Recovery',
-      subtitle: 'Enter your registered email to receive an authentic OTP reset code.',
-      badge: 'Devotee Sanctum',
-      demoEmail: 'user@example.demo',
-      login: '/user/login',
-      reset: '/user/reset-password',
-      panelBg: 'bg-[#780016]',
-      quote: 'सत्येन लभ्यस्तपसा ह्येष आत्मा — Truth and discipline reveal sacred purpose.',
-      source: 'Mundaka Upanishad',
+      title: "Devotee Account Recovery",
+      subtitle:
+        "Enter your registered email to receive an authentic OTP reset code.",
+      badge: "Devotee Sanctum",
+      demoEmail: "user@example.demo",
+      login: "/user/login",
+      reset: "/user/reset-password",
+      panelBg: "bg-[#780016]",
+      quote:
+        "सत्येन लभ्यस्तपसा ह्येष आत्मा — Truth and discipline reveal sacred purpose.",
+      source: "Mundaka Upanishad",
     },
     PRIEST: {
-      title: 'Purohit Account Recovery',
-      subtitle: 'Enter your registered Acharya email to restore access to your ceremony calendar.',
-      badge: 'Purohit Sanctum',
-      demoEmail: 'priest@example.demo',
-      login: '/priest/login',
-      reset: '/priest/reset-password',
-      panelBg: 'bg-[#780016]',
-      quote: 'विद्या ददाति विनयं विनयाद्याति पात्रताम् — True knowledge bestows humility and spiritual worth.',
-      source: 'Hitopadesha',
+      title: "Purohit Account Recovery",
+      subtitle:
+        "Enter your registered Acharya email to restore access to your ceremony calendar.",
+      badge: "Purohit Sanctum",
+      demoEmail: "priest@example.demo",
+      login: "/priest/login",
+      reset: "/priest/reset-password",
+      panelBg: "bg-[#780016]",
+      quote:
+        "विद्या ददाति विनयं विनयाद्याति पात्रताम् — True knowledge bestows humility and spiritual worth.",
+      source: "Hitopadesha",
     },
   }[activeRole];
 
@@ -69,19 +77,23 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ForgotPasswordInput>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      email: '',
+      email: "",
     },
   });
 
-  const handleRoleChange = (newRole: 'USER' | 'PRIEST') => {
+  const watchEmail = watch("email");
+  const isFormValid = Boolean(watchEmail?.trim());
+
+  const handleRoleChange = (newRole: "USER" | "PRIEST") => {
     setActiveRole(newRole);
     setError(null);
     reset({
-      email: '',
+      email: "",
     });
   };
 
@@ -96,7 +108,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
   };
 
   const handleFillDemo = () => {
-    setValue('email', roleConfig.demoEmail, { shouldValidate: true });
+    setValue("email", roleConfig.demoEmail, { shouldValidate: true });
     setError(null);
     toast.info(`Filled demo recovery email for ${activeRole}.`);
   };
@@ -105,7 +117,9 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
       <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel */}
-        <div className={`hidden lg:flex flex-col justify-between w-5/12 ${roleConfig.panelBg} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
+        <div
+          className={`hidden lg:flex flex-col justify-between w-5/12 ${roleConfig.panelBg} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}
+        >
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
               <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
@@ -130,7 +144,9 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                 Secure Sanctum Credential Recovery
               </h2>
               <p className="text-xs text-amber-100/90 leading-relaxed">
-                Protecting devotee privacy and Purohit portal security. We will dispatch a 6-digit verification code to your registered email address.
+                Protecting devotee privacy and Purohit portal security. We will
+                dispatch a 6-digit verification code to your registered email
+                address.
               </p>
             </div>
 
@@ -198,28 +214,32 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-stone-800">Registered Email Address</Label>
+                <Label className="text-xs font-bold text-stone-800">
+                  Registered Email Address
+                </Label>
                 <div className="relative">
                   <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                   <Input
                     type="email"
                     placeholder={roleConfig.demoEmail}
-                    {...register('email')}
+                    {...register("email")}
                     className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                  <p className="text-[11px] text-red-700 font-semibold">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
               <div className="space-y-3 pt-2">
                 <Button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
+                  disabled={isLoading || !isFormValid}
+                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2 disabled:opacity-50"
                 >
-                  {isLoading ? 'Sending Reset Code...' : 'Send Recovery Code'}
+                  {isLoading ? "Sending Reset Code..." : "Send Recovery Code"}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -227,8 +247,11 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
           </div>
 
           <div className="pt-6 text-center text-xs text-stone-600">
-            <Link to={roleConfig.login} className="text-[#780016] font-bold hover:underline">
-              ← Return to {isPriest ? 'Purohit' : 'Devotee'} Sign In
+            <Link
+              to={roleConfig.login}
+              className="text-[#780016] font-bold hover:underline"
+            >
+              ← Return to {isPriest ? "Purohit" : "Devotee"} Sign In
             </Link>
           </div>
         </div>

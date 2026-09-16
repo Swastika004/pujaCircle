@@ -50,6 +50,7 @@ export const UserRegisterPage: React.FC = () => {
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<RegisterUserPersonalInput>({
     resolver: zodResolver(registerUserPersonalSchema),
@@ -61,19 +62,39 @@ export const UserRegisterPage: React.FC = () => {
     },
   });
 
+  const watchFullName = watch("fullName");
+  const watchPhone = watch("phoneNumber");
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+
+  const isStep1Valid = Boolean(
+    watchFullName?.trim() &&
+    watchPhone?.trim() &&
+    watchEmail?.trim() &&
+    watchPassword &&
+    watchPassword.length >= 6,
+  );
+
   // Step 2: OTP verification state
   const [phoneOtp, setPhoneOtp] = useState("");
   const [emailOtp, setEmailOtp] = useState("");
+  const isStep2Valid =
+    phoneOtp.trim().length === 6 && emailOtp.trim().length === 6;
 
   // Step 3: Address setup state
-  const [pincode, setPincode] = useState("700019");
+  const [pincode, setPincode] = useState("");
   const [locations, setLocations] = useState<PincodeLocation[]>([]);
   const [selectedLocation, setSelectedLocation] =
     useState<PincodeLocation | null>(null);
-  const [houseBuilding, setHouseBuilding] = useState("Flat 402, Ganga Heights");
-  const [street, setStreet] = useState("Rashbehari Avenue");
-  const [landmark, setLandmark] = useState("Near Lake Mall");
+  const [houseBuilding, setHouseBuilding] = useState("");
+  const [street, setStreet] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [isSearchingPin, setIsSearchingPin] = useState(false);
+
+  const isStep3Valid =
+    pincode.trim().length === 6 &&
+    houseBuilding.trim().length > 0 &&
+    street.trim().length > 0;
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -520,7 +541,8 @@ export const UserRegisterPage: React.FC = () => {
                 <div className="space-y-3 pt-2">
                   <Button
                     type="submit"
-                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
+                    disabled={!isStep1Valid}
+                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2 disabled:opacity-50"
                   >
                     <span>Continue to Verification</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -597,7 +619,8 @@ export const UserRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
+                    disabled={!isStep2Valid}
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1 disabled:opacity-50"
                   >
                     <span>Verify & Continue</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -756,8 +779,8 @@ export const UserRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
-                    disabled={isSubmitting}
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1 disabled:opacity-50"
+                    disabled={isSubmitting || !isStep3Valid}
                   >
                     {isSubmitting
                       ? "Creating Account..."

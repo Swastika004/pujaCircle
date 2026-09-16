@@ -46,12 +46,13 @@ export const PriestRegisterPage: React.FC = () => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Step 1: Personal credentials
+  // Step 1: Form with React Hook Form + Zod
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<RegisterPriestPersonalInput>({
     resolver: zodResolver(registerPriestPersonalSchema),
@@ -63,14 +64,29 @@ export const PriestRegisterPage: React.FC = () => {
     },
   });
 
+  const watchFullName = watch("fullName");
+  const watchPhone = watch("phoneNumber");
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+
+  const isStep1Valid = Boolean(
+    watchFullName?.trim() &&
+    watchPhone?.trim() &&
+    watchEmail?.trim() &&
+    watchPassword &&
+    watchPassword.length >= 6,
+  );
+
   // Step 2: Verification state
   const [phoneOtp, setPhoneOtp] = useState("");
   const [emailOtp, setEmailOtp] = useState("");
+  const isStep2Valid =
+    phoneOtp.trim().length === 6 && emailOtp.trim().length === 6;
 
   // Step 3: Vedic qualifications & Service city extraction
-  const [experienceYears, setExperienceYears] = useState("12");
-  const [pincode, setPincode] = useState("700019");
-  const [city, setCity] = useState("Kolkata");
+  const [experienceYears, setExperienceYears] = useState("5");
+  const [pincode, setPincode] = useState("");
+  const [city, setCity] = useState("");
   const [state, setState] = useState("West Bengal");
   const [locations, setLocations] = useState<PincodeLocation[]>([]);
   const [selectedLocation, setSelectedLocation] =
@@ -87,11 +103,14 @@ export const PriestRegisterPage: React.FC = () => {
     "Satyanarayan Katha",
     "Rudrabhishek",
   ]);
-  const [bio, setBio] = useState(
-    "Shastri degree in Shukla Yajurveda from Varanasi Gurukul with 12+ years of Vedic rituals experience.",
-  );
+  const [bio, setBio] = useState("");
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isStep3Valid = Boolean(
+    pincode.trim().length === 6 && city.trim() && bio.trim() && !isSubmitting,
+  );
 
   // Step 1: Submit Personal Details
   const onPersonalSubmit = () => {
@@ -165,6 +184,7 @@ export const PriestRegisterPage: React.FC = () => {
     }
 
     const personal = getValues();
+    setIsSubmitting(true);
     try {
       const res = await authApi.registerPriest({
         fullName: personal.fullName,
@@ -190,6 +210,8 @@ export const PriestRegisterPage: React.FC = () => {
       }
     } catch {
       setErrorMessage("Failed to submit application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -545,7 +567,8 @@ export const PriestRegisterPage: React.FC = () => {
                 <div className="space-y-3 pt-2">
                   <Button
                     type="submit"
-                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
+                    disabled={!isStep1Valid}
+                    className="w-full text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-11 rounded-md shadow-md cursor-pointer gap-2 disabled:opacity-50"
                   >
                     <span>Continue to Verification</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -622,7 +645,8 @@ export const PriestRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
+                    disabled={!isStep2Valid}
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1 disabled:opacity-50"
                   >
                     <span>Verify & Continue</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -835,9 +859,13 @@ export const PriestRegisterPage: React.FC = () => {
                   <Button
                     type="submit"
                     size="sm"
-                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
+                    disabled={!isStep3Valid || isSubmitting}
+                    className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1 disabled:opacity-50"
                   >
-                    <Award className="h-3.5 w-3.5" /> Submit Application
+                    <Award className="h-3.5 w-3.5" />
+                    <span>
+                      {isSubmitting ? "Submitting..." : "Submit Application"}
+                    </span>
                   </Button>
                 </div>
               </form>

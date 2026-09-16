@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/store/auth.store';
-import { priestApi } from '@/api/priest.api';
-import { addressApi } from '@/api/address.api';
-import { bookingApi } from '@/api/booking.api';
-import { Priest, PriestSlot, PriestService } from '@/types/priest.types';
-import { Address } from '@/types/address.types';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
+import { priestApi } from "@/api/priest.api";
+import { addressApi } from "@/api/address.api";
+import { bookingApi } from "@/api/booking.api";
+import { Priest, PriestSlot, PriestService } from "@/types/priest.types";
+import { Address } from "@/types/address.types";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { formatCurrency, formatTime, formatFullDate } from '@/lib/utils';
+} from "@/components/ui/dialog";
+import { formatCurrency, formatTime, formatFullDate } from "@/lib/utils";
 import {
   Sparkles,
   MapPin,
@@ -30,8 +30,8 @@ import {
   Check,
   AlertCircle,
   Plus,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 export const PriestDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,17 +43,19 @@ export const PriestDetailsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Date & Dynamic Slot Picker
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState<string>(todayStr);
   const [availableSlots, setAvailableSlots] = useState<PriestSlot[]>([]);
   const [isSlotsLoading, setIsSlotsLoading] = useState(false);
 
   // Booking Flow State
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<PriestService | null>(null);
+  const [selectedService, setSelectedService] = useState<PriestService | null>(
+    null,
+  );
   const [selectedSlot, setSelectedSlot] = useState<PriestSlot | null>(null);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
-  const [userNotes, setUserNotes] = useState('');
+  const [selectedAddressId, setSelectedAddressId] = useState<string>("");
+  const [userNotes, setUserNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -76,11 +78,12 @@ export const PriestDetailsPage: React.FC = () => {
           const matchingAddrs = priestCity
             ? addrs.filter((a) => a.city?.trim().toLowerCase() === priestCity)
             : addrs;
-          const defaultAddr = matchingAddrs.find((a) => a.isDefault) || matchingAddrs[0];
+          const defaultAddr =
+            matchingAddrs.find((a) => a.isDefault) || matchingAddrs[0];
           if (defaultAddr) setSelectedAddressId(defaultAddr.id);
         }
       } catch {
-        toast.error('Failed to load priest profile.');
+        toast.error("Failed to load priest profile.");
       } finally {
         setIsLoading(false);
       }
@@ -94,10 +97,13 @@ export const PriestDetailsPage: React.FC = () => {
       if (!id) return;
       setIsSlotsLoading(true);
       try {
-        const slots = await priestApi.getAvailableSlotsForDate(id, selectedDate);
+        const slots = await priestApi.getAvailableSlotsForDate(
+          id,
+          selectedDate,
+        );
         setAvailableSlots(slots);
       } catch {
-        toast.error('Failed to load slots for this date.');
+        toast.error("Failed to load slots for this date.");
       } finally {
         setIsSlotsLoading(false);
       }
@@ -107,8 +113,8 @@ export const PriestDetailsPage: React.FC = () => {
 
   const handleStartBooking = (service?: PriestService, slot?: PriestSlot) => {
     if (!isAuthenticated) {
-      toast.info('Please sign in to schedule an appointment with this Priest.');
-      navigate('/user/login');
+      toast.info("Please sign in to schedule an appointment with this Priest.");
+      navigate("/user/login");
       return;
     }
     if (service) setSelectedService(service);
@@ -117,14 +123,29 @@ export const PriestDetailsPage: React.FC = () => {
   };
 
   const handleSubmitBooking = async () => {
-    if (!user || !priest || !selectedSlot || !selectedAddressId || !selectedService) {
-      toast.error('Please select a service, address, and available time slot.');
+    if (
+      !user ||
+      !priest ||
+      !selectedSlot ||
+      !selectedAddressId ||
+      !selectedService
+    ) {
+      toast.error("Please select a service, address, and available time slot.");
       return;
     }
 
-    const selectedAddress = userAddresses.find((a) => a.id === selectedAddressId);
-    if (priest.city && selectedAddress && selectedAddress.city.trim().toLowerCase() !== priest.city.trim().toLowerCase()) {
-      toast.error(`This priest only conducts ceremonies in ${priest.city}. Please choose an address in ${priest.city}.`);
+    const selectedAddress = userAddresses.find(
+      (a) => a.id === selectedAddressId,
+    );
+    if (
+      priest.city &&
+      selectedAddress &&
+      selectedAddress.city.trim().toLowerCase() !==
+        priest.city.trim().toLowerCase()
+    ) {
+      toast.error(
+        `This priest only conducts ceremonies in ${priest.city}. Please choose an address in ${priest.city}.`,
+      );
       return;
     }
 
@@ -137,12 +158,13 @@ export const PriestDetailsPage: React.FC = () => {
           slotId: selectedSlot.id,
           availabilitySlotId: selectedSlot.id,
           addressId: selectedAddressId,
-          bookingDate: selectedSlot.slotDate || selectedSlot.date || selectedDate,
+          bookingDate:
+            selectedSlot.slotDate || selectedSlot.date || selectedDate,
           startTime: selectedSlot.startTime,
           endTime: selectedSlot.endTime,
           userNotes,
         },
-        user.id
+        user.id,
       );
 
       if (res.success && res.data) {
@@ -150,10 +172,10 @@ export const PriestDetailsPage: React.FC = () => {
         setIsBookingOpen(false);
         navigate(`/user/bookings/${res.data.id}`);
       } else {
-        toast.error(res.message || 'Failed to submit booking request.');
+        toast.error(res.message || "Failed to submit booking request.");
       }
     } catch {
-      toast.error('Failed to submit booking request.');
+      toast.error("Failed to submit booking request.");
     } finally {
       setIsSubmitting(false);
     }
@@ -170,12 +192,19 @@ export const PriestDetailsPage: React.FC = () => {
   if (!priest) {
     return (
       <div className="container py-12 text-center space-y-4 max-w-md">
-        <h2 className="text-xl font-bold font-serif">Priest Profile Not Found</h2>
+        <h2 className="text-xl font-bold font-serif">
+          Priest Profile Not Found
+        </h2>
         <p className="text-xs text-muted-foreground">
-          The requested priest profile does not exist or is currently pending approval.
+          The requested priest profile does not exist or is currently pending
+          approval.
         </p>
         <Link to="/user/priests">
-          <Button size="sm" variant="outline" className="border-2 border-amber-300 rounded-md hover:bg-amber-50">
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-2 border-amber-300 rounded-md hover:bg-amber-50"
+          >
             ← Return to Priest Directory
           </Button>
         </Link>
@@ -183,7 +212,9 @@ export const PriestDetailsPage: React.FC = () => {
     );
   }
 
-  const activeBookableSlots = availableSlots.filter((s) => s.status === 'AVAILABLE');
+  const activeBookableSlots = availableSlots.filter(
+    (s) => s.status === "AVAILABLE",
+  );
 
   return (
     <div className="container py-6 sm:py-8 space-y-6 max-w-6xl">
@@ -200,7 +231,10 @@ export const PriestDetailsPage: React.FC = () => {
       <div className="bg-white border border-amber-300/90 rounded-xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row gap-6 items-start relative">
         <div className="relative shrink-0 mx-auto md:mx-0">
           <img
-            src={priest.profileImageUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200'}
+            src={
+              priest.profileImageUrl ||
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200"
+            }
             alt={priest.fullName}
             className="h-28 w-28 sm:h-32 sm:w-32 rounded-md object-cover ring-2 ring-amber-400 ring-offset-2 shrink-0 bg-amber-50 shadow-sm"
           />
@@ -228,14 +262,16 @@ export const PriestDetailsPage: React.FC = () => {
               <div className="flex flex-wrap items-center gap-3 text-xs text-stone-600 mt-1.5">
                 <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-100 px-2.5 py-0.5 rounded-sm border border-amber-300">
                   <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                  {priest.rating ? priest.rating.toFixed(1) : '4.9'} ({priest.reviewCount || 48} Reviews)
+                  {priest.rating ? priest.rating.toFixed(1) : "4.9"} (
+                  {priest.reviewCount || 48} Reviews)
                 </span>
                 <span className="inline-flex items-center gap-1 font-bold text-stone-900 bg-amber-400 px-2.5 py-0.5 rounded-sm">
                   <Clock className="h-3 w-3 text-stone-950" />
                   {priest.experienceYears}+ Yrs Shastric Exp
                 </span>
                 <span className="flex items-center gap-1 font-semibold text-stone-700">
-                  <MapPin className="h-3.5 w-3.5 text-red-700" /> {priest.city}, {priest.state}
+                  <MapPin className="h-3.5 w-3.5 text-red-700" /> {priest.city},{" "}
+                  {priest.state}
                 </span>
               </div>
             </div>
@@ -254,12 +290,18 @@ export const PriestDetailsPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 text-xs pt-2 border-t border-amber-100">
             <div>
               <span className="text-stone-500 font-medium">Languages: </span>
-              <strong className="text-stone-900">{priest.languages?.join(', ') || 'Hindi, Sanskrit'}</strong>
+              <strong className="text-stone-900">
+                {priest.languages?.join(", ") || "Hindi, Sanskrit"}
+              </strong>
             </div>
             <span>•</span>
             <div>
-              <span className="text-stone-500 font-medium">Serving Localities: </span>
-              <strong className="text-stone-900">{priest.serviceAreas?.join(', ') || priest.city}</strong>
+              <span className="text-stone-500 font-medium">
+                Serving Localities:{" "}
+              </span>
+              <strong className="text-stone-900">
+                {priest.serviceAreas?.join(", ") || priest.city}
+              </strong>
             </div>
           </div>
         </div>
@@ -274,7 +316,9 @@ export const PriestDetailsPage: React.FC = () => {
               <Sparkles className="h-4 w-4 text-red-700" />
               <span>Offered Ceremonies & Dakshina Rates</span>
             </h2>
-            <span className="text-[11px] text-stone-500 font-semibold">Cash after puja</span>
+            <span className="text-[11px] text-stone-500 font-semibold">
+              Cash after puja
+            </span>
           </div>
 
           <div className="space-y-3">
@@ -288,20 +332,23 @@ export const PriestDetailsPage: React.FC = () => {
                   key={srv.id}
                   className={`p-4 rounded-md border-2 cursor-pointer transition-all shadow-xs bg-white flex items-center justify-between gap-4 ${
                     selectedService?.id === srv.id
-                      ? 'border-red-700 ring-2 ring-red-700/20 shadow-md bg-amber-50/30'
-                      : 'border-amber-200 hover:border-amber-400'
+                      ? "border-red-700 ring-2 ring-red-700/20 shadow-md bg-amber-50/30"
+                      : "border-amber-200 hover:border-amber-400"
                   }`}
                   onClick={() => setSelectedService(srv)}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-base text-stone-900 font-serif">{srv.serviceName}</h3>
+                      <h3 className="font-bold text-base text-stone-900 font-serif">
+                        {srv.serviceName}
+                      </h3>
                       {selectedService?.id === srv.id && (
                         <span className="h-2 w-2 rounded-full bg-red-700" />
                       )}
                     </div>
                     <p className="text-xs text-stone-600 leading-relaxed">
-                      Traditional Vedic Vidhi with complete samagri guidance and chanting
+                      Traditional Vedic Vidhi with complete samagri guidance and
+                      chanting
                     </p>
                   </div>
 
@@ -316,17 +363,19 @@ export const PriestDetailsPage: React.FC = () => {
                       size="sm"
                       className={`mt-2 h-8 text-xs px-3 rounded-md font-bold cursor-pointer ${
                         selectedService?.id === srv.id
-                          ? 'bg-red-700 hover:bg-red-800 text-white shadow-xs'
-                          : 'border-2 border-amber-300 text-stone-800 hover:bg-amber-50'
+                          ? "bg-red-700 hover:bg-red-800 text-white shadow-xs"
+                          : "border-2 border-amber-300 text-stone-800 hover:bg-amber-50"
                       }`}
-                      variant={selectedService?.id === srv.id ? 'default' : 'outline'}
+                      variant={
+                        selectedService?.id === srv.id ? "default" : "outline"
+                      }
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedService(srv);
                         handleStartBooking(srv);
                       }}
                     >
-                      {selectedService?.id === srv.id ? 'Selected' : 'Select'}
+                      {selectedService?.id === srv.id ? "Selected" : "Select"}
                     </Button>
                   </div>
                 </div>
@@ -345,7 +394,9 @@ export const PriestDetailsPage: React.FC = () => {
           <div className="bg-white border-2 border-amber-300 rounded-xl p-5 shadow-xs space-y-4">
             <div className="pb-3 border-b border-amber-200 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">Select Ceremony Date</span>
+                <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+                  Select Ceremony Date
+                </span>
                 <span className="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2 py-0.5 rounded-sm">
                   Verified Calendar
                 </span>
@@ -375,7 +426,10 @@ export const PriestDetailsPage: React.FC = () => {
               ) : activeBookableSlots.length === 0 ? (
                 <div className="text-center py-6 text-xs text-stone-500 space-y-2">
                   <Clock className="h-8 w-8 mx-auto text-amber-600/40" />
-                  <p>No open slots on this date. Please pick another auspicious date.</p>
+                  <p>
+                    No open slots on this date. Please pick another auspicious
+                    date.
+                  </p>
                 </div>
               ) : (
                 activeBookableSlots.map((slot) => (
@@ -383,8 +437,8 @@ export const PriestDetailsPage: React.FC = () => {
                     key={slot.id}
                     className={`p-3.5 rounded-md border-2 flex items-center justify-between cursor-pointer transition-all bg-white ${
                       selectedSlot?.id === slot.id
-                        ? 'border-red-700 ring-2 ring-red-700/20 shadow-xs bg-amber-50/40'
-                        : 'border-amber-200 hover:border-amber-400'
+                        ? "border-red-700 ring-2 ring-red-700/20 shadow-xs bg-amber-50/40"
+                        : "border-amber-200 hover:border-amber-400"
                     }`}
                     onClick={() => {
                       setSelectedSlot(slot);
@@ -395,11 +449,14 @@ export const PriestDetailsPage: React.FC = () => {
                       <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900 font-mono">
                         <Clock className="h-3.5 w-3.5 text-red-700" />
                         <span>
-                          {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
+                          {formatTime(slot.startTime)} –{" "}
+                          {formatTime(slot.endTime)}
                         </span>
                       </div>
                       <p className="text-[11px] text-stone-500">
-                        {slot.ruleId ? 'Standard Shubh Muhurat' : 'Special Auspicious Muhurat'}
+                        {slot.ruleId
+                          ? "Standard Shubh Muhurat"
+                          : "Special Auspicious Muhurat"}
                       </p>
                     </div>
 
@@ -428,7 +485,8 @@ export const PriestDetailsPage: React.FC = () => {
               Confirm Ceremony Request
             </DialogTitle>
             <DialogDescription className="text-[11px] text-stone-600 leading-snug">
-              Price is locked at request submission. Dakshina is payable directly in cash after ritual completion.
+              Price is locked at request submission. Dakshina is payable
+              directly in cash after ritual completion.
             </DialogDescription>
           </DialogHeader>
 
@@ -438,11 +496,15 @@ export const PriestDetailsPage: React.FC = () => {
             <div className="p-3.5 rounded-md bg-amber-50 border border-amber-300 space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-stone-600">Appointed Purohit:</span>
-                <strong className="text-stone-900 font-serif text-xs sm:text-sm">{priest.displayName || priest.fullName}</strong>
+                <strong className="text-stone-900 font-serif text-xs sm:text-sm">
+                  {priest.displayName || priest.fullName}
+                </strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-stone-600">Ritual / Ceremony:</span>
-                <strong className="text-stone-900 font-serif text-xs sm:text-sm">{selectedService?.serviceName || 'Selected Ceremony'}</strong>
+                <strong className="text-stone-900 font-serif text-xs sm:text-sm">
+                  {selectedService?.serviceName || "Selected Ceremony"}
+                </strong>
               </div>
               <div className="flex items-center justify-between border-t border-amber-200 pt-1.5">
                 <span className="text-stone-600">Service Dakshina:</span>
@@ -463,7 +525,9 @@ export const PriestDetailsPage: React.FC = () => {
             {/* Address Selection */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs font-bold text-stone-900">Puja Sanctum Venue (Home Address)</Label>
+                <Label className="text-xs font-bold text-stone-900">
+                  Puja Sanctum Venue (Home Address)
+                </Label>
                 <Link
                   to="/user/addresses"
                   className="text-xs text-red-700 hover:underline font-bold flex items-center gap-1"
@@ -475,10 +539,14 @@ export const PriestDetailsPage: React.FC = () => {
               {userAddresses.length === 0 ? (
                 <div className="p-3 rounded-md border border-amber-300 bg-amber-50 text-stone-800 space-y-2">
                   <p className="text-xs">
-                    You have no saved addresses. An address with PIN code is required for the priest to arrive.
+                    You have no saved addresses. An address with PIN code is
+                    required for the priest to arrive.
                   </p>
                   <Link to="/user/addresses">
-                    <Button size="sm" className="text-xs h-7.5 bg-red-700 hover:bg-red-800 text-white rounded-md">
+                    <Button
+                      size="sm"
+                      className="text-xs h-7.5 bg-red-700 hover:bg-red-800 text-white rounded-md"
+                    >
                       Add Address Now
                     </Button>
                   </Link>
@@ -486,7 +554,10 @@ export const PriestDetailsPage: React.FC = () => {
               ) : (
                 <div className="space-y-2">
                   {userAddresses.map((addr) => {
-                    const isServiceable = !priest?.city || addr.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase();
+                    const isServiceable =
+                      !priest?.city ||
+                      addr.city?.trim().toLowerCase() ===
+                        priest.city?.trim().toLowerCase();
                     const isSelected = selectedAddressId === addr.id;
 
                     return (
@@ -497,16 +568,17 @@ export const PriestDetailsPage: React.FC = () => {
                         }}
                         className={`p-2.5 rounded-md border-2 flex items-center justify-between transition-all ${
                           !isServiceable
-                            ? 'opacity-60 bg-stone-50 border-stone-200 cursor-not-allowed'
+                            ? "opacity-60 bg-stone-50 border-stone-200 cursor-not-allowed"
                             : isSelected
-                            ? 'border-red-700 ring-2 ring-red-700/20 shadow-2xs bg-white cursor-pointer'
-                            : 'border-amber-200 hover:border-amber-300 bg-white cursor-pointer'
+                              ? "border-red-700 ring-2 ring-red-700/20 shadow-2xs bg-white cursor-pointer"
+                              : "border-amber-200 hover:border-amber-300 bg-white cursor-pointer"
                         }`}
                       >
                         <div>
                           <div className="flex items-center gap-2">
                             <p className="font-bold text-stone-900 text-xs font-serif">
-                              {addr.houseNo || addr.houseBuilding}, {addr.villageTown || addr.locality}
+                              {addr.houseNo || addr.houseBuilding},{" "}
+                              {addr.villageTown || addr.locality}
                             </p>
                             {!isServiceable && (
                               <span className="text-[10px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-xs">
@@ -515,37 +587,60 @@ export const PriestDetailsPage: React.FC = () => {
                             )}
                           </div>
                           <p className="text-[11px] text-stone-600">
-                            {addr.city}, {addr.state} - <strong className="font-mono text-stone-900">{addr.pincode}</strong>
+                            {addr.city}, {addr.state} -{" "}
+                            <strong className="font-mono text-stone-900">
+                              {addr.pincode}
+                            </strong>
                           </p>
                         </div>
-                        {isSelected && isServiceable && <Check className="h-4 w-4 text-red-700 shrink-0" />}
+                        {isSelected && isServiceable && (
+                          <Check className="h-4 w-4 text-red-700 shrink-0" />
+                        )}
                       </div>
                     );
                   })}
 
-                  {userAddresses.length > 0 && !userAddresses.some((a) => !priest?.city || a.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase()) && (
-                    <div className="p-3 rounded-md border border-amber-300 bg-amber-50 text-amber-950 text-xs space-y-1.5">
-                      <p className="font-semibold flex items-center gap-1.5 text-amber-900">
-                        <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
-                        No addresses in {priest?.city}
-                      </p>
-                      <p className="text-stone-700 text-[11px]">
-                        This priest only conducts ceremonies in <strong>{priest?.city}</strong>. Please add or select an address located in {priest?.city}.
-                      </p>
-                      <Link to="/user/addresses" className="inline-block mt-1">
-                        <Button size="sm" variant="outline" className="text-xs h-7 border-amber-300 hover:bg-amber-100/50">
-                          <Plus className="h-3 w-3 mr-1" /> Add Address in {priest?.city}
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
+                  {userAddresses.length > 0 &&
+                    !userAddresses.some(
+                      (a) =>
+                        !priest?.city ||
+                        a.city?.trim().toLowerCase() ===
+                          priest.city?.trim().toLowerCase(),
+                    ) && (
+                      <div className="p-3 rounded-md border border-amber-300 bg-amber-50 text-amber-950 text-xs space-y-1.5">
+                        <p className="font-semibold flex items-center gap-1.5 text-amber-900">
+                          <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                          No addresses in {priest?.city}
+                        </p>
+                        <p className="text-stone-700 text-[11px]">
+                          This priest only conducts ceremonies in{" "}
+                          <strong>{priest?.city}</strong>. Please add or select
+                          an address located in {priest?.city}.
+                        </p>
+                        <Link
+                          to="/user/addresses"
+                          className="inline-block mt-1"
+                        >
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-xs h-7 border-amber-300 hover:bg-amber-100/50"
+                          >
+                            <Plus className="h-3 w-3 mr-1" /> Add Address in{" "}
+                            {priest?.city}
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
                 </div>
               )}
             </div>
 
             {/* User Notes with generous spacing & clean padding */}
             <div className="space-y-2 pt-1">
-              <Label className="text-xs font-bold text-stone-900 block">Special Notes or Requests (Optional)</Label>
+              <Label className="text-xs font-bold text-stone-900 block">
+                Special Notes or Requests (Optional)
+              </Label>
               <Textarea
                 placeholder="e.g. Please advise if Havan Kund or special samagri items are needed..."
                 rows={3}
@@ -559,7 +654,9 @@ export const PriestDetailsPage: React.FC = () => {
             <div className="flex items-start gap-2.5 p-3 rounded-md bg-red-50 border border-red-200 text-[11px] text-stone-700">
               <AlertCircle className="h-3.5 w-3.5 text-red-700 shrink-0 mt-0.5" />
               <span>
-                <strong>5-Hour Purohit Confirmation SLA:</strong> Priest will confirm within <strong>5 hours</strong>. Payment is strictly in cash upon ritual completion.
+                <strong>5-Hour Purohit Confirmation SLA:</strong> Priest will
+                confirm within <strong>5 hours</strong>. Payment is strictly in
+                cash upon ritual completion.
               </span>
             </div>
           </div>
@@ -567,15 +664,17 @@ export const PriestDetailsPage: React.FC = () => {
           {/* Fixed Footer */}
           <DialogFooter className="shrink-0 pt-3 border-t border-amber-100 flex items-center justify-end gap-2">
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={() => setIsBookingOpen(false)}
-              className="text-xs h-9 rounded-md border-2 border-amber-300 hover:bg-amber-50 cursor-pointer"
+              className="text-xs h-9 px-4 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
               disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
+              type="button"
               size="sm"
               disabled={
                 isSubmitting ||
@@ -583,13 +682,17 @@ export const PriestDetailsPage: React.FC = () => {
                 !selectedAddressId ||
                 !selectedService ||
                 !userAddresses.find(
-                  (a) => a.id === selectedAddressId && (!priest?.city || a.city?.trim().toLowerCase() === priest.city?.trim().toLowerCase())
+                  (a) =>
+                    a.id === selectedAddressId &&
+                    (!priest?.city ||
+                      a.city?.trim().toLowerCase() ===
+                        priest.city?.trim().toLowerCase()),
                 )
               }
               onClick={handleSubmitBooking}
-              className="text-xs font-bold bg-red-700 hover:bg-red-800 text-white h-9 px-4 rounded-md shadow-md cursor-pointer"
+              className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-9 px-4 rounded-md shadow-xs border border-amber-400 cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? 'Sending Request...' : 'Confirm Ceremony Booking'}
+              {isSubmitting ? "Sending Request..." : "Confirm Ceremony Booking"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -599,4 +702,3 @@ export const PriestDetailsPage: React.FC = () => {
 };
 
 export default PriestDetailsPage;
-

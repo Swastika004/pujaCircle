@@ -30,6 +30,7 @@ export const PriestLoginPage: React.FC = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<PriestLoginInput>({
     resolver: zodResolver(priestLoginSchema),
@@ -38,6 +39,10 @@ export const PriestLoginPage: React.FC = () => {
       password: "",
     },
   });
+
+  const watchPhone = watch("phoneNumber");
+  const watchPassword = watch("password");
+  const isFormValid = Boolean(watchPhone?.trim() && watchPassword?.trim());
 
   const onLogin = async (data: PriestLoginInput) => {
     clearError();
@@ -249,8 +254,8 @@ export const PriestLoginPage: React.FC = () => {
 
               <Button
                 type="submit"
-                disabled={isLoading}
-                className="w-full h-11 bg-[#780016] hover:bg-[#5a0010] text-white font-semibold text-sm shadow-md mt-2 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isLoading || !isFormValid}
+                className="w-full h-11 bg-[#780016] hover:bg-[#5a0010] text-white font-semibold text-sm shadow-md mt-2 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {isLoading ? (
                   "Signing in..."

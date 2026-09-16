@@ -514,15 +514,15 @@ export const AddressesPage: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-xs w-full sm:w-auto h-10 px-4 rounded-md cursor-pointer"
+                  className="text-xs w-full sm:w-auto h-10 px-4 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   size="sm"
-                  disabled={isSaving || !pinCode || !houseNo}
-                  className="text-xs w-full sm:w-auto h-10 px-5 rounded-md font-bold bg-[#780016] hover:bg-red-800 text-white border border-amber-400 shadow-xs cursor-pointer puja-btn-tap"
+                  disabled={isSaving || !pinCode.trim() || !houseNo.trim()}
+                  className="text-xs w-full sm:w-auto h-10 px-5 rounded-md font-bold bg-[#780016] hover:bg-[#600012] text-white border border-amber-400 shadow-xs cursor-pointer disabled:opacity-50"
                 >
                   {isSaving
                     ? "Saving..."

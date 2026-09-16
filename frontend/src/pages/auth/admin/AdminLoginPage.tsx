@@ -28,6 +28,7 @@ export const AdminLoginPage: React.FC = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<AdminLoginInput>({
     resolver: zodResolver(adminLoginSchema),
@@ -36,6 +37,10 @@ export const AdminLoginPage: React.FC = () => {
       password: "",
     },
   });
+
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+  const isFormValid = Boolean(watchEmail?.trim() && watchPassword?.trim());
 
   const onLogin = async (data: AdminLoginInput) => {
     clearError();
@@ -217,8 +222,8 @@ export const AdminLoginPage: React.FC = () => {
 
               <Button
                 type="submit"
-                disabled={isLoading}
-                className="w-full h-11 bg-[#780016] hover:bg-[#5a0010] text-white font-semibold text-sm shadow-md mt-2 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isLoading || !isFormValid}
+                className="w-full h-11 bg-[#780016] hover:bg-[#5a0010] text-white font-semibold text-sm shadow-md mt-2 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {isLoading ? (
                   "Verifying..."

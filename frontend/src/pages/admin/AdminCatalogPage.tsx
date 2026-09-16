@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Edit2, Trash2, Filter, X, Layers, UploadCloud, AlertCircle } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Edit2,
+  Trash2,
+  Filter,
+  X,
+  Layers,
+  UploadCloud,
+  AlertCircle,
+} from "lucide-react";
 import { PujaCatalogEntry } from "@/types/catalog.types";
 import { catalogApi } from "@/api/catalog.api";
 import { modalTransition, buttonPress } from "@/motion/variants";
@@ -24,7 +34,9 @@ export const AdminCatalogPage: React.FC = () => {
   const [category, setCategory] =
     useState<PujaCatalogEntry["category"]>("life-event");
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState<string>("/images/hero_vedic_puja.jpg");
+  const [coverImage, setCoverImage] = useState<string>(
+    "/images/hero_vedic_puja.jpg",
+  );
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadFileName, setUploadFileName] = useState<string>("");
   const [intentTagsText, setIntentTagsText] = useState("");
@@ -87,7 +99,7 @@ export const AdminCatalogPage: React.FC = () => {
     const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
     if (file.size > MAX_SIZE_BYTES) {
       setUploadError(
-        `File size exceeds limit. Image must be strictly less than 2MB (Current size: ${(file.size / (1024 * 1024)).toFixed(2)} MB).`
+        `File size exceeds limit. Image must be strictly less than 2MB (Current size: ${(file.size / (1024 * 1024)).toFixed(2)} MB).`,
       );
       e.target.value = "";
       return;
@@ -200,18 +212,28 @@ export const AdminCatalogPage: React.FC = () => {
     }
   };
 
+  const isFormValid = Boolean(
+    name.trim() &&
+    deity.trim() &&
+    category &&
+    coverImage &&
+    description.trim() &&
+    intentTagsText.trim(),
+  );
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[hsl(var(--border))] pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-[hsl(var(--brand-secondary))]" />
-            <h1 className="font-serif text-2xl font-bold text-[hsl(var(--brand-secondary))]">
+            <Layers className="w-5 h-5 text-[#780016]" />
+            <h1 className="font-serif text-2xl font-bold text-[#780016]">
               Puja Catalog Management Console
             </h1>
           </div>
-          <p className="text-xs text-[hsl(var(--foreground-muted))] mt-1">
-            Curate and moderate sacred rituals, deities, and samagri requirements across the platform
+          <p className="text-xs text-stone-500 mt-1">
+            Curate and moderate sacred rituals, deities, and samagri
+            requirements across the platform
           </p>
         </div>
 
@@ -219,27 +241,27 @@ export const AdminCatalogPage: React.FC = () => {
           type="button"
           whileTap={buttonPress}
           onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-2 rounded-md bg-[hsl(var(--brand-primary))] px-4 py-2 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))] transition-colors shadow-xs"
+          className="inline-flex items-center gap-2 rounded-md bg-[#780016] hover:bg-[#600012] text-white border border-amber-400 px-4 py-2 text-xs font-bold transition-colors shadow-xs cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Catalog Entry</span>
         </motion.button>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-[hsl(var(--surface-alt))] p-3 rounded-lg border border-[hsl(var(--border))]">
+      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-amber-50/40 p-3 rounded-xl border border-amber-200">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3 top-2.5 text-[hsl(var(--foreground-muted))]" />
+          <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by puja name, deity, or tag..."
-            className="w-full rounded-md border bg-[hsl(var(--surface))] pl-9 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-[hsl(var(--brand-primary))]"
+            className="w-full rounded-md border border-amber-300 bg-white pl-9 pr-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:ring-1 focus:ring-[#780016]"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto text-xs">
-          <Filter className="w-3.5 h-3.5 text-[hsl(var(--foreground-muted))]" />
+          <Filter className="w-3.5 h-3.5 text-stone-500 shrink-0" />
           {[
             "ALL",
             "life-event",
@@ -252,10 +274,10 @@ export const AdminCatalogPage: React.FC = () => {
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`px-2.5 py-1 rounded-sm text-[11px] font-medium transition-colors ${
+              className={`px-3 py-1 rounded-md text-[11px] font-semibold transition-colors cursor-pointer shrink-0 ${
                 selectedCategory === cat
-                  ? "bg-[hsl(var(--brand-secondary))] text-white"
-                  : "bg-[hsl(var(--surface))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface-alt))] border border-[hsl(var(--border))]"
+                  ? "bg-[#780016] text-white border border-amber-400 shadow-xs"
+                  : "bg-white text-stone-700 hover:bg-amber-50 border border-amber-300"
               }`}
             >
               {cat.replace("-", " ")}
@@ -264,10 +286,10 @@ export const AdminCatalogPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] shadow-xs overflow-hidden">
+      <div className="rounded-xl border-2 border-amber-200/80 bg-white shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-[hsl(var(--foreground))] divide-y divide-[hsl(var(--border))]">
-            <thead className="bg-[hsl(var(--surface-alt))] text-[hsl(var(--foreground-muted))] font-semibold uppercase text-[10px] tracking-wider">
+          <table className="w-full text-left text-xs text-stone-800 divide-y divide-amber-200">
+            <thead className="bg-amber-50/80 text-stone-700 font-bold uppercase text-[10px] tracking-wider">
               <tr>
                 <th className="py-3 px-4">Puja Ceremony & Cover</th>
                 <th className="py-3 px-4">Category</th>
@@ -276,7 +298,7 @@ export const AdminCatalogPage: React.FC = () => {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[hsl(var(--border))]">
+            <tbody className="divide-y divide-amber-100">
               {isLoading ? (
                 <tr>
                   <td colSpan={5} className="py-12 text-center text-stone-500">
@@ -293,30 +315,31 @@ export const AdminCatalogPage: React.FC = () => {
                 filteredCatalog.map((entry) => (
                   <tr
                     key={entry.id}
-                    className="hover:bg-[hsl(var(--surface-alt))]/50 transition-colors"
+                    className="hover:bg-amber-50/40 transition-colors"
                   >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <img
                           src={entry.coverImage}
                           alt={entry.name}
-                          className="w-14 h-10 object-cover rounded-md border border-[hsl(var(--border))] shadow-xs shrink-0 bg-stone-100"
+                          className="w-14 h-10 object-cover rounded-md border border-amber-200 shadow-xs shrink-0 bg-stone-100"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
+                            (e.target as HTMLImageElement).src =
+                              "/images/hero_vedic_puja.jpg";
                           }}
                         />
                         <div>
-                          <div className="font-semibold text-[hsl(var(--foreground))]">
+                          <div className="font-semibold text-stone-900">
                             {entry.name}
                           </div>
-                          <div className="text-[11px] text-[hsl(var(--brand-primary))]">
+                          <div className="text-[11px] text-[#780016] font-medium">
                             Deity: {entry.deity}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="rounded-sm bg-[hsl(var(--surface-alt))] px-2 py-0.5 text-[10px] font-medium border border-[hsl(var(--border))]">
+                      <span className="rounded-sm bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-stone-800 border border-amber-300">
                         {entry.category}
                       </span>
                     </td>
@@ -325,19 +348,19 @@ export const AdminCatalogPage: React.FC = () => {
                         {entry.intentTags.slice(0, 4).map((tag) => (
                           <span
                             key={tag}
-                            className="rounded bg-[hsl(var(--surface-alt))] px-1.5 py-0.5 text-[10px] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]"
+                            className="rounded bg-stone-100 px-1.5 py-0.5 text-[10px] text-stone-700 border border-stone-200"
                           >
                             {tag}
                           </span>
                         ))}
                         {entry.intentTags.length > 4 && (
-                          <span className="text-[10px] text-[hsl(var(--foreground-muted))] pt-0.5">
+                          <span className="text-[10px] text-stone-500 pt-0.5">
                             +{entry.intentTags.length - 4} more
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-[11px] text-[hsl(var(--foreground-muted))]">
+                    <td className="py-3 px-4 text-[11px] text-stone-600">
                       <div>{entry.samagriList.length} samagri items</div>
                       <div>{entry.steps.length} sequential steps</div>
                     </td>
@@ -346,7 +369,7 @@ export const AdminCatalogPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleOpenEditModal(entry)}
-                          className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--brand-primary))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
+                          className="rounded p-1.5 text-stone-500 hover:text-[#780016] hover:bg-amber-50 transition-colors cursor-pointer"
                           title="Edit Entry"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -354,7 +377,7 @@ export const AdminCatalogPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleDeleteEntry(entry.id)}
-                          className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--danger))] hover:bg-[hsl(var(--danger))]/10 transition-colors"
+                          className="rounded p-1.5 text-stone-500 hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
                           title="Delete Entry"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -368,26 +391,28 @@ export const AdminCatalogPage: React.FC = () => {
           </table>
         </div>
 
-        <div className="p-3 bg-[hsl(var(--surface-alt))] border-t border-[hsl(var(--border))] text-[11px] text-[hsl(var(--foreground-muted))] flex justify-between items-center">
+        <div className="p-3 bg-amber-50/50 border-t border-amber-200 text-[11px] text-stone-600 flex justify-between items-center">
           <span>
             Showing {filteredCatalog.length} of {catalog.length} catalog entries
           </span>
-          <span>Session In-Memory Persistence Active (FR-21)</span>
+          <span className="text-amber-900 font-medium">
+            Session In-Memory Persistence Active (FR-21)
+          </span>
         </div>
       </div>
 
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
             <motion.div
               variants={modalTransition}
               initial="initial"
               animate="animate"
               exit="exit"
-              className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-6 shadow-xl space-y-4 text-xs"
+              className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border-2 border-amber-300 bg-white p-6 shadow-2xl space-y-4 text-xs"
             >
-              <div className="flex items-center justify-between border-b border-[hsl(var(--border))] pb-3">
-                <h3 className="font-serif text-lg font-bold text-[hsl(var(--brand-secondary))]">
+              <div className="flex items-center justify-between border-b border-amber-200 pb-3">
+                <h3 className="font-serif text-lg font-bold text-[#780016]">
                   {editingEntry
                     ? "Edit Catalog Entry"
                     : "Create New Puja Catalog Entry"}
@@ -395,7 +420,7 @@ export const AdminCatalogPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="rounded p-1 text-[hsl(var(--foreground-muted))] hover:bg-[hsl(var(--surface-alt))]"
+                  className="rounded-full p-1.5 text-stone-400 hover:text-stone-700 hover:bg-amber-100 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -404,7 +429,7 @@ export const AdminCatalogPage: React.FC = () => {
               <form onSubmit={handleSaveEntry} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                    <label className="block font-semibold text-stone-800 mb-1">
                       Puja Name *
                     </label>
                     <input
@@ -413,12 +438,12 @@ export const AdminCatalogPage: React.FC = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Maha Ganapati Homam"
-                      className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                      className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                    <label className="block font-semibold text-stone-800 mb-1">
                       Presiding Deity *
                     </label>
                     <input
@@ -427,13 +452,13 @@ export const AdminCatalogPage: React.FC = () => {
                       value={deity}
                       onChange={(e) => setDeity(e.target.value)}
                       placeholder="e.g. Lord Ganesha"
-                      className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                      className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Category *
                   </label>
                   <select
@@ -443,7 +468,7 @@ export const AdminCatalogPage: React.FC = () => {
                         e.target.value as PujaCatalogEntry["category"],
                       )
                     }
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   >
                     <option value="life-event">Life Event (Samskara)</option>
                     <option value="dosha-nivaran">
@@ -456,9 +481,9 @@ export const AdminCatalogPage: React.FC = () => {
                 </div>
 
                 {/* Cover Image Upload (Strictly Upload Only < 2MB per requirements) */}
-                <div className="space-y-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--surface-alt))]/40 p-3.5">
+                <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50/30 p-3.5">
                   <div className="flex items-center justify-between">
-                    <label className="block font-semibold text-[hsl(var(--foreground))] text-xs">
+                    <label className="block font-semibold text-stone-800 text-xs">
                       Ceremony Cover Image *
                     </label>
                     <span className="text-[10px] font-semibold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded">
@@ -475,18 +500,21 @@ export const AdminCatalogPage: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
                     {/* Image Preview Box */}
-                    <div className="relative aspect-video sm:aspect-4/3 rounded-lg overflow-hidden border-2 border-dashed border-[hsl(var(--border))] bg-stone-100 flex items-center justify-center group shadow-xs">
+                    <div className="relative aspect-video sm:aspect-4/3 rounded-lg overflow-hidden border-2 border-dashed border-amber-300 bg-stone-100 flex items-center justify-center group shadow-xs">
                       {coverImage ? (
                         <img
                           src={coverImage}
                           alt="Cover preview"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
+                            (e.target as HTMLImageElement).src =
+                              "/images/hero_vedic_puja.jpg";
                           }}
                         />
                       ) : (
-                        <span className="text-xs text-[hsl(var(--foreground-muted))]">No image uploaded</span>
+                        <span className="text-xs text-stone-400">
+                          No image uploaded
+                        </span>
                       )}
                       {coverImage && (
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -499,10 +527,12 @@ export const AdminCatalogPage: React.FC = () => {
 
                     {/* Upload Dropzone / Button */}
                     <div className="sm:col-span-2 space-y-2">
-                      <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-amber-400/70 hover:border-amber-500 rounded-lg bg-amber-50/50 hover:bg-amber-50/90 cursor-pointer transition-all">
+                      <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-amber-400 hover:border-amber-500 rounded-lg bg-amber-50/60 hover:bg-amber-100/60 cursor-pointer transition-all">
                         <UploadCloud className="w-6 h-6 text-amber-700 mb-1" />
                         <span className="text-xs font-semibold text-stone-900 text-center">
-                          {uploadFileName ? `Selected: ${uploadFileName}` : "Click or drag to upload ceremony cover"}
+                          {uploadFileName
+                            ? `Selected: ${uploadFileName}`
+                            : "Click or drag to upload ceremony cover"}
                         </span>
                         <span className="text-[11px] text-stone-500 mt-0.5">
                           PNG, JPG, WebP (Strictly max 2.0 MB)
@@ -514,15 +544,16 @@ export const AdminCatalogPage: React.FC = () => {
                           className="hidden"
                         />
                       </label>
-                      <p className="text-[10px] text-[hsl(var(--foreground-muted))] leading-tight">
-                        Note: Strictly file upload under 2MB. Prepared for direct Cloudinary or ImageKit backend.
+                      <p className="text-[10px] text-stone-500 leading-tight">
+                        Note: Strictly file upload under 2MB. Prepared for
+                        direct Cloudinary or ImageKit backend.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Description *
                   </label>
                   <textarea
@@ -531,12 +562,12 @@ export const AdminCatalogPage: React.FC = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Brief description of the ritual's significance..."
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Intent Tags (Comma-separated, powers matching engine) *
                   </label>
                   <input
@@ -545,12 +576,12 @@ export const AdminCatalogPage: React.FC = () => {
                     value={intentTagsText}
                     onChange={(e) => setIntentTagsText(e.target.value)}
                     placeholder="new-home, vastu, flat, apartment, relocation..."
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Samagri List (One item per line)
                   </label>
                   <textarea
@@ -558,12 +589,12 @@ export const AdminCatalogPage: React.FC = () => {
                     value={samagriText}
                     onChange={(e) => setSamagriText(e.target.value)}
                     placeholder="Copper Kalash&#10;Mango leaves&#10;Havan Samagri..."
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs font-mono"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs font-mono text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Vedic Vidhi Steps (One step per line)
                   </label>
                   <textarea
@@ -571,12 +602,12 @@ export const AdminCatalogPage: React.FC = () => {
                     value={stepsText}
                     onChange={(e) => setStepsText(e.target.value)}
                     placeholder="Ganesha Sthapana and Kalash pujan&#10;Navagraha invocation&#10;Havan offering..."
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs font-mono"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs font-mono text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[hsl(var(--foreground))] mb-1">
+                  <label className="block font-semibold text-stone-800 mb-1">
                     Auspicious Timing Note
                   </label>
                   <input
@@ -584,21 +615,22 @@ export const AdminCatalogPage: React.FC = () => {
                     value={timingNote}
                     onChange={(e) => setTimingNote(e.target.value)}
                     placeholder="e.g. Shukla Paksha morning hours recommended."
-                    className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--surface))] p-2 text-xs"
+                    className="w-full rounded-md border border-amber-300 bg-white p-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-[#780016]"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-2 pt-3 border-t border-[hsl(var(--border))]">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-amber-200">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="rounded-md border border-[hsl(var(--border))] px-3 py-1.5 text-xs text-[hsl(var(--foreground-muted))] hover:bg-[hsl(var(--surface-alt))]"
+                    className="border-2 border-amber-300 text-stone-800 hover:bg-amber-50 rounded-md px-4 py-2 text-xs font-semibold cursor-pointer transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="rounded-md bg-[hsl(var(--brand-primary))] px-4 py-1.5 text-xs font-semibold text-white hover:bg-[hsl(var(--brand-primary-dark))]"
+                    disabled={!isFormValid}
+                    className="bg-[#780016] hover:bg-[#600012] text-white border border-amber-400 rounded-md px-5 py-2 text-xs font-bold shadow-xs cursor-pointer transition-colors disabled:opacity-50"
                   >
                     {editingEntry ? "Update Entry" : "Create Entry"}
                   </button>
