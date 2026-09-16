@@ -108,10 +108,6 @@ export const Navbar: React.FC = () => {
                 <Home className="h-4 w-4 text-amber-700" />
                 <span>Home</span>
               </NavLink>
-              <NavLink to="/priests" className={navLinkClass}>
-                <Users className="h-4 w-4 text-amber-700" />
-                <span>Browse Priests</span>
-              </NavLink>
               <NavLink to="/about" className={navLinkClass}>
                 <Info className="h-4 w-4 text-amber-700" />
                 <span>About</span>
@@ -269,14 +265,6 @@ export const Navbar: React.FC = () => {
                       >
                         <Home className="h-4 w-4 text-amber-700" />
                         <span>Home</span>
-                      </NavLink>
-                      <NavLink
-                        to="/priests"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={mobileNavLinkClass}
-                      >
-                        <Users className="h-4 w-4 text-amber-700" />
-                        <span>Browse Priests</span>
                       </NavLink>
                       <NavLink
                         to="/about"

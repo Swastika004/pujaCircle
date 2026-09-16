@@ -112,11 +112,11 @@ export const appRouter = createBrowserRouter([
 
       { path: 'admin/login', element: <GuestOnlyRoute>{LazyPage(AdminLoginPage)}</GuestOnlyRoute> },
 
-      // Public Priest Discovery (Accessible to both Guests and Devotees)
-      { path: 'priests', element: LazyPage(PriestListingPage) },
-      { path: 'priests/:id', element: LazyPage(PriestDetailsPage) },
-      { path: 'user/priests', element: LazyPage(PriestListingPage) },
-      { path: 'user/priests/:id', element: LazyPage(PriestDetailsPage) },
+      // Devotee Priest Discovery (Strictly Authenticated Devotees Only)
+      { path: 'priests', element: <UserRouteGuard>{LazyPage(PriestListingPage)}</UserRouteGuard> },
+      { path: 'priests/:id', element: <UserRouteGuard>{LazyPage(PriestDetailsPage)}</UserRouteGuard> },
+      { path: 'user/priests', element: <UserRouteGuard>{LazyPage(PriestListingPage)}</UserRouteGuard> },
+      { path: 'user/priests/:id', element: <UserRouteGuard>{LazyPage(PriestDetailsPage)}</UserRouteGuard> },
 
       // Canonical Devotee Features (USER Role Only)
       { path: 'user/home', element: <UserRouteGuard>{LazyPage(UserHomePage)}</UserRouteGuard> },

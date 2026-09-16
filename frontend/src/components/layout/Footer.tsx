@@ -45,9 +45,11 @@ export const Footer: React.FC = () => {
             <Link to="/contact" className="hover:text-[#991B1B] transition-colors">
               Contact
             </Link>
-            <Link to="/priests" className="hover:text-[#991B1B] transition-colors">
-              Browse Priests
-            </Link>
+            {user?.role === 'USER' && (
+              <Link to="/priests" className="hover:text-[#991B1B] transition-colors">
+                Browse Priests
+              </Link>
+            )}
           </div>
         </div>
 
