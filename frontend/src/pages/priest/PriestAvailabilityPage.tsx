@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthStore } from '@/store/auth.store';
 import { priestApi } from '@/api/priest.api';
 import { bookingApi } from '@/api/booking.api';
-import { resolvePriestId } from '@/mocks/mock-api';
 import { PriestSlot } from '@/types/priest.types';
 import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
@@ -28,8 +26,7 @@ import { toast } from 'sonner';
  * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
  */
 export const PriestAvailabilityPage: React.FC = () => {
-  const { user } = useAuthStore();
-  const priestId = resolvePriestId(user);
+  const priestId = priestApi.resolveCurrentPriestId();
 
   const todayStr = new Date().toISOString().split('T')[0];
 

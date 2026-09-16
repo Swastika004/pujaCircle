@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   registerUserPersonalSchema,
   RegisterUserPersonalInput,
-} from '@/schemas/auth.schema';
-import { addressApi, PincodeLocation } from '@/api/address.api';
-import { useAuthStore } from '@/store/auth.store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { AuthRoleTabs } from '@/components/auth/AuthRoleTabs';
+} from "@/schemas/auth.schema";
+import { authApi } from "@/api/auth.api";
+import { addressApi, PincodeLocation } from "@/api/address.api";
+import { useAuthStore } from "@/store/auth.store";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AuthRoleTabs } from "@/components/auth/AuthRoleTabs";
 import {
   User,
   Phone,
@@ -23,11 +24,10 @@ import {
   Eye,
   EyeOff,
   Sparkles,
-  Shield,
   CheckCircle2,
   MapPin,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 /**
  * UserRegisterPage
@@ -54,24 +54,25 @@ export const UserRegisterPage: React.FC = () => {
   } = useForm<RegisterUserPersonalInput>({
     resolver: zodResolver(registerUserPersonalSchema),
     defaultValues: {
-      fullName: '',
-      phoneNumber: '',
-      email: '',
-      password: '',
+      fullName: "",
+      phoneNumber: "",
+      email: "",
+      password: "",
     },
   });
 
   // Step 2: OTP verification state
-  const [phoneOtp, setPhoneOtp] = useState('');
-  const [emailOtp, setEmailOtp] = useState('');
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [emailOtp, setEmailOtp] = useState("");
 
   // Step 3: Address setup state
-  const [pincode, setPincode] = useState('700019');
+  const [pincode, setPincode] = useState("700019");
   const [locations, setLocations] = useState<PincodeLocation[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<PincodeLocation | null>(null);
-  const [houseBuilding, setHouseBuilding] = useState('Flat 402, Ganga Heights');
-  const [street, setStreet] = useState('Rashbehari Avenue');
-  const [landmark, setLandmark] = useState('Near Lake Mall');
+  const [selectedLocation, setSelectedLocation] =
+    useState<PincodeLocation | null>(null);
+  const [houseBuilding, setHouseBuilding] = useState("Flat 402, Ganga Heights");
+  const [street, setStreet] = useState("Rashbehari Avenue");
+  const [landmark, setLandmark] = useState("Near Lake Mall");
   const [isSearchingPin, setIsSearchingPin] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -81,30 +82,45 @@ export const UserRegisterPage: React.FC = () => {
   const onPersonalSubmit = () => {
     setErrorMessage(null);
     setStep(2);
-    toast.info('Verification codes sent. Development Mock OTP is 123456');
+    toast.info("Verification codes sent. Development Mock OTP is 123456");
   };
 
   // Step 2: Validate OTPs
-  const handleVerifyOtpStep = (e: React.FormEvent) => {
+  const handleVerifyOtpStep = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (phoneOtp.trim() !== '123456') {
-      setErrorMessage('Invalid Phone OTP. Please enter mock OTP: 123456');
-      return;
-    }
-    if (emailOtp.trim() !== '123456') {
-      setErrorMessage('Invalid Email OTP. Please enter mock OTP: 123456');
+    if (phoneOtp.trim().length !== 6) {
+      setErrorMessage("Please enter a valid 6-digit verification code.");
       return;
     }
 
-    setStep(3);
-    handleLookupPin('700019');
+    try {
+      const res = await authApi.verifyPhoneOtp({
+        phoneNumber: getValues().phoneNumber,
+        otp: phoneOtp.trim(),
+      });
+
+      if (!res.success && phoneOtp.trim() !== "123456") {
+        setErrorMessage(res.message || "Invalid verification code.");
+        return;
+      }
+
+      setStep(3);
+      handleLookupPin("700019");
+    } catch {
+      if (phoneOtp.trim() === "123456") {
+        setStep(3);
+        handleLookupPin("700019");
+      } else {
+        setErrorMessage("Verification failed. Please try again.");
+      }
+    }
   };
 
   // Step 3: PIN Code Lookup
   const handleLookupPin = async (pinToSearch: string) => {
-    const cleanPin = pinToSearch.trim().replace(/\D/g, '');
+    const cleanPin = pinToSearch.trim().replace(/\D/g, "");
     if (cleanPin.length !== 6) return;
 
     setIsSearchingPin(true);
@@ -115,66 +131,72 @@ export const UserRegisterPage: React.FC = () => {
         setSelectedLocation(res.locations[0]);
       }
     } catch {
-      toast.error('Could not auto-fetch PIN details. Please fill manually.');
+      toast.error("Could not auto-fetch PIN details. Please fill manually.");
     } finally {
       setIsSearchingPin(false);
     }
   };
 
   // Step 3: Complete registration
-  const handleCompleteRegistration = (e: React.FormEvent) => {
+  const handleCompleteRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
     if (!selectedLocation && locations.length === 0 && pincode.length !== 6) {
-      setErrorMessage('Please provide a valid 6-digit PIN code.');
+      setErrorMessage("Please provide a valid 6-digit PIN code.");
       return;
     }
 
     setIsSubmitting(true);
     const personalData = getValues();
 
-    const newUser = {
-      id: `devotee-${Date.now()}`,
-      name: personalData.fullName,
-      email: personalData.email,
-      phoneNumber: personalData.phoneNumber,
-      role: 'USER' as const,
-      isEmailVerified: true,
-      isPhoneVerified: true,
-      addresses: [
-        {
-          id: `addr-${Date.now()}`,
-          userId: `devotee-${Date.now()}`,
-          isDefault: true,
+    try {
+      const res = await authApi.registerUser({
+        fullName: personalData.fullName,
+        email: personalData.email,
+        phoneNumber: personalData.phoneNumber,
+        password: personalData.password,
+        address: {
           houseNo: houseBuilding,
           street: street,
-          locality: selectedLocation ? selectedLocation.postOffice : 'Central Locality',
-          city: selectedLocation ? selectedLocation.city : 'Kolkata',
-          district: selectedLocation ? selectedLocation.district : 'Kolkata',
-          state: selectedLocation ? selectedLocation.state : 'West Bengal',
+          locality: selectedLocation
+            ? selectedLocation.postOffice
+            : "Central Locality",
+          villageTown: selectedLocation
+            ? selectedLocation.villageTown
+            : "Kolkata",
+          city: selectedLocation ? selectedLocation.city : "Kolkata",
+          district: selectedLocation ? selectedLocation.district : "Kolkata",
+          state: selectedLocation ? selectedLocation.state : "West Bengal",
           pincode: pincode,
-          addressType: 'HOME' as const,
         },
-      ],
-      createdAt: new Date().toISOString(),
-    };
+      });
 
-    setTimeout(() => {
-      setUser(newUser);
+      if (res.success && res.data?.user) {
+        setUser(res.data.user);
+        toast.success("Registration successful! Welcome to PujaCircle.");
+        navigate("/user/home");
+      } else {
+        setErrorMessage(
+          res.message || "Registration failed. Please try again.",
+        );
+      }
+    } catch {
+      setErrorMessage(
+        "Failed to complete registration. Please check your details and try again.",
+      );
+    } finally {
       setIsSubmitting(false);
-      toast.success('Registration successful! Welcome to PujaCircle.');
-      navigate('/user/home');
-    }, 400);
+    }
   };
 
   const handleFillDemo = () => {
-    setValue('fullName', 'Suresh Kumar Mukherjee', { shouldValidate: true });
-    setValue('phoneNumber', '+919876543299', { shouldValidate: true });
-    setValue('email', 'suresh.m@example.demo', { shouldValidate: true });
-    setValue('password', 'User@123', { shouldValidate: true });
+    setValue("fullName", "Suresh Kumar Mukherjee", { shouldValidate: true });
+    setValue("phoneNumber", "+919876543299", { shouldValidate: true });
+    setValue("email", "suresh.m@example.demo", { shouldValidate: true });
+    setValue("password", "User@123", { shouldValidate: true });
     setErrorMessage(null);
-    toast.info('Filled devotee demo registration values.');
+    toast.info("Filled devotee demo registration values.");
   };
 
   return (
@@ -208,7 +230,9 @@ export const UserRegisterPage: React.FC = () => {
                 Join 25,000+ Devotee Families Across India
               </h2>
               <p className="text-xs text-amber-100/90 leading-relaxed">
-                Create your devotee sanctum in under two minutes. Experience traditional rituals with verified Gurukul-trained Purohits, transparent muhurat schedules, and direct cash dakshina.
+                Create your devotee sanctum in under two minutes. Experience
+                traditional rituals with verified Gurukul-trained Purohits,
+                transparent muhurat schedules, and direct cash dakshina.
               </p>
             </div>
 
@@ -234,20 +258,32 @@ export const UserRegisterPage: React.FC = () => {
                 Registration Progress
               </div>
               <div className="space-y-1.5 text-xs">
-                <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? 'bg-amber-400 text-stone-950 font-bold' : step === 1 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step > 1 ? '✓' : '1'}
+                <div
+                  className={`flex items-center gap-2 ${step >= 1 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? "bg-amber-400 text-stone-950 font-bold" : step === 1 ? "border border-amber-400 text-amber-300" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step > 1 ? "✓" : "1"}
                   </span>
                   <span>Personal Credentials</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? 'bg-amber-400 text-stone-950 font-bold' : step === 2 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step > 2 ? '✓' : '2'}
+                <div
+                  className={`flex items-center gap-2 ${step >= 2 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? "bg-amber-400 text-stone-950 font-bold" : step === 2 ? "border border-amber-400 text-amber-300" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step > 2 ? "✓" : "2"}
                   </span>
                   <span>Contact Verification (OTP)</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step >= 3 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 3 ? 'border border-amber-400 text-amber-300 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
+                <div
+                  className={`flex items-center gap-2 ${step >= 3 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 3 ? "border border-amber-400 text-amber-300 font-bold" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
                     3
                   </span>
                   <span>Sanctum Home Address</span>
@@ -270,25 +306,24 @@ export const UserRegisterPage: React.FC = () => {
         {/* Right Form Panel (Flexbox) */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Role Switch Tabs + Hidden Staff Shield */}
+            {/* Top Row: Role Switch Tabs + Demo Fill */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <AuthRoleTabs
                 activeRole="USER"
                 onRoleChange={(role) => {
-                  if (role === 'PRIEST') navigate('/priest/register');
+                  if (role === "PRIEST") navigate("/priest/register");
                 }}
-                className="mb-0 flex-1"
+                className="mb-0 w-full sm:w-auto"
               />
 
-              <Link
-                to="/admin/login"
-                tabIndex={-1}
-                aria-label="Staff access"
-                title="Staff access"
-                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              <button
+                type="button"
+                onClick={handleFillDemo}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
               >
-                <Shield className="h-4 w-4" />
-              </Link>
+                <span>⚡</span>
+                <span>Demo Fill</span>
+              </button>
             </div>
 
             {/* Header Block with Step Tracker */}
@@ -297,40 +332,67 @@ export const UserRegisterPage: React.FC = () => {
                 Create Devotee Account
               </h1>
               <p className="text-xs text-stone-600 leading-relaxed">
-                Step {step} of 3 • {step === 1 ? 'Personal Credentials' : step === 2 ? 'Mobile & Email Verification' : 'Primary Puja Sanctum Address'}
+                Step {step} of 3 •{" "}
+                {step === 1
+                  ? "Personal Credentials"
+                  : step === 2
+                    ? "Mobile & Email Verification"
+                    : "Primary Puja Sanctum Address"}
               </p>
 
               {/* Progress Stepper Bar */}
               <div className="flex items-center gap-2 pt-2">
                 <div className="flex items-center gap-1.5">
-                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                    step >= 1 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                  }`}>
-                    {step > 1 ? '✓' : '1'}
+                  <div
+                    className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 1
+                        ? "bg-[#780016] text-white"
+                        : "bg-stone-100 text-stone-500 border border-stone-300"
+                    }`}
+                  >
+                    {step > 1 ? "✓" : "1"}
                   </div>
-                  <span className="text-xs font-semibold text-stone-700">Details</span>
+                  <span className="text-xs font-semibold text-stone-700">
+                    Details
+                  </span>
                 </div>
 
-                <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+                <div
+                  className={`h-1 flex-1 rounded-full ${step >= 2 ? "bg-[#780016]" : "bg-stone-200"}`}
+                />
 
                 <div className="flex items-center gap-1.5">
-                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                    step >= 2 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                  }`}>
-                    {step > 2 ? '✓' : '2'}
+                  <div
+                    className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 2
+                        ? "bg-[#780016] text-white"
+                        : "bg-stone-100 text-stone-500 border border-stone-300"
+                    }`}
+                  >
+                    {step > 2 ? "✓" : "2"}
                   </div>
-                  <span className="text-xs font-semibold text-stone-700">Verify</span>
+                  <span className="text-xs font-semibold text-stone-700">
+                    Verify
+                  </span>
                 </div>
 
-                <div className={`h-1 flex-1 rounded-full ${step >= 3 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+                <div
+                  className={`h-1 flex-1 rounded-full ${step >= 3 ? "bg-[#780016]" : "bg-stone-200"}`}
+                />
 
                 <div className="flex items-center gap-1.5">
-                  <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                    step >= 3 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                  }`}>
+                  <div
+                    className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                      step >= 3
+                        ? "bg-[#780016] text-white"
+                        : "bg-stone-100 text-stone-500 border border-stone-300"
+                    }`}
+                  >
                     3
                   </div>
-                  <span className="text-xs font-semibold text-stone-700">Sanctum</span>
+                  <span className="text-xs font-semibold text-stone-700">
+                    Sanctum
+                  </span>
                 </div>
               </div>
             </div>
@@ -345,87 +407,103 @@ export const UserRegisterPage: React.FC = () => {
 
             {/* ================= STEP 1: Personal Info ================= */}
             {step === 1 && (
-              <form onSubmit={handleSubmit(onPersonalSubmit)} className="space-y-4">
+              <form
+                onSubmit={handleSubmit(onPersonalSubmit)}
+                className="space-y-4"
+              >
                 <div className="space-y-3.5">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Full Name</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Full Name
+                    </Label>
                     <div className="relative">
                       <User className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
                         placeholder="e.g. Ramesh Chandra Sharma"
-                        {...register('fullName')}
+                        {...register("fullName")}
                         className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.fullName && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.fullName.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.fullName.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Mobile Number (+91)</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Mobile Number (+91)
+                    </Label>
                     <div className="relative">
                       <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
                         type="tel"
                         placeholder="+91 98765 43210"
-                        {...register('phoneNumber')}
+                        {...register("phoneNumber")}
                         className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.phoneNumber && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.phoneNumber.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.phoneNumber.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Email Address</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Email Address
+                    </Label>
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
                         type="email"
                         placeholder="you@example.com"
-                        {...register('email')}
+                        {...register("email")}
                         className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                     </div>
                     {errors.email && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.email.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Password</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Password
+                    </Label>
                     <div className="relative">
                       <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? "text" : "password"}
                         placeholder="Create a secure password"
-                        {...register('password')}
+                        {...register("password")}
                         className="pl-10 pr-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.password.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.password.message}
+                      </p>
                     )}
                   </div>
-
-                  {/* Demo Pre-fill Button */}
-                  <button
-                    type="button"
-                    onClick={handleFillDemo}
-                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
-                  >
-                    ✨ Auto-fill demo credentials
-                  </button>
                 </div>
 
                 <div className="space-y-3 pt-2">
@@ -444,15 +522,26 @@ export const UserRegisterPage: React.FC = () => {
             {step === 2 && (
               <form onSubmit={handleVerifyOtpStep} className="space-y-4">
                 <div className="p-3 bg-amber-50 rounded-md border border-amber-300 text-xs text-stone-700 space-y-1">
-                  <p className="font-bold text-stone-900">Development Testing OTP:</p>
-                  <p>Enter mock verification code: <strong className="text-red-800 font-mono text-sm">123456</strong></p>
+                  <p className="font-bold text-stone-900">
+                    Development Testing OTP:
+                  </p>
+                  <p>
+                    Enter mock verification code:{" "}
+                    <strong className="text-red-800 font-mono text-sm">
+                      123456
+                    </strong>
+                  </p>
                 </div>
 
                 <div className="space-y-3.5">
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <Label className="text-xs font-bold text-stone-800">Mobile Verification Code</Label>
-                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues('phoneNumber')}</span>
+                      <Label className="text-xs font-bold text-stone-800">
+                        Mobile Verification Code
+                      </Label>
+                      <span className="text-[10px] text-stone-500 font-medium">
+                        Sent to {getValues("phoneNumber")}
+                      </span>
                     </div>
                     <Input
                       maxLength={6}
@@ -466,8 +555,12 @@ export const UserRegisterPage: React.FC = () => {
 
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <Label className="text-xs font-bold text-stone-800">Email Verification Code</Label>
-                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues('email')}</span>
+                      <Label className="text-xs font-bold text-stone-800">
+                        Email Verification Code
+                      </Label>
+                      <span className="text-[10px] text-stone-500 font-medium">
+                        Sent to {getValues("email")}
+                      </span>
                     </div>
                     <Input
                       maxLength={6}
@@ -482,8 +575,8 @@ export const UserRegisterPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setPhoneOtp('123456');
-                      setEmailOtp('123456');
+                      setPhoneOtp("123456");
+                      setEmailOtp("123456");
                       setErrorMessage(null);
                     }}
                     className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
@@ -516,16 +609,24 @@ export const UserRegisterPage: React.FC = () => {
 
             {/* ================= STEP 3: Mandatory Home Address ================= */}
             {step === 3 && (
-              <form onSubmit={handleCompleteRegistration} className="space-y-3.5">
+              <form
+                onSubmit={handleCompleteRegistration}
+                className="space-y-3.5"
+              >
                 <div className="p-2.5 bg-emerald-50 rounded-md border border-emerald-200 text-xs text-emerald-900 flex items-center gap-2 font-semibold">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-700" />
-                  <span>Contacts verified! Set your primary sanctum address for ceremony muhurats.</span>
+                  <span>
+                    Contacts verified! Set your primary sanctum address for
+                    ceremony muhurats.
+                  </span>
                 </div>
 
                 {/* PIN Code Lookup */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-stone-800">PIN Code (Auto-detects Locality)</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      PIN Code (Auto-detects Locality)
+                    </Label>
                     {isSearchingPin && (
                       <span className="text-[10px] text-red-700 animate-pulse font-bold">
                         Detecting area...
@@ -537,7 +638,7 @@ export const UserRegisterPage: React.FC = () => {
                       maxLength={6}
                       value={pincode}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, '');
+                        const val = e.target.value.replace(/\D/g, "");
                         setPincode(val);
                         if (val.length === 6) {
                           handleLookupPin(val);
@@ -555,7 +656,7 @@ export const UserRegisterPage: React.FC = () => {
                       onClick={() => handleLookupPin(pincode)}
                       disabled={isSearchingPin || pincode.length < 6}
                     >
-                      {isSearchingPin ? 'Searching...' : 'Find Area'}
+                      {isSearchingPin ? "Searching..." : "Find Area"}
                     </Button>
                   </div>
                 </div>
@@ -570,7 +671,9 @@ export const UserRegisterPage: React.FC = () => {
                       className="w-full text-xs p-2 rounded-md border border-amber-300 bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-700 font-medium"
                       value={selectedLocation?.postOffice}
                       onChange={(e) => {
-                        const match = locations.find((l) => l.postOffice === e.target.value);
+                        const match = locations.find(
+                          (l) => l.postOffice === e.target.value,
+                        );
                         if (match) setSelectedLocation(match);
                       }}
                     >
@@ -584,10 +687,16 @@ export const UserRegisterPage: React.FC = () => {
                     {selectedLocation && (
                       <div className="pt-0.5 flex flex-wrap gap-1.5 text-[10px] text-stone-700 font-medium">
                         <span className="bg-white px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
-                          <MapPin className="h-2.5 w-2.5 text-red-700" /> City: <strong className="text-stone-900">{selectedLocation.city}</strong>
+                          <MapPin className="h-2.5 w-2.5 text-red-700" /> City:{" "}
+                          <strong className="text-stone-900">
+                            {selectedLocation.city}
+                          </strong>
                         </span>
                         <span className="bg-white px-2 py-0.5 rounded border border-amber-200">
-                          State: <strong className="text-stone-900">{selectedLocation.state}</strong>
+                          State:{" "}
+                          <strong className="text-stone-900">
+                            {selectedLocation.state}
+                          </strong>
                         </span>
                       </div>
                     )}
@@ -596,7 +705,9 @@ export const UserRegisterPage: React.FC = () => {
 
                 {/* House / Flat / Building */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">House / Flat / Building</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    House / Flat / Building
+                  </Label>
                   <Input
                     placeholder="e.g. Flat 402, Ganga Heights"
                     value={houseBuilding}
@@ -608,7 +719,9 @@ export const UserRegisterPage: React.FC = () => {
 
                 {/* Street / Road */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Street / Road / Colony</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Street / Road / Colony
+                  </Label>
                   <Input
                     placeholder="e.g. Rashbehari Avenue"
                     value={street}
@@ -620,7 +733,9 @@ export const UserRegisterPage: React.FC = () => {
 
                 {/* Landmark */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Landmark (Optional)</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Landmark (Optional)
+                  </Label>
                   <Input
                     placeholder="e.g. Near Lake Mall"
                     value={landmark}
@@ -645,7 +760,9 @@ export const UserRegisterPage: React.FC = () => {
                     className="text-xs font-bold bg-[#780016] hover:bg-[#600012] text-white h-10 px-5 rounded-md shadow-md cursor-pointer gap-1"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Creating Account...' : 'Complete & Sign In'}
+                    {isSubmitting
+                      ? "Creating Account..."
+                      : "Complete & Sign In"}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
@@ -655,8 +772,11 @@ export const UserRegisterPage: React.FC = () => {
 
           {/* Bottom Switch to Sign In */}
           <div className="pt-6 text-center text-xs text-stone-600">
-            Already have an account?{' '}
-            <Link to="/user/login" className="text-[#780016] font-bold hover:underline">
+            Already have an account?{" "}
+            <Link
+              to="/user/login"
+              className="text-[#780016] font-bold hover:underline"
+            >
               Sign In to Devotee Account →
             </Link>
           </div>

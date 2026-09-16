@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useAuthStore } from "@/store/auth.store";
-import {
-  mockGetBookings,
-  mockAcceptBooking,
-  mockRejectBooking,
-  mockCompleteBooking,
-  resolvePriestId,
-} from "@/mocks/mock-api";
+import { bookingApi } from "@/api/booking.api";
+import { priestApi } from "@/api/priest.api";
 import { Booking } from "@/types/booking.types";
 import { PriestBookingRow } from "@/components/priest/PriestBookingRow";
 import { PriestBookingDetailsDialog } from "@/components/priest/PriestBookingDetailsDialog";
@@ -28,8 +22,7 @@ type TabFilter = "PENDING" | "CONFIRMED" | "COMPLETED" | "HISTORY";
  * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
  */
 export const PriestBookingsPage: React.FC = () => {
-  const { user } = useAuthStore();
-  const priestId = resolvePriestId(user);
+  const priestId = priestApi.resolveCurrentPriestId();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeTab, setActiveTab] = useState<TabFilter>("PENDING");
@@ -46,10 +39,8 @@ export const PriestBookingsPage: React.FC = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await mockGetBookings(undefined, priestId);
-      if (res.success) {
-        setBookings(res.data);
-      }
+      const data = await bookingApi.getPriestBookings(priestId);
+      setBookings(data);
     } catch {
       toast.error("Failed to load appointments.");
     }
@@ -63,9 +54,9 @@ export const PriestBookingsPage: React.FC = () => {
   const handleAccept = async (bookingId: string) => {
     setIsProcessing(true);
     try {
-      const res = await mockAcceptBooking(bookingId, priestId);
+      const res = await bookingApi.acceptBooking(bookingId, priestId);
       if (res.success) {
-        toast.success("Puja request accepted and confirmed!");
+        toast.success("Booking confirmed! Auspicious preparation begins.");
         fetchBookings();
       } else {
         toast.error(res.message || "Failed to accept booking.");
@@ -75,18 +66,24 @@ export const PriestBookingsPage: React.FC = () => {
     }
   };
 
-  const handleDeclineConfirm = async (reason: string) => {
+  const handleRejectConfirm = async (reason: string) => {
     if (!rejectBookingTarget) return;
-    const res = await mockRejectBooking(
-      rejectBookingTarget.id,
-      priestId,
-      reason,
-    );
-    if (res.success) {
-      toast.success("Request declined.");
-      fetchBookings();
-    } else {
-      toast.error(res.message || "Failed to decline booking.");
+    setIsProcessing(true);
+    try {
+      const res = await bookingApi.rejectBooking(
+        rejectBookingTarget.id,
+        priestId,
+        reason
+      );
+      if (res.success) {
+        toast.success("Booking declined. Slot has been freed.");
+        setRejectBookingTarget(null);
+        fetchBookings();
+      } else {
+        toast.error(res.message || "Failed to decline booking.");
+      }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -94,7 +91,7 @@ export const PriestBookingsPage: React.FC = () => {
     if (!completeBookingTarget) return;
     setIsProcessing(true);
     try {
-      const res = await mockCompleteBooking(
+      const res = await bookingApi.completeBooking(
         completeBookingTarget.id,
         priestId,
         completionCode
@@ -305,7 +302,7 @@ export const PriestBookingsPage: React.FC = () => {
       <CancelBookingDialog
         isOpen={!!rejectBookingTarget}
         onClose={() => setRejectBookingTarget(null)}
-        onConfirm={handleDeclineConfirm}
+        onConfirm={handleRejectConfirm}
         bookingReference={
           rejectBookingTarget?.bookingReference || rejectBookingTarget?.id
         }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
-import { mockGetBookings, mockCancelBooking, mockSubmitRating } from '@/mocks/mock-api';
+import { bookingApi } from '@/api/booking.api';
 import { Booking } from '@/types/booking.types';
 import { RatingInput } from '@/schemas/booking.schema';
 import { Button } from '@/components/ui/button';
@@ -43,11 +43,8 @@ export const BookingsPage: React.FC = () => {
   const loadBookings = async () => {
     setIsLoading(true);
     try {
-      const devoteeId = user?.id || 'user-devotee-1';
-      const res = await mockGetBookings(devoteeId);
-      if (res.success) {
-        setBookings(res.data);
-      }
+      const data = await bookingApi.getBookings(user?.id);
+      setBookings(data);
     } catch {
       toast.error('Failed to load your ceremony bookings.');
     } finally {
@@ -61,7 +58,7 @@ export const BookingsPage: React.FC = () => {
 
   const handleConfirmCancel = async (reason: string) => {
     if (!bookingToCancel || !user) return;
-    const res = await mockCancelBooking(bookingToCancel.id, user.id, reason);
+    const res = await bookingApi.cancelBooking({ bookingId: bookingToCancel.id, userId: user.id, reason });
     if (res.success) {
       toast.success('Puja appointment cancelled.');
       setCancelModalOpen(false);
@@ -73,7 +70,11 @@ export const BookingsPage: React.FC = () => {
 
   const handleRatingSubmit = async (data: RatingInput) => {
     if (!user || !bookingToRate) return;
-    const res = await mockSubmitRating(user.id, data);
+    const res = await bookingApi.submitRating(user.id, {
+      bookingId: bookingToRate.id,
+      rating: data.rating,
+      review: data.review,
+    });
     if (res.success) {
       toast.success('Thank you for rating your Priest!');
       setRatingModalOpen(false);

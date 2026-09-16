@@ -133,11 +133,24 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            <div className="space-y-1 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-100 border border-amber-300 text-stone-900 text-xs font-bold mb-2">
+            {/* Top Row: Verification Badge + Demo Fill */}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
                 {icon}
                 <span>Identity Verification</span>
               </div>
+
+              <button
+                type="button"
+                onClick={handleFillDemoOtp}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
+              >
+                <span>⚡</span>
+                <span>Demo Fill</span>
+              </button>
+            </div>
+
+            <div className="space-y-1 mb-6">
               <h1 className="text-2xl font-bold font-serif text-stone-900">
                 {title}
               </h1>
@@ -170,17 +183,6 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
                 {errors.otp && (
                   <p className="text-[11px] text-red-700 font-semibold">{errors.otp.message}</p>
                 )}
-              </div>
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="button"
-                  onClick={handleFillDemoOtp}
-                  className="text-xs text-amber-700 hover:text-amber-800 font-bold cursor-pointer hover:underline flex items-center gap-1"
-                >
-                  <Sparkles className="h-3 w-3" />
-                  <span>Fill Mock Code (123456)</span>
-                </button>
               </div>
 
               <div className="space-y-3 pt-2">

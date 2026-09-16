@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { mockAdminGetDashboardStats } from '@/mocks/mock-api';
-import { mockDb } from '@/mocks/data';
+import { adminApi } from '@/api/admin.api';
+import { catalogApi } from '@/api/catalog.api';
 import { StatCard } from '@/components/common/StatCard';
 import {
   Users,
@@ -23,16 +23,19 @@ import {
 // Full management tables removed (managed under /admin/priests and /admin/users).
 export const AdminDashboardPage: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
+  const [catalogSize, setCatalogSize] = useState<number>(0);
 
   useEffect(() => {
     async function loadData() {
-      const statsData = await mockAdminGetDashboardStats();
+      const [statsData, catalogItems] = await Promise.all([
+        adminApi.getDashboardStats(),
+        catalogApi.getCatalog(),
+      ]);
       setStats(statsData);
+      setCatalogSize(catalogItems ? catalogItems.length : 0);
     }
     loadData();
   }, []);
-
-  const catalogSize = mockDb.pujaCatalog.length;
 
   return (
     <div className="space-y-8 pb-12 w-full max-w-7xl text-stone-900">

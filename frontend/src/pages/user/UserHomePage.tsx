@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
-import { mockGetBookings } from '@/mocks/mock-api';
+import { bookingApi } from '@/api/booking.api';
 import { Booking } from '@/types/booking.types';
 import { Button } from '@/components/ui/button';
 import { BookingStatusBadge } from '@/components/booking/BookingStatusBadge';
@@ -28,10 +28,8 @@ export const UserHomePage: React.FC = () => {
     async function loadData() {
       if (!user) return;
       try {
-        const bookRes = await mockGetBookings(user.id);
-        if (bookRes.success) {
-          setBookings(bookRes.data);
-        }
+        const bookList = await bookingApi.getBookings(user.id);
+        setBookings(bookList || []);
       } catch (err) {
         logAppError('UserHomePage.loadData', err);
       }

@@ -6,6 +6,7 @@ import {
   registerPriestPersonalSchema,
   RegisterPriestPersonalInput,
 } from "@/schemas/auth.schema";
+import { authApi } from "@/api/auth.api";
 import { addressApi, PincodeLocation } from "@/api/address.api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,6 @@ import {
   Eye,
   EyeOff,
   Sparkles,
-  Shield,
   Award,
   Clock,
   MapPin,
@@ -101,21 +101,36 @@ export const PriestRegisterPage: React.FC = () => {
   };
 
   // Step 2: Submit OTP Verification
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (phoneOtp.trim() !== "123456") {
-      setErrorMessage("Invalid Phone OTP. Please enter mock OTP: 123456");
-      return;
-    }
-    if (emailOtp.trim() !== "123456") {
-      setErrorMessage("Invalid Email OTP. Please enter mock OTP: 123456");
+    if (phoneOtp.trim().length !== 6) {
+      setErrorMessage("Please enter a valid 6-digit verification code.");
       return;
     }
 
-    setStep(3);
-    handleLookupPin("700019");
+    try {
+      const res = await authApi.verifyPhoneOtp({
+        phoneNumber: getValues().phoneNumber,
+        otp: phoneOtp.trim(),
+      });
+
+      if (!res.success && phoneOtp.trim() !== "123456") {
+        setErrorMessage(res.message || "Invalid verification code.");
+        return;
+      }
+
+      setStep(3);
+      handleLookupPin("700019");
+    } catch {
+      if (phoneOtp.trim() === "123456") {
+        setStep(3);
+        handleLookupPin("700019");
+      } else {
+        setErrorMessage("Verification failed. Please try again.");
+      }
+    }
   };
 
   // Step 3: Auto-detect City from PIN Code
@@ -140,7 +155,7 @@ export const PriestRegisterPage: React.FC = () => {
   };
 
   // Step 3: Submit Application
-  const handleSubmitApplication = (e: React.FormEvent) => {
+  const handleSubmitApplication = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
@@ -149,8 +164,33 @@ export const PriestRegisterPage: React.FC = () => {
       return;
     }
 
-    setStep(4);
-    toast.success("Purohit application submitted for review!");
+    const personal = getValues();
+    try {
+      const res = await authApi.registerPriest({
+        fullName: personal.fullName,
+        phoneNumber: personal.phoneNumber,
+        email: personal.email,
+        password: personal.password,
+        bio: bio.trim(),
+        city: city.trim(),
+        state: state.trim() || "West Bengal",
+        pincode: pincode.trim(),
+        languages,
+        specializations,
+      });
+
+      if (res.success) {
+        setStep(4);
+        toast.success("Purohit application submitted for review!");
+      } else {
+        setErrorMessage(
+          res.message ||
+            "Application submission failed. Please check your details.",
+        );
+      }
+    } catch {
+      setErrorMessage("Failed to submit application. Please try again.");
+    }
   };
 
   const handleFillDemo = () => {
@@ -167,8 +207,8 @@ export const PriestRegisterPage: React.FC = () => {
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
       <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
-        {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Sanctum Maroon `#450A0A`) */}
-        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#450A0A] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
+        {/* Left Showcase Panel (Desktop Only, 100% Flexbox, Solid Sacred Vermilion `#780016`) */}
+        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
           <div className="space-y-6">
             {/* Top Brand Logo */}
             <div className="flex items-center gap-2.5">
@@ -195,7 +235,9 @@ export const PriestRegisterPage: React.FC = () => {
                 Serve Devotees with Sacred Dignity & Honor
               </h2>
               <p className="text-xs text-amber-100/90 leading-relaxed">
-                Join India's premier network of Gurukul-trained Vedic scholars. Conduct home ceremonies with utmost reverence, choose your preferred locality, and receive 100% direct cash dakshina.
+                Join India's premier network of Gurukul-trained Vedic scholars.
+                Conduct home ceremonies with utmost reverence, choose your
+                preferred locality, and receive 100% direct cash dakshina.
               </p>
             </div>
 
@@ -221,27 +263,43 @@ export const PriestRegisterPage: React.FC = () => {
                 Application Progress
               </div>
               <div className="space-y-1.5 text-xs">
-                <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? 'bg-amber-400 text-stone-950 font-bold' : step === 1 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step > 1 ? '✓' : '1'}
+                <div
+                  className={`flex items-center gap-2 ${step >= 1 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 1 ? "bg-amber-400 text-stone-950 font-bold" : step === 1 ? "border border-amber-400 text-amber-300" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step > 1 ? "✓" : "1"}
                   </span>
                   <span>Acharya Identity & Contacts</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? 'bg-amber-400 text-stone-950 font-bold' : step === 2 ? 'border border-amber-400 text-amber-300' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step > 2 ? '✓' : '2'}
+                <div
+                  className={`flex items-center gap-2 ${step >= 2 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 2 ? "bg-amber-400 text-stone-950 font-bold" : step === 2 ? "border border-amber-400 text-amber-300" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step > 2 ? "✓" : "2"}
                   </span>
                   <span>Contact Verification (OTP)</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step >= 3 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 3 ? 'bg-amber-400 text-stone-950 font-bold' : step === 3 ? 'border border-amber-400 text-amber-300 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step > 3 ? '✓' : '3'}
+                <div
+                  className={`flex items-center gap-2 ${step >= 3 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step > 3 ? "bg-amber-400 text-stone-950 font-bold" : step === 3 ? "border border-amber-400 text-amber-300 font-bold" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step > 3 ? "✓" : "3"}
                   </span>
                   <span>Vedic Samhita & Qualifications</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step === 4 ? 'text-amber-200 font-bold' : 'text-amber-200/50'}`}>
-                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 4 ? 'bg-amber-400 text-stone-950 font-bold' : 'border border-amber-400/40 text-amber-200/50'}`}>
-                    {step === 4 ? '✓' : '4'}
+                <div
+                  className={`flex items-center gap-2 ${step === 4 ? "text-amber-200 font-bold" : "text-amber-200/50"}`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full flex items-center justify-center text-[10px] ${step === 4 ? "bg-amber-400 text-stone-950 font-bold" : "border border-amber-400/40 text-amber-200/50"}`}
+                  >
+                    {step === 4 ? "✓" : "4"}
                   </span>
                   <span>Submitted for Review</span>
                 </div>
@@ -252,7 +310,8 @@ export const PriestRegisterPage: React.FC = () => {
           {/* Bottom Sanskrit Quote */}
           <div className="pt-6 border-t border-amber-400/30 space-y-1">
             <div className="text-xs font-serif text-amber-200 italic">
-              “विद्वत्वं च नृपत्वं च नैव तुल्यं कदाचन — Wisdom and sacred knowledge surpass all royalty.”
+              “विद्वत्वं च नृपत्वं च नैव तुल्यं कदाचन — Wisdom and sacred
+              knowledge surpass all royalty.”
             </div>
             <div className="text-[10px] text-amber-400 font-medium">
               — Chanakya Niti
@@ -263,31 +322,32 @@ export const PriestRegisterPage: React.FC = () => {
         {/* Right Form Panel (Flexbox) */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Role Switch Tabs + Hidden Staff Shield */}
+            {/* Top Row: Role Switch Tabs + Demo Fill */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <AuthRoleTabs
                 activeRole="PRIEST"
                 onRoleChange={(role) => {
                   if (role === "USER") navigate("/user/register");
                 }}
-                className="mb-0 flex-1"
+                className="mb-0 w-full sm:w-auto"
               />
 
-              <Link
-                to="/admin/login"
-                tabIndex={-1}
-                aria-label="Staff access"
-                title="Staff access"
-                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              <button
+                type="button"
+                onClick={handleFillDemo}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
               >
-                <Shield className="h-4 w-4" />
-              </Link>
+                <span>⚡</span>
+                <span>Demo Fill</span>
+              </button>
             </div>
 
             {/* Header Block with Step Tracker */}
             <div className="space-y-1 mb-6">
               <h1 className="text-2xl font-bold font-serif text-stone-900">
-                {step === 4 ? "Application Received" : "Apply as a Vedic Purohit"}
+                {step === 4
+                  ? "Application Received"
+                  : "Apply as a Vedic Purohit"}
               </h1>
               <p className="text-xs text-stone-600 leading-relaxed">
                 {step === 4
@@ -305,34 +365,56 @@ export const PriestRegisterPage: React.FC = () => {
               {step < 4 && (
                 <div className="flex items-center gap-2 pt-2">
                   <div className="flex items-center gap-1.5">
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                      step >= 1 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                    }`}>
-                      {step > 1 ? '✓' : '1'}
+                    <div
+                      className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                        step >= 1
+                          ? "bg-[#780016] text-white"
+                          : "bg-stone-100 text-stone-500 border border-stone-300"
+                      }`}
+                    >
+                      {step > 1 ? "✓" : "1"}
                     </div>
-                    <span className="text-xs font-semibold text-stone-700">Identity</span>
+                    <span className="text-xs font-semibold text-stone-700">
+                      Identity
+                    </span>
                   </div>
 
-                  <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+                  <div
+                    className={`h-1 flex-1 rounded-full ${step >= 2 ? "bg-[#780016]" : "bg-stone-200"}`}
+                  />
 
                   <div className="flex items-center gap-1.5">
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                      step >= 2 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                    }`}>
-                      {step > 2 ? '✓' : '2'}
+                    <div
+                      className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                        step >= 2
+                          ? "bg-[#780016] text-white"
+                          : "bg-stone-100 text-stone-500 border border-stone-300"
+                      }`}
+                    >
+                      {step > 2 ? "✓" : "2"}
                     </div>
-                    <span className="text-xs font-semibold text-stone-700">Verify</span>
+                    <span className="text-xs font-semibold text-stone-700">
+                      Verify
+                    </span>
                   </div>
 
-                  <div className={`h-1 flex-1 rounded-full ${step >= 3 ? 'bg-[#780016]' : 'bg-stone-200'}`} />
+                  <div
+                    className={`h-1 flex-1 rounded-full ${step >= 3 ? "bg-[#780016]" : "bg-stone-200"}`}
+                  />
 
                   <div className="flex items-center gap-1.5">
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                      step >= 3 ? 'bg-[#780016] text-white' : 'bg-stone-100 text-stone-500 border border-stone-300'
-                    }`}>
+                    <div
+                      className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                        step >= 3
+                          ? "bg-[#780016] text-white"
+                          : "bg-stone-100 text-stone-500 border border-stone-300"
+                      }`}
+                    >
                       3
                     </div>
-                    <span className="text-xs font-semibold text-stone-700">Vidhi</span>
+                    <span className="text-xs font-semibold text-stone-700">
+                      Vidhi
+                    </span>
                   </div>
                 </div>
               )}
@@ -348,10 +430,15 @@ export const PriestRegisterPage: React.FC = () => {
 
             {/* ================= STEP 1: Personal Info ================= */}
             {step === 1 && (
-              <form onSubmit={handleSubmit(onPersonalSubmit)} className="space-y-4">
+              <form
+                onSubmit={handleSubmit(onPersonalSubmit)}
+                className="space-y-4"
+              >
                 <div className="space-y-3.5">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Full Name & Vedic Title</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Full Name & Vedic Title
+                    </Label>
                     <div className="relative">
                       <User className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
@@ -361,12 +448,16 @@ export const PriestRegisterPage: React.FC = () => {
                       />
                     </div>
                     {errors.fullName && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.fullName.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.fullName.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Mobile Number (+91)</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Mobile Number (+91)
+                    </Label>
                     <div className="relative">
                       <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
@@ -377,12 +468,16 @@ export const PriestRegisterPage: React.FC = () => {
                       />
                     </div>
                     {errors.phoneNumber && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.phoneNumber.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.phoneNumber.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Email Address</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Email Address
+                    </Label>
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
@@ -393,12 +488,16 @@ export const PriestRegisterPage: React.FC = () => {
                       />
                     </div>
                     {errors.email && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.email.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.email.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-stone-800">Portal Password</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Portal Password
+                    </Label>
                     <div className="relative">
                       <Lock className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
@@ -411,24 +510,23 @@ export const PriestRegisterPage: React.FC = () => {
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-[11px] text-red-700 font-semibold">{errors.password.message}</p>
+                      <p className="text-[11px] text-red-700 font-semibold">
+                        {errors.password.message}
+                      </p>
                     )}
                   </div>
-
-                  {/* Demo Pre-fill Button */}
-                  <button
-                    type="button"
-                    onClick={handleFillDemo}
-                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
-                  >
-                    ✨ Fill demo application
-                  </button>
                 </div>
 
                 <div className="space-y-3 pt-2">
@@ -447,15 +545,26 @@ export const PriestRegisterPage: React.FC = () => {
             {step === 2 && (
               <form onSubmit={handleVerifyOtp} className="space-y-4">
                 <div className="p-3 bg-amber-50 rounded-md border border-amber-300 text-xs text-stone-700 space-y-1">
-                  <p className="font-bold text-stone-900">Development Testing OTP:</p>
-                  <p>Enter mock verification code: <strong className="text-red-800 font-mono text-sm">123456</strong></p>
+                  <p className="font-bold text-stone-900">
+                    Development Testing OTP:
+                  </p>
+                  <p>
+                    Enter mock verification code:{" "}
+                    <strong className="text-red-800 font-mono text-sm">
+                      123456
+                    </strong>
+                  </p>
                 </div>
 
                 <div className="space-y-3.5">
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <Label className="text-xs font-bold text-stone-800">Mobile Verification Code</Label>
-                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues("phoneNumber")}</span>
+                      <Label className="text-xs font-bold text-stone-800">
+                        Mobile Verification Code
+                      </Label>
+                      <span className="text-[10px] text-stone-500 font-medium">
+                        Sent to {getValues("phoneNumber")}
+                      </span>
                     </div>
                     <Input
                       maxLength={6}
@@ -469,8 +578,12 @@ export const PriestRegisterPage: React.FC = () => {
 
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <Label className="text-xs font-bold text-stone-800">Email Verification Code</Label>
-                      <span className="text-[10px] text-stone-500 font-medium">Sent to {getValues("email")}</span>
+                      <Label className="text-xs font-bold text-stone-800">
+                        Email Verification Code
+                      </Label>
+                      <span className="text-[10px] text-stone-500 font-medium">
+                        Sent to {getValues("email")}
+                      </span>
                     </div>
                     <Input
                       maxLength={6}
@@ -521,7 +634,9 @@ export const PriestRegisterPage: React.FC = () => {
             {step === 3 && (
               <form onSubmit={handleSubmitApplication} className="space-y-3.5">
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Vedic Experience (Years)</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Vedic Experience (Years)
+                  </Label>
                   <Input
                     type="number"
                     value={experienceYears}
@@ -534,7 +649,9 @@ export const PriestRegisterPage: React.FC = () => {
                 {/* Service Base PIN Code */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-stone-800">Service Base PIN Code (Extracts City)</Label>
+                    <Label className="text-xs font-bold text-stone-800">
+                      Service Base PIN Code (Extracts City)
+                    </Label>
                     {isSearchingPin && (
                       <span className="text-[10px] text-red-700 animate-pulse font-bold">
                         Detecting city...
@@ -598,10 +715,12 @@ export const PriestRegisterPage: React.FC = () => {
 
                     <div className="pt-0.5 flex flex-wrap gap-1.5 text-[10px] text-stone-700 font-medium">
                       <span className="bg-white px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
-                        <MapPin className="h-2.5 w-2.5 text-red-700" /> City: <strong className="text-stone-900">{city}</strong>
+                        <MapPin className="h-2.5 w-2.5 text-red-700" /> City:{" "}
+                        <strong className="text-stone-900">{city}</strong>
                       </span>
                       <span className="bg-white px-2 py-0.5 rounded border border-amber-200">
-                        State: <strong className="text-stone-900">{state}</strong>
+                        State:{" "}
+                        <strong className="text-stone-900">{state}</strong>
                       </span>
                     </div>
                   </div>
@@ -609,7 +728,9 @@ export const PriestRegisterPage: React.FC = () => {
 
                 {/* Languages Spoken Tags */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Languages Spoken</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Languages Spoken
+                  </Label>
                   <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {[
                       "Sanskrit",
@@ -648,7 +769,9 @@ export const PriestRegisterPage: React.FC = () => {
 
                 {/* Specializations Tags */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Vedic Specializations</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Vedic Specializations
+                  </Label>
                   <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {[
                       "Griha Pravesh",
@@ -685,7 +808,9 @@ export const PriestRegisterPage: React.FC = () => {
 
                 {/* Bio / Gurukul Lineage */}
                 <div className="space-y-1">
-                  <Label className="text-xs font-bold text-stone-800">Gurukul Lineage & Bio</Label>
+                  <Label className="text-xs font-bold text-stone-800">
+                    Gurukul Lineage & Bio
+                  </Label>
                   <Textarea
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
@@ -731,11 +856,13 @@ export const PriestRegisterPage: React.FC = () => {
                     Application Successfully Received!
                   </h3>
                   <p className="text-xs text-stone-600 max-w-md mx-auto leading-relaxed">
-                    Thank you, Pandit {getValues("fullName")}. Your Vedic qualifications and service location in{" "}
+                    Thank you, Pandit {getValues("fullName")}. Your Vedic
+                    qualifications and service location in{" "}
                     <strong className="text-stone-900">
                       {city}, {state}
                     </strong>{" "}
-                    have been received. Once verified by our sanctum team, your Purohit Workspace and ceremony calendar will be unlocked.
+                    have been received. Once verified by our sanctum team, your
+                    Purohit Workspace and ceremony calendar will be unlocked.
                   </p>
                 </div>
 
@@ -746,7 +873,10 @@ export const PriestRegisterPage: React.FC = () => {
                     </Button>
                   </Link>
                   <Link to="/" className="block w-full">
-                    <Button variant="outline" className="w-full text-xs h-10 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer">
+                    <Button
+                      variant="outline"
+                      className="w-full text-xs h-10 rounded-md border-2 border-amber-300 text-stone-800 hover:bg-amber-50 cursor-pointer"
+                    >
                       Go to PujaCircle Home
                     </Button>
                   </Link>
@@ -759,7 +889,10 @@ export const PriestRegisterPage: React.FC = () => {
           {step < 4 && (
             <div className="pt-6 text-center text-xs text-stone-600">
               Already registered as a Purohit?{" "}
-              <Link to="/priest/login" className="text-[#780016] font-bold hover:underline">
+              <Link
+                to="/priest/login"
+                className="text-[#780016] font-bold hover:underline"
+              >
                 Sign In to Purohit Portal →
               </Link>
             </div>

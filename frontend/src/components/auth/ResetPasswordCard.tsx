@@ -69,7 +69,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
       <div className="w-full max-w-4xl rounded-xl border-2 border-amber-300 bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row items-stretch">
         {/* Left Showcase Panel */}
-        <div className={`hidden lg:flex flex-col justify-between w-5/12 ${isPriest ? 'bg-[#450A0A]' : 'bg-[#780016]'} text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative`}>
+        <div className="hidden lg:flex flex-col justify-between w-5/12 bg-[#780016] text-white p-8 sm:p-10 border-r-2 border-amber-400/40 relative">
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
               <div className="h-10 w-10 rounded-md bg-amber-400 text-stone-950 flex items-center justify-center font-serif font-black text-2xl shadow-md select-none">
@@ -127,6 +127,23 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
+            {/* Top Row: Role Indicator Badge + Demo Fill */}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
+                <span className="font-serif font-black">{isPriest ? 'ॐ' : '👤'}</span>
+                <span>{isPriest ? 'Purohit Passkey Reset' : 'Devotee Passkey Reset'}</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleFillDemo}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
+              >
+                <span>⚡</span>
+                <span>Demo Fill</span>
+              </button>
+            </div>
+
             <div className="space-y-1 mb-6">
               <h1 className="text-2xl font-bold font-serif text-stone-900">
                 Set New Password
@@ -210,21 +227,10 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                 )}
               </div>
 
-              <div className="flex justify-end pt-1">
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className="text-xs text-amber-700 hover:text-amber-800 font-bold cursor-pointer hover:underline flex items-center gap-1"
-                >
-                  <Sparkles className="h-3 w-3" />
-                  <span>Fill Demo Password</span>
-                </button>
-              </div>
-
               <div className="space-y-3 pt-2">
                 <Button
                   type="submit"
-                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-md shadow-md cursor-pointer gap-2`}
+                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
                 >
                   <span>Update Password & Sign In</span>
                   <ArrowRight className="h-4 w-4" />

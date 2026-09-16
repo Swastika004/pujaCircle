@@ -29,55 +29,41 @@ export const AuthRoleTabs: React.FC<AuthRoleTabsProps> = ({
   return (
     <div
       className={cn(
-        'w-full bg-white p-1.5 rounded-lg border-2 border-amber-300 shadow-sm mb-4',
+        'inline-flex p-1 rounded-md bg-amber-100/70 border border-amber-300 w-full sm:w-auto',
         className
       )}
     >
-      <div className="flex items-center gap-2 w-full">
-        {/* 1. Devotee Tab */}
-        <button
-          type="button"
-          onClick={() => triggerChange('USER')}
-          className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
-            activeRole === 'USER'
-              ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
-              : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'
-          )}
-          aria-pressed={activeRole === 'USER'}
-        >
-          <User
-            className={cn(
-              'h-4 w-4 shrink-0 transition-transform duration-200',
-              activeRole === 'USER' ? 'text-amber-300 scale-105' : 'text-stone-500'
-            )}
-          />
-          <span>Devotee</span>
-        </button>
+      {/* 1. Devotee Tab */}
+      <button
+        type="button"
+        onClick={() => triggerChange('USER')}
+        className={cn(
+          'flex-1 sm:flex-initial px-5 py-2 rounded-sm text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer select-none',
+          activeRole === 'USER'
+            ? 'bg-white text-[#780016] shadow-xs'
+            : 'text-stone-700 hover:text-stone-950'
+        )}
+        aria-pressed={activeRole === 'USER'}
+      >
+        <User className="h-3.5 w-3.5" />
+        <span>Devotee</span>
+      </button>
 
-        {/* 2. Priest Tab */}
-        <button
-          type="button"
-          onClick={() => triggerChange('PRIEST')}
-          className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-md text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-[0.98]',
-            activeRole === 'PRIEST'
-              ? 'bg-[#780016] text-white border-2 border-amber-400 shadow-sm'
-              : 'text-stone-700 hover:text-stone-950 hover:bg-amber-50/60'
-          )}
-          aria-pressed={activeRole === 'PRIEST'}
-        >
-          <span
-            className={cn(
-              'text-sm font-serif font-black leading-none shrink-0 transition-transform duration-200',
-              activeRole === 'PRIEST' ? 'text-amber-300 scale-105' : 'text-amber-600'
-            )}
-          >
-            ॐ
-          </span>
-          <span>Vedic Purohit</span>
-        </button>
-      </div>
+      {/* 2. Priest Tab */}
+      <button
+        type="button"
+        onClick={() => triggerChange('PRIEST')}
+        className={cn(
+          'flex-1 sm:flex-initial px-5 py-2 rounded-sm text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer select-none',
+          activeRole === 'PRIEST'
+            ? 'bg-white text-[#780016] shadow-xs'
+            : 'text-stone-700 hover:text-stone-950'
+        )}
+        aria-pressed={activeRole === 'PRIEST'}
+      >
+        <span className="text-amber-800 font-serif font-black text-sm">ॐ</span>
+        <span>Vedic Purohit</span>
+      </button>
     </div>
   );
 };

@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "@/store/auth.store";
-import {
-  mockGetPriestById,
-  mockUpdatePriestProfile,
-  mockGetPriestServices,
-  mockLookupPincode,
-  resolvePriestId,
-} from "@/mocks/mock-api";
+import { priestApi } from "@/api/priest.api";
 import { Priest, PriestService } from "@/types/priest.types";
 import { updatePriestProfileSchema } from "@/schemas/priest.schema";
 import { Button } from "@/components/ui/button";
@@ -63,8 +56,7 @@ const POPULAR_LANGUAGES = [
  * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
  */
 export const PriestProfilePage: React.FC = () => {
-  const { user } = useAuthStore();
-  const priestId = resolvePriestId(user);
+  const priestId = priestApi.resolveCurrentPriestId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -92,13 +84,12 @@ export const PriestProfilePage: React.FC = () => {
   const loadProfile = async () => {
     setIsLoading(true);
     try {
-      const [priestRes, srvRes] = await Promise.all([
-        mockGetPriestById(priestId),
-        mockGetPriestServices(priestId),
+      const [p, srvList] = await Promise.all([
+        priestApi.getPriestById(priestId),
+        priestApi.getPriestServices(priestId),
       ]);
 
-      if (priestRes.success && priestRes.data) {
-        const p = priestRes.data;
+      if (p) {
         setPriest(p);
         setFullName(p.fullName || "");
         setExperienceYears(p.experienceYears || 0);
@@ -113,13 +104,9 @@ export const PriestProfilePage: React.FC = () => {
         else if (p.city === "Bengaluru") setPincode("560038");
         else if (p.city === "Kolkata") setPincode("700019");
         else if (p.city === "Gurugram") setPincode("122002");
-      } else {
-        toast.error(priestRes.message || "Failed to load priest profile.");
       }
 
-      if (srvRes.success && srvRes.data) {
-        setServices(srvRes.data);
-      }
+      setServices(srvList || []);
     } catch {
       toast.error("An error occurred while loading your profile.");
     } finally {
@@ -138,7 +125,7 @@ export const PriestProfilePage: React.FC = () => {
     if (clean.length === 6) {
       setIsSearchingPin(true);
       try {
-        const res = await mockLookupPincode(clean);
+        const res = await priestApi.lookupPincode(clean);
         if (res && res.locations && res.locations.length > 0) {
           const loc = res.locations[0];
           setCity(loc.city || loc.district);
@@ -254,7 +241,7 @@ export const PriestProfilePage: React.FC = () => {
 
     setIsSaving(true);
     try {
-      const res = await mockUpdatePriestProfile(priestId, parseResult.data);
+      const res = await priestApi.updatePriestProfile(priestId, parseResult.data);
 
       if (res.success && res.data) {
         setPriest(res.data);

@@ -5,6 +5,7 @@ import { authApi } from '@/api/auth.api';
 
 interface AuthState {
   user: AuthUser | null;
+  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -13,6 +14,7 @@ interface AuthState {
   login: (credentials: LoginCredentials) => Promise<boolean>;
   logout: () => void;
   setUser: (user: AuthUser | null) => void;
+  setToken: (token: string | null) => void;
   clearError: () => void;
 }
 
@@ -20,6 +22,7 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -32,7 +35,9 @@ export const useAuthStore = create<AuthState>()(
 
           if (response.success && response.data?.user) {
             const user = response.data.user;
-            set({ user, isAuthenticated: true, isLoading: false, error: null });
+            const token = response.data.token || null;
+            if (token) localStorage.setItem('pujacircle_token', token);
+            set({ user, token, isAuthenticated: true, isLoading: false, error: null });
             return true;
           } else {
             set({ error: response.message || 'Login failed', isLoading: false });
@@ -45,11 +50,18 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        set({ user: null, isAuthenticated: false, error: null });
+        localStorage.removeItem('pujacircle_token');
+        set({ user: null, token: null, isAuthenticated: false, error: null });
       },
 
       setUser: (user: AuthUser | null) => {
         set({ user, isAuthenticated: user !== null });
+      },
+
+      setToken: (token: string | null) => {
+        if (token) localStorage.setItem('pujacircle_token', token);
+        else localStorage.removeItem('pujacircle_token');
+        set({ token });
       },
 
       clearError: () => set({ error: null }),
@@ -59,6 +71,7 @@ export const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     }

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  mockAdminGetUsers,
-  mockAdminBanUser,
-  mockAdminUnbanUser,
-} from "@/mocks/mock-api";
+import { adminApi } from "@/api/admin.api";
 import {
   UserManagementTable,
   DevoteeRecord,
@@ -37,24 +33,22 @@ export const AdminUsersPage: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await mockAdminGetUsers();
-      if (res.success) {
-        setUsers(
-          res.data.map((u: any) => ({
-            id: u.id,
-            name: u.name,
-            email: u.email,
-            phoneNumber: u.phoneNumber,
-            status:
-              u.accountStatus === "BANNED" || u.status === "BANNED"
-                ? "SUSPENDED"
-                : "ACTIVE",
-            bookingCount: u.bookingCount || 0,
-            createdAt: u.createdAt || "2026-01-15",
-            banReason: u.banReason,
-          })),
-        );
-      }
+      const userList = await adminApi.getAllUsers();
+      setUsers(
+        (userList || []).map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          phoneNumber: u.phoneNumber,
+          status:
+            u.accountStatus === "BANNED" || u.status === "BANNED"
+              ? "SUSPENDED"
+              : "ACTIVE",
+          bookingCount: u.bookingCount || 0,
+          createdAt: u.createdAt || "2026-01-15",
+          banReason: u.banReason,
+        })),
+      );
     } catch {
       toast.error("Failed to load devotee directory.");
     }
@@ -66,7 +60,7 @@ export const AdminUsersPage: React.FC = () => {
 
   const handleSuspendConfirm = async (reason: string) => {
     if (!suspendTarget) return;
-    const res = await mockAdminBanUser(suspendTarget.id, reason);
+    const res = await adminApi.updateUserStatus(suspendTarget.id, "BANNED", reason);
     if (res.success) {
       toast.success(`Account for ${suspendTarget.name} suspended.`);
       fetchUsers();
@@ -76,7 +70,7 @@ export const AdminUsersPage: React.FC = () => {
   };
 
   const handleReactivate = async (userId: string, name: string) => {
-    const res = await mockAdminUnbanUser(userId);
+    const res = await adminApi.updateUserStatus(userId, "ACTIVE");
     if (res.success) {
       toast.success(`Account for ${name} reactivated.`);
       fetchUsers();

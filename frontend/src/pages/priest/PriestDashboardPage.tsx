@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
-import {
-  mockGetBookings,
-  mockGetPriestServices,
-  mockGetPriestSlots,
-  mockGetPriestById,
-  resolvePriestId,
-} from '@/mocks/mock-api';
+import { bookingApi } from '@/api/booking.api';
+import { priestApi } from '@/api/priest.api';
 import { Booking } from '@/types/booking.types';
 import { Priest } from '@/types/priest.types';
 import { StatCard } from '@/components/common/StatCard';
@@ -27,7 +22,7 @@ import {
 // Action queues and decline dialog removed (managed under /priest/bookings).
 export const PriestDashboardPage: React.FC = () => {
   const { user } = useAuthStore();
-  const priestId = resolvePriestId(user);
+  const priestId = priestApi.resolveCurrentPriestId();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeServicesCount, setActiveServicesCount] = useState(0);
@@ -36,17 +31,17 @@ export const PriestDashboardPage: React.FC = () => {
 
   useEffect(() => {
     async function fetchDashboardData() {
-      const [bookRes, srvRes, slotRes, profileRes] = await Promise.all([
-        mockGetBookings(undefined, priestId),
-        mockGetPriestServices(priestId),
-        mockGetPriestSlots(priestId),
-        mockGetPriestById(priestId),
+      const [bookingsData, servicesData, slotsData, profileData] = await Promise.all([
+        bookingApi.getPriestBookings(priestId),
+        priestApi.getPriestServices(priestId),
+        priestApi.getPriestSlots(priestId),
+        priestApi.getPriestById(priestId),
       ]);
 
-      if (bookRes.success) setBookings(bookRes.data);
-      if (srvRes.success) setActiveServicesCount(srvRes.data.filter((s) => s.isActive).length);
-      if (slotRes.success) setAvailableSlotsCount(slotRes.data.filter((s) => s.status === 'AVAILABLE').length);
-      if (profileRes.success && profileRes.data) setPriestProfile(profileRes.data);
+      setBookings(bookingsData);
+      setActiveServicesCount(servicesData.filter((s) => s.isActive).length);
+      setAvailableSlotsCount(slotsData.filter((s) => s.status === 'AVAILABLE').length);
+      if (profileData) setPriestProfile(profileData);
     }
 
     fetchDashboardData();

@@ -195,7 +195,7 @@ export const Navbar: React.FC = () => {
             </DropdownMenu>
           ) : (
             <div className="hidden sm:flex items-center">
-              <Link to="/login">
+              <Link to="/user/login">
                 <Button
                   size="sm"
                   className="text-xs font-bold bg-[#991B1B] hover:bg-[#780016] text-white shadow-xs active:scale-[0.98] transition-all rounded-md px-5 h-9 border border-amber-400/60 cursor-pointer"
@@ -343,7 +343,7 @@ export const Navbar: React.FC = () => {
                     </Button>
                   </div>
                 ) : (
-                  <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full">
+                  <Link to="/user/login" onClick={() => setMobileMenuOpen(false)} className="block w-full">
                     <Button className="w-full bg-[#991B1B] hover:bg-[#780016] text-white font-bold text-xs h-10 rounded-md shadow-sm">
                       Login
                     </Button>

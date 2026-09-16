@@ -12,7 +12,6 @@ import {
   ArrowRight,
   AlertCircle,
   Sparkles,
-  Shield,
   CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -59,7 +58,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
       demoEmail: 'priest@example.demo',
       login: '/priest/login',
       reset: '/priest/reset-password',
-      panelBg: 'bg-[#450A0A]',
+      panelBg: 'bg-[#780016]',
       quote: 'विद्या ददाति विनयं विनयाद्याति पात्रताम् — True knowledge bestows humility and spiritual worth.',
       source: 'Hitopadesha',
     },
@@ -168,18 +167,17 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
               <AuthRoleTabs
                 activeRole={activeRole}
                 onRoleChange={handleRoleChange}
-                className="mb-0 flex-1"
+                className="mb-0 w-full sm:w-auto"
               />
 
-              <Link
-                to="/admin/login"
-                tabIndex={-1}
-                aria-label="Staff access"
-                title="Staff access"
-                className="text-stone-300 hover:text-stone-600 transition-colors p-1.5 rounded-md hover:bg-stone-100 shrink-0"
+              <button
+                type="button"
+                onClick={handleFillDemo}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
               >
-                <Shield className="h-4 w-4" />
-              </Link>
+                <span>⚡</span>
+                <span>Demo Fill</span>
+              </button>
             </div>
 
             <div className="space-y-1 mb-6">
@@ -215,23 +213,11 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-[11px] text-stone-500 font-mono">Mock: {roleConfig.demoEmail}</span>
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className="text-xs text-amber-700 hover:text-amber-800 font-bold cursor-pointer hover:underline flex items-center gap-1"
-                >
-                  <Sparkles className="h-3 w-3" />
-                  <span>Fill Demo Email</span>
-                </button>
-              </div>
-
               <div className="space-y-3 pt-2">
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full text-xs font-bold ${isPriest ? 'bg-[#450A0A] hover:bg-[#300505]' : 'bg-[#780016] hover:bg-[#600012]'} text-white h-11 rounded-md shadow-md cursor-pointer gap-2`}
+                  className="w-full text-xs font-bold bg-[#780016] hover:bg-[#5a0010] text-white h-11 rounded-md shadow-md cursor-pointer gap-2"
                 >
                   {isLoading ? 'Sending Reset Code...' : 'Send Recovery Code'}
                   <ArrowRight className="h-4 w-4" />

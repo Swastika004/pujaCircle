@@ -11,7 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { PujaCatalogEntry } from "@/types/catalog.types";
-import { mockDb } from "@/mocks/data";
+import { catalogApi } from "@/api/catalog.api";
 
 const CATEGORIES = [
   { key: "ALL", label: "All Ceremonies" },
@@ -23,13 +23,19 @@ const CATEGORIES = [
 ];
 
 export const FeaturedCeremoniesCarousel: React.FC = () => {
+  const [allPujas, setAllPujas] = useState<PujaCatalogEntry[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Read catalog dynamically from mockDb so any admin additions/edits reflect immediately
-  const allPujas: PujaCatalogEntry[] = mockDb.pujaCatalog;
+  useEffect(() => {
+    async function fetchCatalog() {
+      const data = await catalogApi.getCatalog();
+      setAllPujas(data || []);
+    }
+    fetchCatalog();
+  }, []);
 
   const filteredPujas = allPujas.filter(
     (puja) => selectedCategory === "ALL" || puja.category === selectedCategory,

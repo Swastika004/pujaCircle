@@ -26,7 +26,40 @@ export interface AuthResponse {
   message: string;
   data?: {
     user: AuthUser;
+    token?: string;
   };
+}
+
+export interface RegisterUserRequest {
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  password?: string;
+  address?: {
+    houseNo: string;
+    houseBuilding?: string;
+    street?: string;
+    locality?: string;
+    villageTown?: string;
+    city: string;
+    district: string;
+    state: string;
+    pincode: string;
+  };
+}
+
+export interface RegisterPriestRequest {
+  fullName: string;
+  phoneNumber: string;
+  email?: string;
+  password?: string;
+  experienceYears?: number;
+  bio?: string;
+  languages?: string[];
+  specializations?: string[];
+  city?: string;
+  state?: string;
+  pincode?: string;
 }
 
 export interface PhoneOtpRequest {

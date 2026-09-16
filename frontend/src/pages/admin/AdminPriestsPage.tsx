@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  mockGetPriests,
-  mockAdminApprovePriest,
-  mockAdminRejectPriest,
-  mockAdminBanPriest,
-  mockAdminUnbanPriest,
-} from "@/mocks/mock-api";
+import { adminApi } from "@/api/admin.api";
 import { Priest, PriestApprovalStatus } from "@/types/priest.types";
 import { PriestApprovalTable } from "@/components/admin/PriestApprovalTable";
 import {
@@ -40,10 +34,8 @@ export const AdminPriestsPage: React.FC = () => {
 
   const fetchPriests = async () => {
     try {
-      const res = await mockGetPriests({ status: "ALL" });
-      if (res.success) {
-        setPriests(res.data);
-      }
+      const data = await adminApi.getAllPriests({ status: "ALL" });
+      setPriests(data || []);
     } catch {
       toast.error("Failed to load priest roster.");
     }
@@ -56,7 +48,7 @@ export const AdminPriestsPage: React.FC = () => {
   const handleApprove = async (priestId: string) => {
     setIsProcessing(true);
     try {
-      const res = await mockAdminApprovePriest(priestId);
+      const res = await adminApi.approvePriest(priestId);
       if (res.success) {
         toast.success(res.message);
         fetchPriests();
@@ -70,7 +62,7 @@ export const AdminPriestsPage: React.FC = () => {
 
   const handleRejectConfirm = async (reason: string) => {
     if (!rejectTarget) return;
-    const res = await mockAdminRejectPriest(rejectTarget.id, reason);
+    const res = await adminApi.rejectPriest(rejectTarget.id, reason);
     if (res.success) {
       toast.success(res.message);
       fetchPriests();
@@ -81,7 +73,7 @@ export const AdminPriestsPage: React.FC = () => {
 
   const handleBanConfirm = async (reason: string) => {
     if (!banTarget) return;
-    const res = await mockAdminBanPriest(banTarget.id, reason);
+    const res = await adminApi.banPriest(banTarget.id, reason);
     if (res.success) {
       toast.success(res.message);
       fetchPriests();
@@ -91,7 +83,7 @@ export const AdminPriestsPage: React.FC = () => {
   };
 
   const handleUnban = async (priestId: string) => {
-    const res = await mockAdminUnbanPriest(priestId);
+    const res = await adminApi.reactivatePriest(priestId);
     if (res.success) {
       toast.success(res.message);
       fetchPriests();

@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
-import {
-  mockGetAddresses,
-  mockGetBookings,
-  mockUpdateUserProfile,
-  mockResetPassword,
-} from "@/mocks/mock-api";
-import { mockDb } from "@/mocks/data";
+import { userApi } from "@/api/user.api";
+import { addressApi } from "@/api/address.api";
+import { bookingApi } from "@/api/booking.api";
 import {
   updateUserProfileSchema,
   changePasswordSchema,
@@ -56,8 +52,6 @@ export const ProfilePage: React.FC = () => {
   const { user, setUser } = useAuthStore();
 
   const devoteeId = user?.id || "user-devotee-1";
-  const dbUser =
-    mockDb.users.find((u) => u.id === devoteeId) || mockDb.users[0];
 
   const [addressCount, setAddressCount] = useState<number>(0);
   const [bookingCount, setBookingCount] = useState<number>(0);
@@ -70,13 +64,12 @@ export const ProfilePage: React.FC = () => {
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [fullName, setFullName] = useState<string>(
-    user?.name || dbUser?.name || "Devotee",
+    user?.name || "Devotee",
   );
   const [isSavingProfile, setIsSavingProfile] = useState<boolean>(false);
 
-  const email = user?.email || dbUser?.email || "devotee@pujacircle.com";
-  const phoneNumber =
-    user?.phoneNumber || dbUser?.phoneNumber || "+91 9876543210";
+  const email = user?.email || "devotee@pujacircle.com";
+  const phoneNumber = user?.phoneNumber || "+91 9876543210";
 
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
@@ -92,20 +85,20 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     async function loadDevoteeStats() {
       try {
-        const [addrRes, bookRes] = await Promise.all([
-          mockGetAddresses(devoteeId),
-          mockGetBookings(devoteeId),
+        const [addrList, bookList] = await Promise.all([
+          addressApi.getAddresses(devoteeId),
+          bookingApi.getBookings(devoteeId),
         ]);
-        if (addrRes.success) setAddressCount(addrRes.data.length);
-        if (bookRes.success) setBookingCount(bookRes.data.length);
+        setAddressCount(addrList ? addrList.length : 0);
+        setBookingCount(bookList ? bookList.length : 0);
       } catch {
-        setAddressCount(dbUser?.hasAddress ? 1 : 0);
-        setBookingCount(dbUser?.bookingCount || 0);
+        setAddressCount(0);
+        setBookingCount(0);
       }
     }
 
     loadDevoteeStats();
-  }, [devoteeId, dbUser]);
+  }, [devoteeId]);
 
   const initials =
     fullName
@@ -116,8 +109,8 @@ export const ProfilePage: React.FC = () => {
       .toUpperCase()
       .slice(0, 2) || "DV";
 
-  const memberSince = dbUser?.createdAt
-    ? new Date(dbUser.createdAt).toLocaleDateString("en-US", {
+  const memberSince = (user as any)?.createdAt
+    ? new Date((user as any).createdAt).toLocaleDateString("en-US", {
         month: "long",
         year: "numeric",
       })
@@ -173,10 +166,13 @@ export const ProfilePage: React.FC = () => {
 
     setIsSavingProfile(true);
     try {
-      const res = await mockUpdateUserProfile(devoteeId, parseResult.data);
+      const res = await userApi.updateProfile(devoteeId, { name: parseResult.data.fullName });
 
       if (res.success && res.data) {
-        setUser(res.data);
+        setUser({
+          ...user!,
+          name: res.data.name,
+        });
         setIsEditing(false);
         toast.success("Your profile name has been updated successfully!");
       } else {
@@ -190,7 +186,7 @@ export const ProfilePage: React.FC = () => {
   };
 
   const handleCancelEdit = () => {
-    setFullName(user?.name || dbUser?.name || "");
+    setFullName(user?.name || "");
     setIsEditing(false);
   };
 
@@ -212,16 +208,13 @@ export const ProfilePage: React.FC = () => {
 
     setIsUpdatingPassword(true);
     try {
-      const res = await mockResetPassword({
-        otp: "123456",
+      const res = await userApi.changePassword({
+        currentPassword: parseResult.data.currentPassword,
         newPassword: parseResult.data.newPassword,
         confirmPassword: parseResult.data.confirmPassword,
       });
 
       if (res.success) {
-        if (dbUser) {
-          dbUser.password = newPassword;
-        }
         toast.success("Password changed successfully. Your account is secure.");
         setCurrentPassword("");
         setNewPassword("");

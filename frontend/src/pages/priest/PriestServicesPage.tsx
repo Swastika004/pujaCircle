@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthStore } from '@/store/auth.store';
-import {
-  mockGetPriestServices,
-  mockCreatePriestService,
-  mockUpdatePriestService,
-  mockTogglePriestService,
-  resolvePriestId,
-} from '@/mocks/mock-api';
+import { priestApi } from '@/api/priest.api';
 import { PriestService } from '@/types/priest.types';
 import { PriestServiceInput } from '@/schemas/priest.schema';
 import { Button } from '@/components/ui/button';
@@ -21,8 +14,7 @@ import { toast } from 'sonner';
  * 100% Flexbox, zero CSS grids, zero gradients, pure solid white canvas, Haldi gold trims.
  */
 export const PriestServicesPage: React.FC = () => {
-  const { user } = useAuthStore();
-  const priestId = resolvePriestId(user);
+  const priestId = priestApi.resolveCurrentPriestId();
 
   const [services, setServices] = useState<PriestService[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,10 +22,8 @@ export const PriestServicesPage: React.FC = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await mockGetPriestServices(priestId);
-      if (res.success) {
-        setServices(res.data);
-      }
+      const data = await priestApi.getPriestServices(priestId);
+      setServices(data);
     } catch {
       toast.error('Failed to load services.');
     }
@@ -53,33 +43,46 @@ export const PriestServicesPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: PriestServiceInput) => {
-    if (editingService) {
-      const res = await mockUpdatePriestService(editingService.id, priestId, data);
-      if (res.success) {
-        toast.success(res.message);
-        fetchServices();
+  const handleSaveService = async (data: PriestServiceInput) => {
+    try {
+      if (editingService) {
+        const res = await priestApi.updatePriestService(editingService.id, priestId, data);
+        if (res.success) {
+          toast.success('Ceremony rate updated.');
+          fetchServices();
+          setIsModalOpen(false);
+        } else {
+          toast.error(res.message || 'Failed to update service.');
+        }
       } else {
-        toast.error(res.message);
+        const res = await priestApi.createPriestService(priestId, {
+          serviceName: data.serviceName,
+          price: data.price,
+        });
+        if (res.success) {
+          toast.success('Ceremony offering added.');
+          fetchServices();
+          setIsModalOpen(false);
+        } else {
+          toast.error(res.message || 'Failed to add service.');
+        }
       }
-    } else {
-      const res = await mockCreatePriestService(priestId, data);
-      if (res.success) {
-        toast.success(res.message);
-        fetchServices();
-      } else {
-        toast.error(res.message);
-      }
+    } catch {
+      toast.error('Failed to save service.');
     }
   };
 
-  const handleToggleActive = async (service: PriestService) => {
-    const res = await mockTogglePriestService(service.id, priestId);
-    if (res.success) {
-      toast.success(res.message);
-      fetchServices();
-    } else {
-      toast.error(res.message);
+  const handleToggle = async (serviceId: string) => {
+    try {
+      const res = await priestApi.togglePriestService(serviceId, priestId);
+      if (res.success) {
+        toast.success(res.message);
+        fetchServices();
+      } else {
+        toast.error(res.message);
+      }
+    } catch {
+      toast.error('Failed to update service status.');
     }
   };
 
@@ -170,7 +173,7 @@ export const PriestServicesPage: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleToggleActive(service)}
+                      onClick={() => handleToggle(service.id)}
                       className={`h-10 px-4 text-xs gap-1.5 w-full sm:w-auto rounded-md font-bold cursor-pointer ${
                         service.isActive ? 'text-stone-500 hover:text-red-700 hover:bg-red-50' : 'text-emerald-700 hover:bg-emerald-50'
                       }`}
@@ -190,7 +193,7 @@ export const PriestServicesPage: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         serviceToEdit={editingService}
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSaveService}
       />
     </div>
   );

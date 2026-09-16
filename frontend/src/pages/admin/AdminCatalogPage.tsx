@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search, Edit2, Trash2, Filter, X, Layers, UploadCloud, AlertCircle } from "lucide-react";
 import { PujaCatalogEntry } from "@/types/catalog.types";
-import { mockDb } from "@/mocks/data";
+import { catalogApi } from "@/api/catalog.api";
 import { modalTransition, buttonPress } from "@/motion/variants";
+import { toast } from "sonner";
 
 export const AdminCatalogPage: React.FC = () => {
-  const [catalog, setCatalog] = useState<PujaCatalogEntry[]>([
-    ...mockDb.pujaCatalog,
-  ]);
+  const [catalog, setCatalog] = useState<PujaCatalogEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
@@ -109,7 +109,21 @@ export const AdminCatalogPage: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveEntry = (e: React.FormEvent) => {
+  const fetchCatalog = async () => {
+    setIsLoading(true);
+    try {
+      const data = await catalogApi.getCatalog();
+      setCatalog(data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCatalog();
+  }, []);
+
+  const handleSaveEntry = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const tags = intentTagsText
@@ -133,28 +147,24 @@ export const AdminCatalogPage: React.FC = () => {
     }
 
     if (editingEntry) {
-      // Edit existing entry per FR-18 & FR-21
-      const updatedIndex = mockDb.pujaCatalog.findIndex(
-        (e) => e.id === editingEntry.id,
-      );
-      if (updatedIndex !== -1) {
-        mockDb.pujaCatalog[updatedIndex] = {
-          ...editingEntry,
-          name,
-          deity,
-          category,
-          description,
-          coverImage,
-          intentTags: tags,
-          samagriList: samagri,
-          steps,
-          timingNote,
-        };
+      const res = await catalogApi.updateCatalogEntry(editingEntry.id, {
+        name,
+        deity,
+        category,
+        description,
+        coverImage,
+        intentTags: tags,
+        samagriList: samagri,
+        steps,
+        timingNote,
+      });
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
     } else {
-      // Add new entry per FR-18 & FR-21
-      const newEntry: PujaCatalogEntry = {
-        id: `catalog-custom-${Date.now()}`,
+      const res = await catalogApi.createCatalogEntry({
         name,
         deity,
         category,
@@ -164,23 +174,28 @@ export const AdminCatalogPage: React.FC = () => {
         samagriList: samagri,
         steps,
         timingNote: timingNote || "Auspicious timing determined by tradition.",
-      };
-      mockDb.pujaCatalog.unshift(newEntry);
+      });
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
     }
 
-    setCatalog([...mockDb.pujaCatalog]);
+    fetchCatalog();
     setIsModalOpen(false);
   };
 
-  const handleDeleteEntry = (id: string) => {
+  const handleDeleteEntry = async (id: string) => {
     if (
       window.confirm("Are you sure you want to delete this puja catalog entry?")
     ) {
-      // Delete entry from session mockDb per FR-18
-      const index = mockDb.pujaCatalog.findIndex((e) => e.id === id);
-      if (index !== -1) {
-        mockDb.pujaCatalog.splice(index, 1);
-        setCatalog([...mockDb.pujaCatalog]);
+      const res = await catalogApi.deleteCatalogEntry(id);
+      if (res.success) {
+        toast.success(res.message);
+        fetchCatalog();
+      } else {
+        toast.error(res.message);
       }
     }
   };
@@ -262,79 +277,93 @@ export const AdminCatalogPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[hsl(var(--border))]">
-              {filteredCatalog.map((entry) => (
-                <tr
-                  key={entry.id}
-                  className="hover:bg-[hsl(var(--surface-alt))]/50 transition-colors"
-                >
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={entry.coverImage}
-                        alt={entry.name}
-                        className="w-14 h-10 object-cover rounded-md border border-[hsl(var(--border))] shadow-xs shrink-0 bg-stone-100"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
-                        }}
-                      />
-                      <div>
-                        <div className="font-semibold text-[hsl(var(--foreground))]">
-                          {entry.name}
-                        </div>
-                        <div className="text-[11px] text-[hsl(var(--brand-primary))]">
-                          Deity: {entry.deity}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="rounded-sm bg-[hsl(var(--surface-alt))] px-2 py-0.5 text-[10px] font-medium border border-[hsl(var(--border))]">
-                      {entry.category}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 max-w-xs">
-                    <div className="flex flex-wrap gap-1">
-                      {entry.intentTags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded bg-[hsl(var(--surface-alt))] px-1.5 py-0.5 text-[10px] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {entry.intentTags.length > 4 && (
-                        <span className="text-[10px] text-[hsl(var(--foreground-muted))] pt-0.5">
-                          +{entry.intentTags.length - 4} more
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-[11px] text-[hsl(var(--foreground-muted))]">
-                    <div>{entry.samagriList.length} samagri items</div>
-                    <div>{entry.steps.length} sequential steps</div>
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenEditModal(entry)}
-                        className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--brand-primary))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
-                        title="Edit Entry"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteEntry(entry.id)}
-                        className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--danger))] hover:bg-[hsl(var(--danger))]/10 transition-colors"
-                        title="Delete Entry"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-stone-500">
+                    Loading sacred catalog entries...
                   </td>
                 </tr>
-              ))}
+              ) : filteredCatalog.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-stone-500">
+                    No catalog entries found matching your search.
+                  </td>
+                </tr>
+              ) : (
+                filteredCatalog.map((entry) => (
+                  <tr
+                    key={entry.id}
+                    className="hover:bg-[hsl(var(--surface-alt))]/50 transition-colors"
+                  >
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={entry.coverImage}
+                          alt={entry.name}
+                          className="w-14 h-10 object-cover rounded-md border border-[hsl(var(--border))] shadow-xs shrink-0 bg-stone-100"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/images/hero_vedic_puja.jpg";
+                          }}
+                        />
+                        <div>
+                          <div className="font-semibold text-[hsl(var(--foreground))]">
+                            {entry.name}
+                          </div>
+                          <div className="text-[11px] text-[hsl(var(--brand-primary))]">
+                            Deity: {entry.deity}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="rounded-sm bg-[hsl(var(--surface-alt))] px-2 py-0.5 text-[10px] font-medium border border-[hsl(var(--border))]">
+                        {entry.category}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 max-w-xs">
+                      <div className="flex flex-wrap gap-1">
+                        {entry.intentTags.slice(0, 4).map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded bg-[hsl(var(--surface-alt))] px-1.5 py-0.5 text-[10px] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--border))]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {entry.intentTags.length > 4 && (
+                          <span className="text-[10px] text-[hsl(var(--foreground-muted))] pt-0.5">
+                            +{entry.intentTags.length - 4} more
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-[11px] text-[hsl(var(--foreground-muted))]">
+                      <div>{entry.samagriList.length} samagri items</div>
+                      <div>{entry.steps.length} sequential steps</div>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditModal(entry)}
+                          className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--brand-primary))] hover:bg-[hsl(var(--surface-alt))] transition-colors"
+                          title="Edit Entry"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteEntry(entry.id)}
+                          className="rounded p-1.5 text-[hsl(var(--foreground-muted))] hover:text-[hsl(var(--danger))] hover:bg-[hsl(var(--danger))]/10 transition-colors"
+                          title="Delete Entry"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

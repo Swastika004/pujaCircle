@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { mockGetPriests } from '@/mocks/mock-api';
+import { priestApi } from '@/api/priest.api';
 import { Priest } from '@/types/priest.types';
 import { PriestCard } from '@/components/priest/PriestCard';
 import { Button } from '@/components/ui/button';
@@ -74,16 +74,14 @@ export const PriestListingPage: React.FC = () => {
     setIsLoading(true);
     try {
       // Devotee discovery: Only approved and active priests appear (status 'ALL' omitted)
-      const res = await mockGetPriests({
+      const data = await priestApi.getPriests({
         searchQuery: query || undefined,
         catalogId: activeCatalogId || undefined,
         serviceName: activeServiceName || undefined,
         language: activeLanguage !== 'All' ? activeLanguage : undefined,
         minExperience: activeMinExp > 0 ? activeMinExp : undefined,
       });
-      if (res.success) {
-        setPriests(res.data);
-      }
+      setPriests(data || []);
     } finally {
       setIsLoading(false);
     }

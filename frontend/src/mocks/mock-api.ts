@@ -234,10 +234,26 @@ export async function mockRegisterUser(payload: {
   fullName: string;
   phoneNumber: string;
   email: string;
-  password: string;
-}): Promise<{ success: boolean; message: string; data?: { user: AuthUser } }> {
+  password?: string;
+  address?: {
+    houseNo: string;
+    houseBuilding?: string;
+    street?: string;
+    locality?: string;
+    villageTown?: string;
+    city: string;
+    district: string;
+    state: string;
+    pincode: string;
+  };
+}): Promise<{ success: boolean; message: string; data?: { user: AuthUser; token?: string } }> {
   await delay(350);
-  const parseResult = registerUserPersonalSchema.safeParse(payload);
+  const parseResult = registerUserPersonalSchema.safeParse({
+    fullName: payload.fullName,
+    phoneNumber: payload.phoneNumber,
+    email: payload.email,
+    password: payload.password || 'Devotee@123',
+  });
   if (!parseResult.success) {
     return { success: false, message: parseResult.error.errors[0]?.message || 'Registration data is invalid.' };
   }
@@ -249,14 +265,16 @@ export async function mockRegisterUser(payload: {
     return { success: false, message: 'A user with this mobile number or email already exists.' };
   }
 
+  const userId = `user-devotee-${Date.now()}`;
+  const hasAddr = !!payload.address;
   const newUser: AuthUser = {
-    id: `user-devotee-${Date.now()}`,
+    id: userId,
     name: payload.fullName.trim(),
     phoneNumber: payload.phoneNumber.trim(),
     email: payload.email.trim(),
     role: 'USER',
     accountStatus: 'ACTIVE',
-    hasAddress: false,
+    hasAddress: hasAddr,
   };
 
   mockDb.users.push({
@@ -266,43 +284,76 @@ export async function mockRegisterUser(payload: {
     email: newUser.email,
     role: 'USER',
     accountStatus: 'ACTIVE',
-    hasAddress: false,
-    password: payload.password,
+    hasAddress: hasAddr,
+    password: payload.password || 'Devotee@123',
     createdAt: new Date().toISOString(),
   });
+
+  if (payload.address) {
+    mockDb.addresses.push({
+      id: `address-${Date.now()}`,
+      userId: newUser.id,
+      label: 'HOME',
+      houseNo: payload.address.houseNo,
+      houseBuilding: payload.address.houseBuilding || payload.address.houseNo,
+      street: payload.address.street || '',
+      locality: payload.address.locality || payload.address.villageTown || '',
+      villageTown: payload.address.villageTown || payload.address.city,
+      city: payload.address.city,
+      district: payload.address.district,
+      state: payload.address.state,
+      pincode: payload.address.pincode,
+      pinCode: payload.address.pincode,
+      isDefault: true,
+      createdAt: new Date().toISOString(),
+    });
+  }
 
   return {
     success: true,
     message: 'Devotee registration successful! Welcome to PujaCircle.',
-    data: { user: deepClone(newUser) },
+    data: { user: deepClone(newUser), token: `mock-jwt-token-${userId}` },
   };
 }
 
 export async function mockRegisterPriest(payload: {
   fullName: string;
   phoneNumber: string;
-  email: string;
-  password: string;
-}): Promise<{ success: boolean; message: string; data?: { user: AuthUser } }> {
+  email?: string;
+  password?: string;
+  experienceYears?: number;
+  bio?: string;
+  languages?: string[];
+  specializations?: string[];
+  city?: string;
+  state?: string;
+  pincode?: string;
+}): Promise<{ success: boolean; message: string; data?: { user: AuthUser; token?: string } }> {
   await delay(350);
-  const parseResult = registerPriestPersonalSchema.safeParse(payload);
+  const parseResult = registerPriestPersonalSchema.safeParse({
+    fullName: payload.fullName,
+    phoneNumber: payload.phoneNumber,
+    email: payload.email || `${payload.phoneNumber.replace(/\D/g, '')}@priest.demo`,
+    password: payload.password || 'Priest@123',
+  });
   if (!parseResult.success) {
     return { success: false, message: parseResult.error.errors[0]?.message || 'Registration data is invalid.' };
   }
 
   const existing = mockDb.users.find(
-    (u) => normalizePhone(u.phoneNumber) === normalizePhone(payload.phoneNumber) || u.email === payload.email
+    (u) => normalizePhone(u.phoneNumber) === normalizePhone(payload.phoneNumber) || (payload.email && u.email === payload.email)
   );
   if (existing) {
     return { success: false, message: 'A priest with this mobile number or email already exists.' };
   }
 
   const priestId = `priest-${Date.now()}`;
+  const userId = `user-${priestId}`;
   const newUser: AuthUser = {
-    id: `user-${priestId}`,
+    id: userId,
     name: payload.fullName.trim(),
     phoneNumber: payload.phoneNumber.trim(),
-    email: payload.email.trim(),
+    email: payload.email?.trim() || `${payload.phoneNumber.replace(/\D/g, '')}@priest.demo`,
     role: 'PRIEST',
     accountStatus: 'ACTIVE',
     hasAddress: false,
@@ -316,23 +367,27 @@ export async function mockRegisterPriest(payload: {
     role: 'PRIEST',
     accountStatus: 'ACTIVE',
     hasAddress: false,
-    password: payload.password,
+    password: payload.password || 'Priest@123',
     createdAt: new Date().toISOString(),
   });
 
+  const city = payload.city?.trim() || 'Kolkata';
+  const state = payload.state?.trim() || 'West Bengal';
+
   const newPriestRecord: Priest = {
     id: priestId,
+    userId: userId,
     fullName: payload.fullName.trim(),
     displayName: payload.fullName.trim(),
     phoneNumber: payload.phoneNumber.trim(),
-    email: payload.email.trim(),
-    experienceYears: 5,
-    bio: 'Vedic priest specializing in traditional rituals and home ceremonies.',
-    languages: ['Hindi', 'Sanskrit'],
-    specializations: ['Satyanarayan Puja', 'Griha Pravesh'],
-    serviceAreas: ['Mumbai'],
-    city: 'Mumbai',
-    state: 'Maharashtra',
+    email: newUser.email,
+    experienceYears: payload.experienceYears || 5,
+    bio: payload.bio?.trim() || 'Dedicated Vedic priest specializing in traditional pujas and sacred ceremonies.',
+    languages: payload.languages && payload.languages.length > 0 ? payload.languages : ['Bengali', 'Hindi', 'Sanskrit'],
+    specializations: payload.specializations && payload.specializations.length > 0 ? payload.specializations : ['Griha Pravesh', 'Satyanarayan Katha'],
+    serviceAreas: [city],
+    city,
+    state,
     approvalStatus: 'PENDING',
     accountStatus: 'ACTIVE',
     isPhoneVerified: true,
@@ -345,7 +400,7 @@ export async function mockRegisterPriest(payload: {
   return {
     success: true,
     message: 'Priest application submitted! Awaiting administrator verification.',
-    data: { user: deepClone(newUser) },
+    data: { user: deepClone(newUser), token: `mock-jwt-token-${userId}` },
   };
 }
 
@@ -1412,9 +1467,9 @@ export async function mockCompleteBooking(
     return { success: false, message: 'Only confirmed bookings can be marked as completed.' };
   }
 
-  // If completionCode is provided, verify match against devotee's booking code
-  if (completionCode !== undefined && booking.completionCode) {
-    if (completionCode.trim() !== booking.completionCode.trim()) {
+  // Enforce 4-digit completion code verification
+  if (booking.completionCode) {
+    if (!completionCode || completionCode.trim() !== booking.completionCode.trim()) {
       return {
         success: false,
         message: 'Invalid completion verification code. Please confirm the 4-digit code with the devotee.',

@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { mockRegisterUser, mockRegisterPriest } from '@/mocks/mock-api';
+import { authApi } from '@/api/auth.api';
 
 export interface AuthPageProps {
   defaultTab?: 'devotee' | 'priest';
@@ -181,7 +181,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       const email = regEmail.trim() || `${regFullName.toLowerCase().replace(/[^a-z0-9]/g, '')}${Date.now().toString().slice(-4)}@pujacircle.demo`;
 
       if (activeTab === 'priest') {
-        const res = await mockRegisterPriest({
+        const res = await authApi.registerPriest({
           fullName: regFullName,
           email,
           phoneNumber: cleanPhone,
@@ -196,7 +196,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           toast.error(res.message || 'Registration failed.');
         }
       } else {
-        const res = await mockRegisterUser({
+        const res = await authApi.registerUser({
           fullName: regFullName,
           email,
           phoneNumber: cleanPhone,

@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { priestServiceSchema, PriestServiceInput } from '@/schemas/priest.schema';
 import { PriestService } from '@/types/priest.types';
-import { mockDb } from '@/mocks/data';
+import { catalogApi } from '@/api/catalog.api';
+import { PujaCatalogEntry } from '@/types/catalog.types';
 import {
   Dialog,
   DialogContent,
@@ -32,7 +33,15 @@ export const ServiceFormModal: React.FC<ServiceFormModalProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
-  const catalogList = mockDb.pujaCatalog;
+  const [catalogList, setCatalogList] = useState<PujaCatalogEntry[]>([]);
+
+  useEffect(() => {
+    async function loadCatalog() {
+      const items = await catalogApi.getCatalog();
+      setCatalogList(items || []);
+    }
+    loadCatalog();
+  }, []);
 
   const [selectedMode, setSelectedMode] = useState<'catalog' | 'custom'>('catalog');
   const [selectedCatalogId, setSelectedCatalogId] = useState<string>('');

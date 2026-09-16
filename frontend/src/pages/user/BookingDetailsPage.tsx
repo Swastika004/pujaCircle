@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
-import { mockGetBookingById, mockCancelBooking, mockSubmitRating } from '@/mocks/mock-api';
+import { bookingApi } from '@/api/booking.api';
 import { Booking } from '@/types/booking.types';
 import { BookingStatusBadge } from '@/components/booking/BookingStatusBadge';
 import { BookingTimelineCard } from '@/components/booking/BookingTimelineCard';
@@ -45,9 +45,9 @@ export const BookingDetailsPage: React.FC = () => {
     if (!id) return;
     setIsLoading(true);
     try {
-      const res = await mockGetBookingById(id);
-      if (res.success && res.data) {
-        setBooking(res.data);
+      const data = await bookingApi.getBookingById(id);
+      if (data) {
+        setBooking(data);
       } else {
         toast.error('Booking not found.');
       }
@@ -62,7 +62,7 @@ export const BookingDetailsPage: React.FC = () => {
 
   const handleCancelConfirm = async (reason: string) => {
     if (!booking || !user) return;
-    const res = await mockCancelBooking(booking.id, user.id, reason);
+    const res = await bookingApi.cancelBooking({ bookingId: booking.id, userId: user.id, reason });
     if (res.success) {
       toast.success('Puja appointment cancelled successfully.');
       fetchBooking();
@@ -72,8 +72,12 @@ export const BookingDetailsPage: React.FC = () => {
   };
 
   const handleRatingSubmit = async (ratingData: any) => {
-    if (!user) return;
-    const res = await mockSubmitRating(user.id, ratingData);
+    if (!user || !booking) return;
+    const res = await bookingApi.submitRating(user.id, {
+      bookingId: booking.id,
+      rating: ratingData.rating,
+      review: ratingData.review,
+    });
     if (res.success) {
       toast.success('Thank you for rating the ceremony!');
       setIsRatingModalOpen(false);
@@ -231,19 +235,21 @@ export const BookingDetailsPage: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-md border-2 border-emerald-400 shadow-2xs shrink-0 self-start sm:self-center">
                     <span className="font-mono text-2xl font-black tracking-widest text-emerald-900 select-all">
-                      {booking.completionCode || '4829'}
+                      {booking.completionCode || '— — — —'}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(booking.completionCode || '4829');
-                        toast.success('Completion code copied!');
-                      }}
-                      className="text-emerald-700 hover:text-emerald-900 p-1 cursor-pointer transition-colors"
-                      title="Copy Code"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
+                    {booking.completionCode && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(booking.completionCode!);
+                          toast.success('Completion code copied!');
+                        }}
+                        className="text-emerald-700 hover:text-emerald-900 p-1 cursor-pointer transition-colors"
+                        title="Copy Code"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
