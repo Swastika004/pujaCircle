@@ -191,12 +191,23 @@ export const UserRegisterPage: React.FC = () => {
   };
 
   const handleFillDemo = () => {
-    setValue("fullName", "Suresh Kumar Mukherjee", { shouldValidate: true });
-    setValue("phoneNumber", "+919876543299", { shouldValidate: true });
-    setValue("email", "suresh.m@example.demo", { shouldValidate: true });
-    setValue("password", "User@123", { shouldValidate: true });
     setErrorMessage(null);
-    toast.info("Filled devotee demo registration values.");
+    if (step === 1) {
+      setValue("fullName", "Suresh Kumar Mukherjee", { shouldValidate: true });
+      setValue("phoneNumber", "+919876543299", { shouldValidate: true });
+      setValue("email", "suresh.m@example.demo", { shouldValidate: true });
+      setValue("password", "User@123", { shouldValidate: true });
+      toast.info("Filled devotee personal credentials.");
+    } else if (step === 2) {
+      setPhoneOtp("123456");
+      toast.info("Filled demo verification code (123456).");
+    } else if (step === 3) {
+      setPincode("700019");
+      setHouseBuilding("Flat 4B, Shanti Kunj");
+      setStreet("Rashbehari Avenue");
+      handleLookupPin("700019");
+      toast.info("Filled demo sanctum address.");
+    }
   };
 
   return (
@@ -571,18 +582,6 @@ export const UserRegisterPage: React.FC = () => {
                       required
                     />
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPhoneOtp("123456");
-                      setEmailOtp("123456");
-                      setErrorMessage(null);
-                    }}
-                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
-                  >
-                    ✨ Auto-fill mock OTP (123456)
-                  </button>
                 </div>
 
                 <div className="flex items-center justify-between gap-3 pt-2">

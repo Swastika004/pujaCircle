@@ -194,14 +194,27 @@ export const PriestRegisterPage: React.FC = () => {
   };
 
   const handleFillDemo = () => {
-    setValue("fullName", "Pandit Giridhar Bhattacharya", {
-      shouldValidate: true,
-    });
-    setValue("phoneNumber", "+919876543288", { shouldValidate: true });
-    setValue("email", "giridhar.b@example.demo", { shouldValidate: true });
-    setValue("password", "Priest@123", { shouldValidate: true });
     setErrorMessage(null);
-    toast.info("Filled Purohit demo credentials.");
+    if (step === 1) {
+      setValue("fullName", "Pandit Giridhar Bhattacharya", {
+        shouldValidate: true,
+      });
+      setValue("phoneNumber", "+919876543288", { shouldValidate: true });
+      setValue("email", "giridhar.b@example.demo", { shouldValidate: true });
+      setValue("password", "Priest@123", { shouldValidate: true });
+      toast.info("Filled Purohit personal credentials.");
+    } else if (step === 2) {
+      setPhoneOtp("123456");
+      toast.info("Filled demo verification code (123456).");
+    } else if (step === 3) {
+      setPincode("700029");
+      setCity("Kolkata");
+      setState("West Bengal");
+      setBio(
+        "Gurukul-trained Vedic scholar with 15+ years of ritual experience across West Bengal specializing in Durga Puja, Griha Pravesh, and Vedic Yajna.",
+      );
+      toast.info("Filled demo Vedic qualifications & locality.");
+    }
   };
 
   return (
@@ -594,18 +607,6 @@ export const PriestRegisterPage: React.FC = () => {
                       required
                     />
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPhoneOtp("123456");
-                      setEmailOtp("123456");
-                      setErrorMessage(null);
-                    }}
-                    className="text-xs text-amber-700 hover:text-amber-800 font-bold block text-right w-full cursor-pointer hover:underline"
-                  >
-                    ✨ Auto-fill mock OTP (123456)
-                  </button>
                 </div>
 
                 <div className="flex items-center justify-between gap-3 pt-2">
