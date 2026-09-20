@@ -53,7 +53,7 @@ export const AdminProfilePage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form states
-  const [fullName, setFullName] = useState(user?.name || "PujaCircle Admin");
+  const [fullName, setFullName] = useState(user?.name || "Swastika Roy");
   const [isSavingName, setIsSavingName] = useState(false);
 
   // Security / Password update states
@@ -65,8 +65,8 @@ export const AdminProfilePage: React.FC = () => {
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   // Read-only account metadata
-  const adminEmail = user?.email || "admin@pujacircle.demo";
-  const adminPhone = user?.phoneNumber || "+919900011223";
+  const adminEmail = user?.email || "admin@pujacircle.com";
+  const adminPhone = user?.phoneNumber || "+919999999999";
   const joinedDate = "January 2026";
 
   const initials =
@@ -76,7 +76,7 @@ export const AdminProfilePage: React.FC = () => {
       .map((word) => word[0])
       .join("")
       .toUpperCase()
-      .slice(0, 2) || "AD";
+      .slice(0, 2) || "SR";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -165,10 +165,7 @@ export const AdminProfilePage: React.FC = () => {
       return;
     }
 
-    if (currentPassword !== "Admin@123") {
-      toast.error("Current password incorrect. (Demo: Admin@123)");
-      return;
-    }
+
 
     setIsUpdatingPassword(true);
     try {

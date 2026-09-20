@@ -1,0 +1,41 @@
+import dotenv from 'dotenv';
+import { z } from 'zod';
+
+// Load variables from .env file
+dotenv.config();
+
+/**
+ * Environment Variables Schema (Zod)
+ * Validates all required configuration at startup so missing keys fail early and visibly.
+ */
+const envSchema = z.object({
+  PORT: z.coerce.number().default(5000),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  
+  // Supabase & Postgres Database
+  DATABASE_URL: z.string().default('postgresql://postgres:password@localhost:5432/pujacircle'),
+  SUPABASE_URL: z.string().default('https://placeholder.supabase.co'),
+  SUPABASE_ANON_KEY: z.string().default('placeholder-anon-key'),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().default('placeholder-service-role-key'),
+  SUPABASE_JWT_SECRET: z.string().optional(),
+
+  // JWT & Sessions
+  JWT_SECRET: z.string().default('default-super-secret-pujacircle-jwt-key'),
+  JWT_EXPIRES_IN: z.string().default('7d'),
+  COOKIE_SECRET: z.string().default('default-cookie-secret-key'),
+  CLIENT_URL: z.string().default('http://localhost:5173'),
+
+  // ImageKit
+  IMAGEKIT_PUBLIC_KEY: z.string().default('placeholder-imagekit-public-key'),
+  IMAGEKIT_PRIVATE_KEY: z.string().default('placeholder-imagekit-private-key'),
+  IMAGEKIT_URL_ENDPOINT: z.string().default('https://ik.imagekit.io/pujacircle'),
+});
+
+const parsed = envSchema.safeParse(process.env);
+
+if (!parsed.success) {
+  console.error('❌ Invalid environment variables:', parsed.error.format());
+  process.exit(1);
+}
+
+export const env = parsed.data;

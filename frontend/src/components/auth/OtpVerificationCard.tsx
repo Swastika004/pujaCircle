@@ -38,7 +38,6 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<VerifyOtpInput>({
     resolver: zodResolver(verifyOtpSchema),
@@ -65,11 +64,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
     }
   };
 
-  const handleFillDemoOtp = () => {
-    setValue('otp', '123456', { shouldValidate: true });
-    setError(null);
-    toast.info('Filled development mock OTP (123456).');
-  };
+
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4 text-stone-900">
@@ -113,10 +108,6 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
                 <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>Encrypted Session Tokens</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-amber-100">
-                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>Development Mock Code: 123456</span>
-              </div>
             </div>
           </div>
 
@@ -133,21 +124,12 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Verification Badge + Demo Fill */}
+            {/* Top Row: Verification Badge */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
                 {icon}
                 <span>Identity Verification</span>
               </div>
-
-              <button
-                type="button"
-                onClick={handleFillDemoOtp}
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-              >
-                <span>⚡</span>
-                <span>Demo Fill</span>
-              </button>
             </div>
 
             <div className="space-y-1 mb-6">
@@ -166,17 +148,12 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
               </div>
             )}
 
-            <div className="mb-4 p-3 rounded-md bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
-              <span className="font-bold text-stone-900">Development Mock OTP:</span>
-              <span className="font-mono font-bold text-red-800 text-sm">123456</span>
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">
                 <Label className="text-xs font-bold text-stone-800">6-Digit Sacred Verification Code</Label>
                 <Input
                   maxLength={6}
-                  placeholder="123456"
+                  placeholder="Enter 6-digit code"
                   {...register('otp')}
                   className="font-mono text-center tracking-widest text-base h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                 />

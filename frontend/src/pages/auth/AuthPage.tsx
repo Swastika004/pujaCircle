@@ -34,7 +34,7 @@ export interface AuthPageProps {
 // Unified Authentication Page
 // Provides:
 // 1. Devotee & Priest tabs with in-place toggle between Login and Register
-// 2. Scoped demo-credential quick-fill buttons for all roles
+// 2. Direct live API integration with Supabase Auth & PostgreSQL backend
 // 3. Low-emphasis "Staff Access" link that reveals the staff login panel inline without routing
 // 4. Aliased by /user/login, /priest/login, and /admin/login (with pre-revealed staff panel)
 export const AuthPage: React.FC<AuthPageProps> = ({
@@ -76,7 +76,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   const {
     register: registerLogin,
     handleSubmit: handleLoginSubmit,
-    setValue: setLoginValue,
     reset: resetLogin,
     formState: { errors: loginErrors },
   } = useForm<UserLoginInput>({
@@ -91,7 +90,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   const {
     register: registerAdmin,
     handleSubmit: handleAdminSubmit,
-    setValue: setAdminValue,
     formState: { errors: adminErrors },
   } = useForm<AdminLoginInput>({
     resolver: zodResolver(adminLoginSchema),
@@ -146,23 +144,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     }
   };
 
-  // Quick Demo Credential Autofill
-  const handleFillDemo = () => {
-    clearError();
-    if (showStaff) {
-      setAdminValue('email', 'admin@pujacircle.demo', { shouldValidate: true });
-      setAdminValue('password', 'Admin@123', { shouldValidate: true });
-      toast.info('Filled staff credentials (admin@pujacircle.demo / Admin@123)');
-    } else if (activeTab === 'priest') {
-      setLoginValue('phoneNumber', '+919876543211', { shouldValidate: true });
-      setLoginValue('password', 'Priest@123', { shouldValidate: true });
-      toast.info('Filled priest credentials (+919876543211 / Priest@123)');
-    } else {
-      setLoginValue('phoneNumber', '+919876543210', { shouldValidate: true });
-      setLoginValue('password', 'User@123', { shouldValidate: true });
-      toast.info('Filled devotee credentials (+919876543210 / User@123)');
-    }
-  };
+
 
   // In-place Registration Submit
   const handleRegisterSubmit = async (e: React.FormEvent) => {
@@ -178,7 +160,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       : `+91${regPhone.replace(/\D/g, '')}`;
 
     try {
-      const email = regEmail.trim() || `${regFullName.toLowerCase().replace(/[^a-z0-9]/g, '')}${Date.now().toString().slice(-4)}@pujacircle.demo`;
+      const email = regEmail.trim() || `${regFullName.toLowerCase().replace(/[^a-z0-9]/g, '')}${Date.now().toString().slice(-4)}@pujacircle.com`;
 
       if (activeTab === 'priest') {
         const res = await authApi.registerPriest({
@@ -388,10 +370,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
                     <Input
+                      id="admin-email"
                       type="email"
-                      placeholder="admin@pujacircle.demo"
+                      placeholder="admin@pujaCircle.com"
                       {...registerAdmin('email')}
-                      className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
+                      className="pl-9 h-11 text-xs border-stone-300 focus-visible:ring-amber-500"
                     />
                   </div>
                   {adminErrors.email && (
@@ -422,16 +405,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   )}
                 </div>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleFillDemo}
-                  className="w-full text-xs text-stone-900 bg-white hover:bg-amber-50 border-2 border-amber-300 h-10 gap-1.5 font-bold cursor-pointer transition-colors"
-                >
-                  <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-                  Fill Staff Credentials (admin@pujacircle.demo)
-                </Button>
+
 
                 <Button
                   type="submit"
@@ -606,17 +580,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   )}
                 </div>
 
-                {/* Scoped Demo Quick-Fill Button */}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleFillDemo}
-                  className="w-full text-xs text-stone-900 bg-white hover:bg-amber-50 border-2 border-amber-300 h-10 gap-1.5 font-bold cursor-pointer transition-colors"
-                >
-                  <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-                  Fill Demo Credentials ({activeTab === 'priest' ? '+919876543211' : '+919876543210'})
-                </Button>
+
 
                 <Button
                   type="submit"

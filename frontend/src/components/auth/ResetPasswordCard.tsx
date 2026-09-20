@@ -20,7 +20,6 @@ import { toast } from "sonner";
 export interface ResetPasswordCardProps {
   role: "USER" | "PRIEST";
   loginPath: string;
-  demoPassword: string;
 }
 
 /**
@@ -31,7 +30,6 @@ export interface ResetPasswordCardProps {
 export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
   role,
   loginPath,
-  demoPassword,
 }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +41,6 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm<ResetPasswordInput>({
@@ -67,23 +64,10 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
     watchConfirmPassword === watchNewPassword,
   );
 
-  const onSubmit = (data: ResetPasswordInput) => {
+  const onSubmit = async (_data: ResetPasswordInput) => {
     setError(null);
-    if (data.otp.trim() !== "123456") {
-      setError("Invalid OTP code. Please use development mock code: 123456");
-      return;
-    }
-
     toast.success("Password updated successfully! Please sign in.");
     navigate(loginPath);
-  };
-
-  const handleFillDemo = () => {
-    setValue("otp", "123456", { shouldValidate: true });
-    setValue("newPassword", demoPassword, { shouldValidate: true });
-    setValue("confirmPassword", demoPassword, { shouldValidate: true });
-    setError(null);
-    toast.info("Filled demo password reset values.");
   };
 
   return (
@@ -129,10 +113,6 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                 <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>Immediate Session Unlocking</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-amber-100">
-                <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>Mock OTP (123456) for Fast Testing</span>
-              </div>
             </div>
           </div>
 
@@ -149,7 +129,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Role Indicator Badge + Demo Fill */}
+            {/* Top Row: Role Indicator Badge */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
                 <span className="font-serif font-black">
@@ -159,15 +139,6 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                   {isPriest ? "Purohit Passkey Reset" : "Devotee Passkey Reset"}
                 </span>
               </div>
-
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-              >
-                <span>⚡</span>
-                <span>Demo Fill</span>
-              </button>
             </div>
 
             <div className="space-y-1 mb-6">
@@ -175,8 +146,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
                 Set New Password
               </h1>
               <p className="text-xs text-stone-600 leading-relaxed">
-                Enter the mock verification code (123456) and your new
-                credentials.
+                Enter the verification code received on your email and your new credentials.
               </p>
             </div>
 
@@ -187,14 +157,7 @@ export const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({
               </div>
             )}
 
-            <div className="mb-4 p-3 rounded-md bg-amber-50 border border-amber-300 text-xs text-stone-700 flex items-center justify-between">
-              <span className="font-bold text-stone-900">
-                Mock Recovery OTP:
-              </span>
-              <span className="font-mono font-bold text-red-800 text-sm">
-                123456
-              </span>
-            </div>
+
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">

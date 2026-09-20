@@ -1,18 +1,16 @@
-import * as mockApi from '@/mocks/mock-api';
 import { Priest, PriestFilterParams } from '@/types/priest.types';
 import { Booking } from '@/types/booking.types';
 import { apiClient } from './client';
-import { config } from '@/lib/config';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';
 
+/**
+ * Admin API (Frontend Layer)
+ * Connected directly to live backend (/api/v1/admin)
+ */
 export const adminApi = {
   // Priest Management
   getAllPriests: async (params?: PriestFilterParams): Promise<Priest[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriests(params);
-        return res.data || [];
-      }
       const res = await apiClient.get('/admin/priests', { params });
       return (res as any).data || res;
     } catch (error) {
@@ -23,10 +21,6 @@ export const adminApi = {
 
   getPendingPriests: async (): Promise<Priest[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockAdminGetPriests();
-        return res.data?.filter((p) => p.approvalStatus === 'PENDING') || [];
-      }
       const res = await apiClient.get('/admin/priests/pending');
       return (res as any).data || res;
     } catch (error) {
@@ -37,9 +31,6 @@ export const adminApi = {
 
   approvePriest: async (priestId: string): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminApprovePriest(priestId);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/approve`);
       return res as any;
     } catch (error) {
@@ -53,9 +44,6 @@ export const adminApi = {
 
   rejectPriest: async (priestId: string, reason?: string): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminRejectPriest(priestId, reason || 'Incomplete documentation');
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/reject`, { reason });
       return res as any;
     } catch (error) {
@@ -69,9 +57,6 @@ export const adminApi = {
 
   banPriest: async (priestId: string, reason?: string): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminBanPriest(priestId, reason || 'Policy violation');
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/ban`, { reason });
       return res as any;
     } catch (error) {
@@ -85,9 +70,6 @@ export const adminApi = {
 
   reactivatePriest: async (priestId: string): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminUnbanPriest(priestId);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/unban`);
       return res as any;
     } catch (error) {
@@ -105,9 +87,6 @@ export const adminApi = {
 
   reopenPriestApplication: async (priestId: string): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminReopenPriestApplication(priestId);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/reopen`);
       return res as any;
     } catch (error) {
@@ -122,10 +101,6 @@ export const adminApi = {
   // Devotee / User Management
   getAllUsers: async (): Promise<any[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockAdminGetUsers();
-        return res.data || [];
-      }
       const res = await apiClient.get('/admin/users');
       return (res as any).data || res;
     } catch (error) {
@@ -136,12 +111,6 @@ export const adminApi = {
 
   updateUserStatus: async (userId: string, status: string, reason?: string) => {
     try {
-      if (config.isMockEnabled) {
-        if (status === 'BANNED' || status === 'SUSPENDED') {
-          return await mockApi.mockAdminBanUser(userId, reason || 'Administrative action');
-        }
-        return await mockApi.mockAdminUnbanUser(userId);
-      }
       const res = await apiClient.patch(`/admin/users/${userId}/status`, { status, reason });
       return res as any;
     } catch (error) {
@@ -156,10 +125,6 @@ export const adminApi = {
   // Platform Bookings
   getAllBookings: async (): Promise<Booking[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetBookings();
-        return res.data || [];
-      }
       const res = await apiClient.get('/admin/bookings');
       return (res as any).data || res;
     } catch (error) {
@@ -170,9 +135,6 @@ export const adminApi = {
 
   getDashboardStats: async (): Promise<any> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminGetDashboardStats();
-      }
       const res = await apiClient.get('/admin/dashboard/stats');
       return (res as any).data || res;
     } catch (error) {

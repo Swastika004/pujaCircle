@@ -11,7 +11,6 @@ export interface AuthUser {
   accountStatus?: AccountStatus;
   banReason?: string;
   hasAddress?: boolean;
-  password?: string; // Mock only
 }
 
 export interface LoginCredentials {

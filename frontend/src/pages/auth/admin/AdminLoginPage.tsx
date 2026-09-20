@@ -27,7 +27,6 @@ export const AdminLoginPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm<AdminLoginInput>({
@@ -55,12 +54,6 @@ export const AdminLoginPage: React.FC = () => {
     }
   };
 
-  const handleFillDemo = () => {
-    clearError();
-    setValue("email", "admin@pujacircle.demo", { shouldValidate: true });
-    setValue("password", "Admin@123", { shouldValidate: true });
-    toast.info("Filled staff credentials (admin@pujacircle.demo / Admin@123)");
-  };
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
@@ -126,21 +119,12 @@ export const AdminLoginPage: React.FC = () => {
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Portal Badge + Demo Fill */}
+            {/* Top Row: Portal Badge */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-[#780016]">
                 <ShieldCheck className="h-4 w-4 text-[#780016]" />
                 <span>Staff Operations Portal</span>
               </div>
-
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-              >
-                <span>⚡</span>
-                <span>Demo Fill</span>
-              </button>
             </div>
 
             <div className="mb-6 pb-3 border-b border-stone-100">
@@ -172,7 +156,7 @@ export const AdminLoginPage: React.FC = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="admin@pujacircle.demo"
+                    placeholder="admin@pujaCircle.com"
                     {...register("email")}
                     className="pl-9 h-11 text-sm border-stone-300 focus-visible:ring-amber-500"
                   />

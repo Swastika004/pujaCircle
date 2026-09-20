@@ -29,7 +29,6 @@ export const PriestLoginPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm<PriestLoginInput>({
@@ -64,12 +63,6 @@ export const PriestLoginPage: React.FC = () => {
     }
   };
 
-  const handleFillDemo = () => {
-    clearError();
-    setValue("phoneNumber", "+919876543211", { shouldValidate: true });
-    setValue("password", "Priest@123", { shouldValidate: true });
-    toast.info("Filled purohit credentials (+919876543211 / Priest@123)");
-  };
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
@@ -136,7 +129,7 @@ export const PriestLoginPage: React.FC = () => {
         {/* Right Form Panel */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Role Switcher Tabs + Top Right Demo Fill */}
+            {/* Role Switcher Tabs */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <AuthRoleTabs
                 activeRole="PRIEST"
@@ -147,15 +140,6 @@ export const PriestLoginPage: React.FC = () => {
               />
 
               <div className="flex items-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-                >
-                  <span>⚡</span>
-                  <span>Demo Fill</span>
-                </button>
-
                 <Link
                   to="/admin/login"
                   title="Staff Operations Portal"

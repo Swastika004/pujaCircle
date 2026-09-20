@@ -50,7 +50,6 @@ export const PriestRegisterPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     getValues,
     watch,
     formState: { errors },
@@ -116,7 +115,7 @@ export const PriestRegisterPage: React.FC = () => {
   const onPersonalSubmit = () => {
     setErrorMessage(null);
     setStep(2);
-    toast.info("Verification codes sent. Development Mock OTP is 123456");
+    toast.info("Verification codes dispatched to your contact details.");
   };
 
   // Step 2: Submit OTP Verification
@@ -135,20 +134,14 @@ export const PriestRegisterPage: React.FC = () => {
         otp: phoneOtp.trim(),
       });
 
-      if (!res.success && phoneOtp.trim() !== "123456") {
+      if (!res.success) {
         setErrorMessage(res.message || "Invalid verification code.");
         return;
       }
 
       setStep(3);
-      handleLookupPin("700019");
     } catch {
-      if (phoneOtp.trim() === "123456") {
-        setStep(3);
-        handleLookupPin("700019");
-      } else {
-        setErrorMessage("Verification failed. Please try again.");
-      }
+      setErrorMessage("Verification failed. Please try again.");
     }
   };
 
@@ -215,29 +208,7 @@ export const PriestRegisterPage: React.FC = () => {
     }
   };
 
-  const handleFillDemo = () => {
-    setErrorMessage(null);
-    if (step === 1) {
-      setValue("fullName", "Pandit Giridhar Bhattacharya", {
-        shouldValidate: true,
-      });
-      setValue("phoneNumber", "+919876543288", { shouldValidate: true });
-      setValue("email", "giridhar.b@example.demo", { shouldValidate: true });
-      setValue("password", "Priest@123", { shouldValidate: true });
-      toast.info("Filled Purohit personal credentials.");
-    } else if (step === 2) {
-      setPhoneOtp("123456");
-      toast.info("Filled demo verification code (123456).");
-    } else if (step === 3) {
-      setPincode("700029");
-      setCity("Kolkata");
-      setState("West Bengal");
-      setBio(
-        "Gurukul-trained Vedic scholar with 15+ years of ritual experience across West Bengal specializing in Durga Puja, Griha Pravesh, and Vedic Yajna.",
-      );
-      toast.info("Filled demo Vedic qualifications & locality.");
-    }
-  };
+
 
   return (
     <div className="w-full min-h-[calc(100vh-140px)] flex items-center justify-center py-8 sm:py-12 px-4">
@@ -357,7 +328,7 @@ export const PriestRegisterPage: React.FC = () => {
         {/* Right Form Panel (Flexbox) */}
         <div className="w-full lg:w-7/12 p-6 sm:p-10 bg-white flex flex-col justify-between relative">
           <div>
-            {/* Top Row: Role Switch Tabs + Demo Fill */}
+            {/* Top Row: Role Switch Tabs */}
             <div className="flex items-center justify-between gap-4 mb-6">
               <AuthRoleTabs
                 activeRole="PRIEST"
@@ -366,15 +337,6 @@ export const PriestRegisterPage: React.FC = () => {
                 }}
                 className="mb-0 w-full sm:w-auto"
               />
-
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-              >
-                <span>⚡</span>
-                <span>Demo Fill</span>
-              </button>
             </div>
 
             {/* Header Block with Step Tracker */}
@@ -517,7 +479,7 @@ export const PriestRegisterPage: React.FC = () => {
                       <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                       <Input
                         type="email"
-                        placeholder="purohit@example.demo"
+                        placeholder="purohit@example.com"
                         {...register("email")}
                         className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                       />
@@ -580,18 +542,6 @@ export const PriestRegisterPage: React.FC = () => {
             {/* ================= STEP 2: Phone & Email OTP ================= */}
             {step === 2 && (
               <form onSubmit={handleVerifyOtp} className="space-y-4">
-                <div className="p-3 bg-amber-50 rounded-md border border-amber-300 text-xs text-stone-700 space-y-1">
-                  <p className="font-bold text-stone-900">
-                    Development Testing OTP:
-                  </p>
-                  <p>
-                    Enter mock verification code:{" "}
-                    <strong className="text-red-800 font-mono text-sm">
-                      123456
-                    </strong>
-                  </p>
-                </div>
-
                 <div className="space-y-3.5">
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
@@ -604,7 +554,7 @@ export const PriestRegisterPage: React.FC = () => {
                     </div>
                     <Input
                       maxLength={6}
-                      placeholder="123456"
+                      placeholder="Enter 6-digit phone OTP"
                       value={phoneOtp}
                       onChange={(e) => setPhoneOtp(e.target.value)}
                       className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
@@ -623,7 +573,7 @@ export const PriestRegisterPage: React.FC = () => {
                     </div>
                     <Input
                       maxLength={6}
-                      placeholder="123456"
+                      placeholder="Enter 6-digit email OTP"
                       value={emailOtp}
                       onChange={(e) => setEmailOtp(e.target.value)}
                       className="font-mono text-center tracking-widest text-sm h-11 rounded-md border-amber-300 focus-visible:ring-red-700"

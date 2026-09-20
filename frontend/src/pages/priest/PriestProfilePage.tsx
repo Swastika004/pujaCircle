@@ -611,7 +611,7 @@ export const PriestProfilePage: React.FC = () => {
                 </Badge>
               </div>
               <p className="font-medium text-xs text-stone-950">
-                {priest?.email || "priest@example.demo"}
+                {priest?.email || "priest@pujacircle.com"}
               </p>
               <p className="text-[11px] text-stone-600">
                 Booking updates, scheduling notifications, and platform alerts.

@@ -6,7 +6,6 @@ const UserResetPasswordPage: React.FC = () => {
     <ResetPasswordCard
       role="USER"
       loginPath="/user/login"
-      demoPassword="User@123"
     />
   );
 };

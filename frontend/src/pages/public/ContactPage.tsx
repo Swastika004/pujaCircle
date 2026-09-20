@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Clock, MessageSquare, Flame, ShieldCheck } from "lucide-react";
 
 // ContactPage
-// Devotee & Purohit Support Desk: mock inquiry form + operational contact details
+// Devotee & Purohit Support Desk: inquiry form + operational contact details
 export const ContactPage: React.FC = () => {
   return (
     <div className="w-full text-stone-900">
@@ -87,7 +87,7 @@ export const ContactPage: React.FC = () => {
                     Purohit Onboarding & Verification
                   </h4>
                   <p className="text-xs text-amber-800 font-bold">
-                    purohits@pujacircle.demo
+                    purohits@pujacircle.com
                   </p>
                   <p className="text-[11px] text-stone-600 leading-snug">
                     Gurukul certifications and priest onboarding inquiries

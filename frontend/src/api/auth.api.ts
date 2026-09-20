@@ -1,14 +1,4 @@
 import {
-  mockLogin,
-  mockLogout,
-  mockSendPhoneOtp,
-  mockVerifyPhoneOtp,
-  mockSendEmailOtp,
-  mockVerifyEmailOtp,
-  mockRegisterUser,
-  mockRegisterPriest,
-} from '@/mocks/mock-api';
-import {
   LoginCredentials,
   AuthResponse,
   AuthUser,
@@ -20,19 +10,15 @@ import {
   RegisterPriestRequest,
 } from '@/types/auth.types';
 import { apiClient } from './client';
-import { config } from '@/lib/config';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';
 
 /**
  * Authentication API (Frontend Layer)
- * Supports transparent switching between Mock API and live Backend via config.isMockEnabled
+ * Connected directly to live backend (/api/v1/auth)
  */
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockLogin(credentials);
-      }
       const res = await apiClient.post('/auth/login', credentials);
       return res as any;
     } catch (error) {
@@ -46,9 +32,6 @@ export const authApi = {
 
   registerUser: async (data: RegisterUserRequest): Promise<AuthResponse> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockRegisterUser(data);
-      }
       const res = await apiClient.post('/auth/register/user', data);
       return res as any;
     } catch (error) {
@@ -62,9 +45,6 @@ export const authApi = {
 
   registerPriest: async (data: RegisterPriestRequest): Promise<AuthResponse> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockRegisterPriest(data);
-      }
       const res = await apiClient.post('/auth/register/priest', data);
       return res as any;
     } catch (error) {
@@ -78,10 +58,6 @@ export const authApi = {
 
   getMe: async (): Promise<{ success: boolean; data?: { user: AuthUser }; message?: string }> => {
     try {
-      if (config.isMockEnabled) {
-        // In mock mode, session is persisted in auth store
-        return { success: true };
-      }
       const res = await apiClient.get('/auth/me');
       return res as any;
     } catch (error) {
@@ -92,9 +68,6 @@ export const authApi = {
 
   logout: async (): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockLogout();
-      }
       const res = await apiClient.post('/auth/logout');
       return res as any;
     } catch (error) {
@@ -105,9 +78,6 @@ export const authApi = {
 
   sendPhoneOtp: async (data: PhoneOtpRequest): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockSendPhoneOtp(data);
-      }
       const res = await apiClient.post('/auth/otp/send-phone', data);
       return res as any;
     } catch (error) {
@@ -121,9 +91,6 @@ export const authApi = {
 
   verifyPhoneOtp: async (data: VerifyPhoneOtpRequest): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockVerifyPhoneOtp(data);
-      }
       const res = await apiClient.post('/auth/otp/verify-phone', data);
       return res as any;
     } catch (error) {
@@ -137,9 +104,6 @@ export const authApi = {
 
   sendEmailOtp: async (data: EmailOtpRequest): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockSendEmailOtp(data);
-      }
       const res = await apiClient.post('/auth/otp/send-email', data);
       return res as any;
     } catch (error) {
@@ -153,9 +117,6 @@ export const authApi = {
 
   verifyEmailOtp: async (data: VerifyEmailOtpRequest): Promise<{ success: boolean; message: string }> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockVerifyEmailOtp(data);
-      }
       const res = await apiClient.post('/auth/otp/verify-email', data);
       return res as any;
     } catch (error) {

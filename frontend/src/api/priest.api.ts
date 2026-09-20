@@ -1,4 +1,3 @@
-import * as mockApi from '@/mocks/mock-api';
 import {
   Priest,
   PriestFilterParams,
@@ -8,24 +7,19 @@ import {
 } from '@/types/priest.types';
 import { PincodeLookupResponse } from '@/types/address.types';
 import { apiClient } from './client';
-import { config } from '@/lib/config';
 import { useAuthStore } from '@/store/auth.store';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';
 
 export const priestApi = {
-  // Helper to resolve current authenticated priest's ID in mock mode
+  // Helper to resolve current authenticated priest ID
   resolveCurrentPriestId: (): string => {
     const user = useAuthStore.getState().user;
-    return mockApi.resolvePriestId(user);
+    return user?.id || '';
   },
 
   // Public Approved Priests
   getPriests: async (params?: PriestFilterParams): Promise<Priest[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriests(params);
-        return res.data || [];
-      }
       const res = await apiClient.get('/priests', { params });
       return (res as any).data || res;
     } catch (error) {
@@ -36,10 +30,6 @@ export const priestApi = {
 
   getPriestById: async (id: string): Promise<Priest | undefined> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriestById(id);
-        return res.data;
-      }
       const res = await apiClient.get(`/priests/${id}`);
       return (res as any).data || res;
     } catch (error) {
@@ -50,14 +40,12 @@ export const priestApi = {
 
   getMyPriestProfile: async (): Promise<Priest | undefined> => {
     const priestId = priestApi.resolveCurrentPriestId();
+    if (!priestId) return undefined;
     return priestApi.getPriestById(priestId);
   },
 
   updatePriestProfile: async (id: string, updates: Partial<Priest>) => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockUpdatePriestProfile(id, updates);
-      }
       const res = await apiClient.put(`/priests/${id}`, updates);
       return res as any;
     } catch (error) {
@@ -73,10 +61,7 @@ export const priestApi = {
   getPriestServices: async (priestId?: string): Promise<PriestService[]> => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriestServices(activeId);
-        return res.data || [];
-      }
+      if (!activeId) return [];
       const res = await apiClient.get(`/priests/${activeId}/services`);
       return (res as any).data || res;
     } catch (error) {
@@ -92,9 +77,6 @@ export const priestApi = {
   createPriestService: async (priestId: string | undefined, data: { serviceName: string; price: number }) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockCreatePriestService(activeId, data);
-      }
       const res = await apiClient.post(`/priests/${activeId}/services`, data);
       return res as any;
     } catch (error) {
@@ -113,9 +95,6 @@ export const priestApi = {
   ) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockUpdatePriestService(serviceId, activeId, data);
-      }
       const res = await apiClient.put(`/priests/${activeId}/services/${serviceId}`, data);
       return res as any;
     } catch (error) {
@@ -130,9 +109,6 @@ export const priestApi = {
   deletePriestService: async (serviceId: string, priestId?: string) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockDeletePriestService(serviceId, activeId);
-      }
       const res = await apiClient.delete(`/priests/${activeId}/services/${serviceId}`);
       return res as any;
     } catch (error) {
@@ -147,9 +123,6 @@ export const priestApi = {
   togglePriestService: async (serviceId: string, priestId?: string) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockTogglePriestService(serviceId, activeId);
-      }
       const res = await apiClient.patch(`/priests/${activeId}/services/${serviceId}/toggle`);
       return res as any;
     } catch (error) {
@@ -165,10 +138,7 @@ export const priestApi = {
   getPriestSlots: async (priestId?: string, date?: string): Promise<PriestSlot[]> => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriestSlots(activeId, date);
-        return res.data || [];
-      }
+      if (!activeId) return [];
       const res = await apiClient.get(`/priests/${activeId}/slots`, { params: { date } });
       return (res as any).data || res;
     } catch (error) {
@@ -183,10 +153,6 @@ export const priestApi = {
 
   getAvailableSlotsForDate: async (priestId: string, date: string): Promise<PriestSlot[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetAvailableSlotsForDate(priestId, date);
-        return res.data || [];
-      }
       const res = await apiClient.get(`/priests/${priestId}/slots/available`, { params: { date } });
       return (res as any).data || res;
     } catch (error) {
@@ -201,9 +167,6 @@ export const priestApi = {
   ) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockCreateAvailabilitySlot(activeId, payload);
-      }
       const res = await apiClient.post(`/priests/${activeId}/slots`, payload);
       return res as any;
     } catch (error) {
@@ -222,9 +185,6 @@ export const priestApi = {
   ) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockUpdateAvailabilitySlot(slotId, activeId, payload);
-      }
       const res = await apiClient.put(`/priests/${activeId}/slots/${slotId}`, payload);
       return res as any;
     } catch (error) {
@@ -239,9 +199,6 @@ export const priestApi = {
   deleteAvailabilitySlot: async (slotId: string, priestId?: string) => {
     try {
       const activeId = priestId || priestApi.resolveCurrentPriestId();
-      if (config.isMockEnabled) {
-        return await mockApi.mockDeleteAvailabilitySlot(slotId, activeId);
-      }
       const res = await apiClient.delete(`/priests/${activeId}/slots/${slotId}`);
       return res as any;
     } catch (error) {
@@ -259,10 +216,6 @@ export const priestApi = {
 
   getRituals: async (): Promise<Ritual[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetRituals();
-        return res.data || [];
-      }
       const res = await apiClient.get('/rituals');
       return (res as any).data || res;
     } catch (error) {
@@ -274,10 +227,6 @@ export const priestApi = {
   // Admin Management APIs
   getAllPriests: async (params?: PriestFilterParams): Promise<Priest[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetPriests(params ? { ...params, status: 'ALL' } : { status: 'ALL' });
-        return res.data || [];
-      }
       const res = await apiClient.get('/admin/priests', { params });
       return (res as any).data || res;
     } catch (error) {
@@ -288,10 +237,6 @@ export const priestApi = {
 
   getPendingPriests: async (): Promise<Priest[]> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockAdminGetPriests();
-        return res.data?.filter((p) => p.approvalStatus === 'PENDING') || [];
-      }
       const res = await apiClient.get('/admin/priests/pending');
       return (res as any).data || res;
     } catch (error) {
@@ -302,9 +247,6 @@ export const priestApi = {
 
   approvePriest: async (priestId: string) => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminApprovePriest(priestId);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/approve`);
       return res as any;
     } catch (error) {
@@ -318,9 +260,6 @@ export const priestApi = {
 
   rejectPriest: async (priestId: string, reason: string = 'Application incomplete') => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminRejectPriest(priestId, reason);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/reject`, { reason });
       return res as any;
     } catch (error) {
@@ -334,9 +273,6 @@ export const priestApi = {
 
   banPriest: async (priestId: string, reason: string = 'Policy violation') => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminBanPriest(priestId, reason);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/ban`, { reason });
       return res as any;
     } catch (error) {
@@ -350,9 +286,6 @@ export const priestApi = {
 
   reactivatePriest: async (priestId: string) => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockAdminUnbanPriest(priestId);
-      }
       const res = await apiClient.post(`/admin/priests/${priestId}/unban`);
       return res as any;
     } catch (error) {
@@ -366,9 +299,6 @@ export const priestApi = {
 
   lookupPincode: async (pincode: string): Promise<PincodeLookupResponse> => {
     try {
-      if (config.isMockEnabled) {
-        return await mockApi.mockLookupPincode(pincode);
-      }
       const res = await apiClient.get(`/geo/pincode/${pincode}`);
       return (res as any).data || res;
     } catch (error) {

@@ -48,6 +48,30 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
 
   const isProfileActive = location.pathname.startsWith(profilePath);
 
+  // Synchronize effective avatar URL from store or local persistence
+  const avatarUrl = React.useMemo(() => {
+    if (user?.avatarUrl) return user.avatarUrl;
+    if (roleLabel === 'ADMIN' && user?.id) {
+      return localStorage.getItem(`admin_avatar_${user.id}`) || null;
+    }
+    if (roleLabel === 'PRIEST' && user?.id) {
+      return localStorage.getItem(`priest_avatar_${user.id}`) || null;
+    }
+    return null;
+  }, [user?.avatarUrl, user?.id, roleLabel]);
+
+  // Unified two-letter uppercase initials
+  const userInitials = React.useMemo(() => {
+    const name = user?.name?.trim();
+    if (!name) return roleLabel === 'ADMIN' ? 'SR' : 'PU';
+    const parts = name.split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return roleLabel === 'ADMIN' ? 'SR' : 'PU';
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + (parts[1] ? parts[1][0] : parts[parts.length - 1][0])).toUpperCase();
+  }, [user?.name, roleLabel]);
+
+  const fallbackBgClass = roleLabel === 'ADMIN' ? 'bg-[#450A0A]' : 'bg-[#780016]';
+
   // Helper to render navigation items
   const renderNavLinks = (onItemClick?: () => void) => {
     return (
@@ -95,10 +119,12 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
               : 'hover:bg-stone-100/70 text-stone-800'
           }`}
         >
-          <Avatar className="h-9 w-9 border border-[hsl(var(--border))]">
-            <AvatarImage src="/images/verified_purohit_portrait.jpg" />
-            <AvatarFallback className="bg-amber-100 text-[#991B1B] font-bold text-xs">
-              {user?.name?.charAt(0) || 'P'}
+          <Avatar className="h-9 w-9 border-2 border-white ring-2 ring-amber-400 bg-amber-100 shadow-xs shrink-0">
+            {avatarUrl ? (
+              <AvatarImage src={avatarUrl} alt={user?.name || 'User'} className="object-cover" />
+            ) : null}
+            <AvatarFallback className={`${fallbackBgClass} text-white font-serif font-bold text-xs`}>
+              {userInitials}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
@@ -209,13 +235,19 @@ export const DashboardSidebarShell: React.FC<DashboardSidebarShellProps> = ({
 
           
           <div className="flex items-center gap-3">
-            <Link to={profilePath} className="hidden sm:flex items-center gap-2 text-xs font-semibold text-stone-700 hover:text-stone-950">
-              <Avatar className="h-7 w-7 border border-[hsl(var(--border))]">
-                <AvatarFallback className="bg-amber-100 text-[#991B1B] text-[10px] font-bold">
-                  {user?.name?.charAt(0) || 'U'}
+            <Link
+              to={profilePath}
+              className="hidden sm:flex items-center gap-2.5 text-xs font-semibold text-stone-700 hover:text-stone-950 transition-colors"
+            >
+              <Avatar className="h-8 w-8 border-2 border-white ring-2 ring-amber-400 bg-amber-100 shadow-xs shrink-0">
+                {avatarUrl ? (
+                  <AvatarImage src={avatarUrl} alt={user?.name || 'User'} className="object-cover" />
+                ) : null}
+                <AvatarFallback className={`${fallbackBgClass} text-white font-serif font-bold text-[11px]`}>
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
-              <span className="truncate max-w-32">{user?.name || 'Account'}</span>
+              <span className="truncate max-w-36 font-semibold">{user?.name || 'Account'}</span>
             </Link>
 
             <button

@@ -15,7 +15,5 @@ const getEnv = (key: string, defaultValue: string = ''): string => {
 
 export const config = {
   apiBaseUrl: getEnv('VITE_API_BASE_URL', 'http://localhost:5000/api/v1'),
-  mockDelayMs: Number(getEnv('VITE_MOCK_DELAY_MS', '50')), // Low latency for fast CLI tests, configurable
-  isMockEnabled: getEnv('VITE_USE_MOCK', 'true') !== 'false',
   defaultTimeout: 10000,
 };

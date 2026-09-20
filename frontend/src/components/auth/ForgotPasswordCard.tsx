@@ -49,7 +49,6 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
       subtitle:
         "Enter your registered email to receive an authentic OTP reset code.",
       badge: "Devotee Sanctum",
-      demoEmail: "user@example.demo",
       login: "/user/login",
       reset: "/user/reset-password",
       panelBg: "bg-[#780016]",
@@ -62,7 +61,6 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
       subtitle:
         "Enter your registered Acharya email to restore access to your ceremony calendar.",
       badge: "Purohit Sanctum",
-      demoEmail: "priest@example.demo",
       login: "/priest/login",
       reset: "/priest/reset-password",
       panelBg: "bg-[#780016]",
@@ -75,7 +73,6 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     watch,
     formState: { errors },
@@ -102,15 +99,9 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      toast.info(`Recovery OTP sent to ${data.email}. Mock code: 123456`);
+      toast.info(`Recovery OTP sent to ${data.email}.`);
       navigate(roleConfig.reset);
     }, 400);
-  };
-
-  const handleFillDemo = () => {
-    setValue("email", roleConfig.demoEmail, { shouldValidate: true });
-    setError(null);
-    toast.info(`Filled demo recovery email for ${activeRole}.`);
   };
 
   return (
@@ -157,7 +148,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
               </div>
               <div className="flex items-center gap-2 text-xs text-amber-100">
                 <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>Instant Mock OTP (123456) for Testing</span>
+                <span>Instant 6-Digit One-Time Password</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-amber-100">
                 <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
@@ -185,15 +176,6 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                 onRoleChange={handleRoleChange}
                 className="mb-0 w-full sm:w-auto"
               />
-
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded border border-amber-300 transition-colors cursor-pointer shrink-0"
-              >
-                <span>⚡</span>
-                <span>Demo Fill</span>
-              </button>
             </div>
 
             <div className="space-y-1 mb-6">
@@ -221,7 +203,7 @@ export const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({
                   <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-500" />
                   <Input
                     type="email"
-                    placeholder={roleConfig.demoEmail}
+                    placeholder="name@example.com"
                     {...register("email")}
                     className="pl-10 text-xs h-11 rounded-md border-amber-300 focus-visible:ring-red-700"
                   />

@@ -1,7 +1,5 @@
-import * as mockApi from '@/mocks/mock-api';
 import { Booking, CreateBookingRequest, CancelBookingRequest, SubmitRatingRequest, Rating } from '@/types/booking.types';
 import { apiClient } from './client';
-import { config } from '@/lib/config';
 import { useAuthStore } from '@/store/auth.store';
 import { logAppError, getUserFriendlyErrorMessage } from '@/lib/errorHandler';
 
@@ -11,11 +9,8 @@ export const bookingApi = {
     userId?: string
   ): Promise<{ success: boolean; message: string; data?: Booking }> => {
     try {
-      const activeUserId = userId || useAuthStore.getState().user?.id || 'user-devotee-1';
-      if (config.isMockEnabled) {
-        return await mockApi.mockCreateBooking(activeUserId, data);
-      }
-      const res = await apiClient.post('/bookings', data);
+      const activeUserId = userId || useAuthStore.getState().user?.id;
+      const res = await apiClient.post('/bookings', { ...data, userId: activeUserId });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.createBooking', error, { data });
@@ -29,10 +24,6 @@ export const bookingApi = {
   getBookings: async (userId?: string, priestId?: string): Promise<Booking[]> => {
     try {
       const activeUserId = userId || (priestId ? undefined : useAuthStore.getState().user?.id);
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetBookings(activeUserId, priestId);
-        return res.data || [];
-      }
       const res = await apiClient.get('/bookings', { params: { userId: activeUserId, priestId } });
       return (res as any).data || res;
     } catch (error) {
@@ -52,10 +43,6 @@ export const bookingApi = {
 
   getBookingById: async (id: string): Promise<Booking | null> => {
     try {
-      if (config.isMockEnabled) {
-        const res = await mockApi.mockGetBookingById(id);
-        return res.data || null;
-      }
       const res = await apiClient.get(`/bookings/${id}`);
       return (res as any).data || res;
     } catch (error) {
@@ -67,10 +54,7 @@ export const bookingApi = {
   acceptBooking: async (bookingId: string, priestId?: string) => {
     try {
       const activePriestId = priestId || useAuthStore.getState().user?.id || '';
-      if (config.isMockEnabled) {
-        return await mockApi.mockAcceptBooking(bookingId, activePriestId);
-      }
-      const res = await apiClient.post(`/bookings/${bookingId}/accept`);
+      const res = await apiClient.post(`/bookings/${bookingId}/accept`, { priestId: activePriestId });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.acceptBooking', error, { bookingId, priestId });
@@ -84,10 +68,7 @@ export const bookingApi = {
   rejectBooking: async (bookingId: string, priestId?: string, reason?: string) => {
     try {
       const activePriestId = priestId || useAuthStore.getState().user?.id || '';
-      if (config.isMockEnabled) {
-        return await mockApi.mockRejectBooking(bookingId, activePriestId, reason || 'Unavailable');
-      }
-      const res = await apiClient.post(`/bookings/${bookingId}/reject`, { reason });
+      const res = await apiClient.post(`/bookings/${bookingId}/reject`, { priestId: activePriestId, reason });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.rejectBooking', error, { bookingId, priestId, reason });
@@ -101,10 +82,7 @@ export const bookingApi = {
   cancelBooking: async (data: CancelBookingRequest & { userId?: string }) => {
     try {
       const activeUserId = data.userId || useAuthStore.getState().user?.id || '';
-      if (config.isMockEnabled) {
-        return await mockApi.mockCancelBooking(data.bookingId, activeUserId, data.reason);
-      }
-      const res = await apiClient.post(`/bookings/${data.bookingId}/cancel`, { reason: data.reason });
+      const res = await apiClient.post(`/bookings/${data.bookingId}/cancel`, { userId: activeUserId, reason: data.reason });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.cancelBooking', error, { data });
@@ -118,10 +96,7 @@ export const bookingApi = {
   completeBooking: async (bookingId: string, priestId?: string, completionCode?: string) => {
     try {
       const activePriestId = priestId || useAuthStore.getState().user?.id || '';
-      if (config.isMockEnabled) {
-        return await mockApi.mockCompleteBooking(bookingId, activePriestId, completionCode);
-      }
-      const res = await apiClient.post(`/bookings/${bookingId}/complete`, { completionCode });
+      const res = await apiClient.post(`/bookings/${bookingId}/complete`, { priestId: activePriestId, completionCode });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.completeBooking', error, { bookingId, priestId, completionCode });
@@ -138,10 +113,7 @@ export const bookingApi = {
   ): Promise<{ success: boolean; message: string; data?: Rating }> => {
     try {
       const activeUserId = userId || useAuthStore.getState().user?.id || '';
-      if (config.isMockEnabled) {
-        return await mockApi.mockSubmitRating(activeUserId, data);
-      }
-      const res = await apiClient.post('/ratings', data);
+      const res = await apiClient.post('/ratings', { ...data, userId: activeUserId });
       return res as any;
     } catch (error) {
       logAppError('bookingApi.submitRating', error, { userId, data });
