@@ -28,6 +28,8 @@ export const bookings = pgTable('bookings', {
   totalPrice: integer('total_price').notNull(), // INR amount in rupees (₹)
   notes: text('notes'),
   cancellationReason: text('cancellation_reason'),
+  rating: integer('rating'),
+  review: text('review'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

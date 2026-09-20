@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Phone,
+  Mail,
   Lock,
   ArrowRight,
   AlertCircle,
@@ -34,21 +34,18 @@ export const PriestLoginPage: React.FC = () => {
   } = useForm<PriestLoginInput>({
     resolver: zodResolver(priestLoginSchema),
     defaultValues: {
-      phoneNumber: "",
+      identifier: "",
       password: "",
     },
   });
 
-  const watchPhone = watch("phoneNumber");
+  const watchIdentifier = watch("identifier");
   const watchPassword = watch("password");
-  const isFormValid = Boolean(watchPhone?.trim() && watchPassword?.trim());
+  const isFormValid = Boolean(watchIdentifier?.trim() && watchPassword?.trim());
 
   const onLogin = async (data: PriestLoginInput) => {
     clearError();
-    const cleanPhone = data.phoneNumber.trim();
-    const identifier = cleanPhone.startsWith("+91")
-      ? cleanPhone
-      : `+91${cleanPhone.replace(/\D/g, "")}`;
+    const identifier = data.identifier.trim();
 
     const success = await login({
       identifier,
@@ -56,10 +53,18 @@ export const PriestLoginPage: React.FC = () => {
     });
 
     if (success) {
-      toast.success(
-        "Pranam Acharya! Welcome to your ceremonial command altar.",
-      );
-      navigate("/priest/dashboard");
+      const user = useAuthStore.getState().user;
+      if (user?.role === "USER") {
+        toast.info("Welcome Devotee! Redirecting to your sanctuary portal.");
+        navigate("/user/home");
+      } else if (user?.role === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else {
+        toast.success(
+          "Pranam Acharya! Welcome to your ceremonial command altar.",
+        );
+        navigate("/priest/dashboard");
+      }
     }
   };
 
@@ -170,24 +175,24 @@ export const PriestLoginPage: React.FC = () => {
             <form onSubmit={handleSubmit(onLogin)} className="space-y-4">
               <div className="space-y-1.5">
                 <Label
-                  htmlFor="phoneNumber"
+                  htmlFor="identifier"
                   className="text-xs font-semibold text-stone-800"
                 >
-                  Registered Mobile Number
+                  Email Address or Registered Mobile
                 </Label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                   <Input
-                    id="phoneNumber"
-                    type="tel"
-                    placeholder="+91 98765 43211"
-                    {...register("phoneNumber")}
+                    id="identifier"
+                    type="text"
+                    placeholder="schakra@pujaCircle.com or 9831987654"
+                    {...register("identifier")}
                     className="pl-9 h-11 text-sm border-stone-300 focus-visible:ring-amber-500"
                   />
                 </div>
-                {errors.phoneNumber && (
+                {errors.identifier && (
                   <p className="text-xs text-red-600">
-                    {errors.phoneNumber.message}
+                    {errors.identifier.message}
                   </p>
                 )}
               </div>

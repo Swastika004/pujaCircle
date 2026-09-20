@@ -111,37 +111,75 @@ export const PriestRegisterPage: React.FC = () => {
     pincode.trim().length === 6 && city.trim() && bio.trim() && !isSubmitting,
   );
 
-  // Step 1: Submit Personal Details
-  const onPersonalSubmit = () => {
+  // Step 1: Submit Personal Details with real dynamic dispatch
+  const onPersonalSubmit = async () => {
     setErrorMessage(null);
-    setStep(2);
-    toast.info("Verification codes dispatched to your contact details.");
+    setIsSubmitting(true);
+    try {
+      const { phoneNumber, email } = getValues();
+      await authApi.sendPhoneOtp({ phoneNumber });
+      await authApi.sendEmailOtp({ email });
+
+      setStep(2);
+      toast.info("Verification codes dispatched to your phone and email.");
+    } catch {
+      setErrorMessage("Failed to dispatch verification codes. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Step 2: Submit OTP Verification
+  // Step 2: Submit OTP Verification dynamically
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (phoneOtp.trim().length !== 6) {
-      setErrorMessage("Please enter a valid 6-digit verification code.");
+    if (phoneOtp.trim().length !== 6 || emailOtp.trim().length !== 6) {
+      setErrorMessage("Please enter both 6-digit phone and email verification codes.");
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      const res = await authApi.verifyPhoneOtp({
+      const phoneRes = await authApi.verifyPhoneOtp({
         phoneNumber: getValues().phoneNumber,
         otp: phoneOtp.trim(),
       });
 
-      if (!res.success) {
-        setErrorMessage(res.message || "Invalid verification code.");
+      if (!phoneRes.success) {
+        setErrorMessage(phoneRes.message || "Invalid phone verification code.");
+        return;
+      }
+
+      const emailRes = await authApi.verifyEmailOtp({
+        email: getValues().email,
+        otp: emailOtp.trim(),
+      });
+
+      if (!emailRes.success) {
+        setErrorMessage(emailRes.message || "Invalid email verification code.");
         return;
       }
 
       setStep(3);
+      toast.success("Phone and Email verified successfully!");
     } catch {
-      setErrorMessage("Verification failed. Please try again.");
+      setErrorMessage("Verification failed. Please check your verification codes and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Resend fresh dynamic OTPs
+  const handleResendOtp = async () => {
+    try {
+      const { phoneNumber, email } = getValues();
+      await authApi.sendPhoneOtp({ phoneNumber });
+      await authApi.sendEmailOtp({ email });
+
+      toast.info("Fresh verification codes dispatched to your phone and email.");
+    } catch {
+      toast.error("Failed to resend verification codes.");
     }
   };
 
@@ -580,6 +618,16 @@ export const PriestRegisterPage: React.FC = () => {
                       required
                     />
                   </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    className="text-[11px] font-semibold text-[#780016] hover:underline cursor-pointer"
+                  >
+                    Didn't receive codes? Resend OTP
+                  </button>
                 </div>
 
                 <div className="flex items-center justify-between gap-3 pt-2">

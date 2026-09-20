@@ -81,7 +81,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   } = useForm<UserLoginInput>({
     resolver: zodResolver(phoneLoginSchema),
     defaultValues: {
-      phoneNumber: '',
+      identifier: '',
       password: '',
     },
   });
@@ -103,16 +103,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     setActiveTab(tab);
     setIsRegister(false);
     clearError();
-    resetLogin({ phoneNumber: '', password: '' });
+    resetLogin({ identifier: '', password: '' });
   };
 
   // Submit Login for Devotee / Priest
   const onLogin = async (data: UserLoginInput) => {
     clearError();
-    const cleanPhone = data.phoneNumber.trim();
-    const identifier = cleanPhone.startsWith('+91')
-      ? cleanPhone
-      : `+91${cleanPhone.replace(/\D/g, '')}`;
+    const identifier = data.identifier.trim();
 
     const success = await login({
       identifier,
@@ -120,9 +117,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     });
 
     if (success) {
-      if (activeTab === 'priest') {
+      const user = useAuthStore.getState().user;
+      if (user?.role === 'PRIEST' || activeTab === 'priest') {
         toast.success('Namaste Purohit-ji! Welcome to your operations workspace.');
         navigate('/priest/dashboard');
+      } else if (user?.role === 'ADMIN') {
+        navigate('/admin/dashboard');
       } else {
         toast.success('Namaste Devotee! Welcome to your sacred sanctuary portal.');
         navigate('/user/home');
@@ -527,20 +527,20 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               <form onSubmit={handleLoginSubmit(onLogin)} className="space-y-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-semibold text-stone-700">
-                    Mobile Number (+91)
+                    Email Address or Mobile Number
                   </Label>
                   <div className="relative">
-                    <Phone className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
+                    <Mail className="absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
                     <Input
-                      type="tel"
-                      placeholder={activeTab === 'priest' ? '+919876543211' : '+919876543210'}
-                      {...registerLogin('phoneNumber')}
+                      type="text"
+                      placeholder={activeTab === 'priest' ? 'schakra@pujaCircle.com or 9831987654' : 'arnab@pujaCircle.com or 9830123456'}
+                      {...registerLogin('identifier')}
                       className="pl-10 text-xs h-10 border-stone-300 focus:ring-amber-500"
                     />
                   </div>
-                  {loginErrors.phoneNumber && (
+                  {loginErrors.identifier && (
                     <p className="text-[11px] text-red-600 font-medium">
-                      {loginErrors.phoneNumber.message}
+                      {loginErrors.identifier.message}
                     </p>
                   )}
                 </div>
