@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { sendSuccess } from '../views/response.view.js';
+import { adminService } from '../services/admin.service.js';
 
 /**
  * [CONTROLLER] Admin Controller (Teammate Skeleton)
@@ -8,33 +9,23 @@ import { sendSuccess } from '../views/response.view.js';
  * Assigned to: Teammate (Admin Module)
  */
 export class AdminController {
-  /**
-   * GET /api/v1/admin/dashboard/stats
-   */
+  // GET /api/v1/admin/dashboard/stats
   async getDashboardStats(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Admin] Query DB for total users, priests, pending applications, bookings, and revenue
-      sendSuccess(res, 'Admin dashboard statistics retrieved.', {
-        totalUsers: 0,
-        totalPriests: 0,
-        pendingPriests: 0,
-        approvedPriests: 0,
-        totalBookings: 0,
-        completedBookings: 0,
-        revenueEstimate: 0,
-      });
+      // Delegate platform analytics aggregation to service layer
+      const stats = await adminService.getDashboardStats();
+      sendSuccess(res, 'Admin dashboard statistics retrieved.', stats);
     } catch (error) {
       next(error);
     }
   }
 
-  /**
-   * GET /api/v1/admin/priests
-   */
+  // GET /api/v1/admin/priests
   async getAllPriests(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Admin] Query priest_profiles joined with users, applying optional status/city filters
-      sendSuccess(res, 'Priest records retrieved.', []);
+      // Fetch all priest records joined with user profile data
+      const priests = await adminService.getAllPriests();
+      sendSuccess(res, 'Priest records retrieved.', priests);
     } catch (error) {
       next(error);
     }
@@ -76,12 +67,11 @@ export class AdminController {
     }
   }
 
-  /**
-   * POST /api/v1/admin/priests/:id/ban
-   */
+  // POST /api/v1/admin/priests/:id/ban
   async banPriest(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Admin] Find user by priest id and SET accountStatus = 'BANNED'
+      // Suspend priest account with optional reason
+      await adminService.banPriest(req.params.id, req.body?.reason);
       sendSuccess(res, `Priest ${req.params.id} has been suspended.`);
     } catch (error) {
       next(error);

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Role } from '../types/express.js';
 import { sendError } from '../views/response.view.js';
+import { isAdmin } from '../utils/auth.util.js';
 
 /**
  * [MIDDLEWARE] Role-Based Access Control (RBAC) Guard
@@ -28,3 +29,19 @@ export const requireRole = (...allowedRoles: Role[]) => {
     next();
   };
 };
+
+// Convenient DRY middleware dedicated for admin-only routes
+export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
+  if (!req.user) {
+    sendError(res, 'Authentication required.', 401);
+    return;
+  }
+
+  if (!isAdmin(req)) {
+    sendError(res, 'Access denied. Administrative privileges required.', 403);
+    return;
+  }
+
+  next();
+};
+

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { adminController } from '../controllers/admin.controller.js';
 import { requireAuth } from '../middlewares/auth.middleware.js';
-import { requireRole } from '../middlewares/role.middleware.js';
+import { requireAdmin } from '../middlewares/role.middleware.js';
 
 const router = Router();
 
@@ -10,7 +10,7 @@ const router = Router();
  * Protected Admin Console Endpoints (ADMIN role required)
  */
 router.use(requireAuth);
-router.use(requireRole('ADMIN'));
+router.use(requireAdmin);
 
 // Platform KPIs & Stats
 router.get('/dashboard/stats', adminController.getDashboardStats);
