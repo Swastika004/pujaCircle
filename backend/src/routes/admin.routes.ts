@@ -29,7 +29,6 @@ router.get('/users', adminController.getAllUsers);
 router.post('/users/:id/suspend', adminController.suspendUser);
 router.post('/users/:id/unsuspend', adminController.unsuspendUser);
 
-// Platform Bookings Oversight
-router.get('/bookings', adminController.getAllBookings);
+
 
 export const adminRoutes = router;

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { sendSuccess } from '../views/response.view.js';
+import { catalogService } from '../services/catalog.service.js';
 
 /**
  * [CONTROLLER] Catalog Controller (Teammate Skeleton)
@@ -8,13 +9,12 @@ import { sendSuccess } from '../views/response.view.js';
  * Assigned to: Teammate (Catalog Module)
  */
 export class CatalogController {
-  /**
-   * GET /api/v1/catalog
-   */
+  // GET /api/v1/catalog
   async getCatalog(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Catalog] Query puja_catalog table with category and search filters
-      sendSuccess(res, 'Puja catalog retrieved successfully.', []);
+      // Query sacred ceremonies from puja_catalog
+      const catalog = await catalogService.getCatalog();
+      sendSuccess(res, 'Puja catalog retrieved successfully.', catalog);
     } catch (error) {
       next(error);
     }
@@ -32,13 +32,12 @@ export class CatalogController {
     }
   }
 
-  /**
-   * POST /api/v1/catalog
-   */
-  async createCatalogEntry(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  // POST /api/v1/catalog
+  async createCatalogEntry(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Catalog] Insert new ceremony into puja_catalog table
-      sendSuccess(res, 'Ceremony catalog entry created successfully.', null, 201);
+      // Create new sacred ceremony in catalog
+      const entry = await catalogService.createCatalogEntry(req.body);
+      sendSuccess(res, 'Ceremony catalog entry created successfully.', entry, 201);
     } catch (error) {
       next(error);
     }

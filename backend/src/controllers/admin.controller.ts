@@ -135,17 +135,8 @@ export class AdminController {
     }
   }
 
-  /**
-   * GET /api/v1/admin/bookings
-   */
-  async getAllBookings(_req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      // TODO: [Teammate - Admin] Query all bookings with user and priest details
-      sendSuccess(res, 'All bookings retrieved.', []);
-    } catch (error) {
-      next(error);
-    }
-  }
+
 }
+
 
 export const adminController = new AdminController();
