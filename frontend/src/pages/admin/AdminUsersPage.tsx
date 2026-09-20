@@ -60,7 +60,7 @@ export const AdminUsersPage: React.FC = () => {
 
   const handleSuspendConfirm = async (reason: string) => {
     if (!suspendTarget) return;
-    const res = await adminApi.updateUserStatus(suspendTarget.id, "BANNED", reason);
+    const res = await adminApi.suspendUser(suspendTarget.id, reason);
     if (res.success) {
       toast.success(`Account for ${suspendTarget.name} suspended.`);
       fetchUsers();
@@ -70,7 +70,7 @@ export const AdminUsersPage: React.FC = () => {
   };
 
   const handleReactivate = async (userId: string, name: string) => {
-    const res = await adminApi.updateUserStatus(userId, "ACTIVE");
+    const res = await adminApi.unsuspendUser(userId);
     if (res.success) {
       toast.success(`Account for ${name} reactivated.`);
       fetchUsers();

@@ -102,25 +102,34 @@ export class AdminController {
     }
   }
 
-  /**
-   * GET /api/v1/admin/users
-   */
+  // GET /api/v1/admin/users
   async getAllUsers(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Admin] Query users where role = 'USER'
-      sendSuccess(res, 'Devotee user accounts retrieved.', []);
+      // Fetch all devotee accounts with booking counts
+      const usersList = await adminService.getAllUsers();
+      sendSuccess(res, 'Devotee user accounts retrieved.', usersList);
     } catch (error) {
       next(error);
     }
   }
 
-  /**
-   * PATCH /api/v1/admin/users/:id/status
-   */
-  async updateUserStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // POST /api/v1/admin/users/:id/suspend
+  async suspendUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // TODO: [Teammate - Admin] Update users SET accountStatus = req.body.status WHERE id = req.params.id
-      sendSuccess(res, `User ${req.params.id} status updated.`);
+      // Suspend devotee user account with optional reason
+      await adminService.suspendUser(req.params.id, req.body?.reason);
+      sendSuccess(res, `User ${req.params.id} has been suspended.`);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // POST /api/v1/admin/users/:id/unsuspend
+  async unsuspendUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // Reactivate / Unsuspend devotee user account
+      await adminService.unsuspendUser(req.params.id);
+      sendSuccess(res, `User ${req.params.id} has been unsuspended.`);
     } catch (error) {
       next(error);
     }

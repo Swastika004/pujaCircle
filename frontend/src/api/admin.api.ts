@@ -109,15 +109,28 @@ export const adminApi = {
     }
   },
 
-  updateUserStatus: async (userId: string, status: string, reason?: string) => {
+  suspendUser: async (userId: string, reason?: string) => {
     try {
-      const res = await apiClient.patch(`/admin/users/${userId}/status`, { status, reason });
+      const res = await apiClient.post(`/admin/users/${userId}/suspend`, { reason });
       return res as any;
     } catch (error) {
-      logAppError('adminApi.updateUserStatus', error, { userId, status, reason });
+      logAppError('adminApi.suspendUser', error, { userId, reason });
       return {
         success: false,
-        message: getUserFriendlyErrorMessage(error, 'Failed to update user status.'),
+        message: getUserFriendlyErrorMessage(error, 'Failed to suspend user.'),
+      };
+    }
+  },
+
+  unsuspendUser: async (userId: string) => {
+    try {
+      const res = await apiClient.post(`/admin/users/${userId}/unsuspend`);
+      return res as any;
+    } catch (error) {
+      logAppError('adminApi.unsuspendUser', error, { userId });
+      return {
+        success: false,
+        message: getUserFriendlyErrorMessage(error, 'Failed to unsuspend user.'),
       };
     }
   },

@@ -26,7 +26,8 @@ router.post('/priests/:id/reopen', adminController.reopenPriestApplication);
 
 // Devotee Moderation
 router.get('/users', adminController.getAllUsers);
-router.patch('/users/:id/status', adminController.updateUserStatus);
+router.post('/users/:id/suspend', adminController.suspendUser);
+router.post('/users/:id/unsuspend', adminController.unsuspendUser);
 
 // Platform Bookings Oversight
 router.get('/bookings', adminController.getAllBookings);
